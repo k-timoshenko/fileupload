@@ -1,0 +1,38 @@
+{
+  "name": "t-kanstantsin/yii2-fileupload",
+  "description": "File upload widget.",
+  "type": "yii2-extension",
+  "keywords": [
+    "yii",
+    "extension",
+    "yii2",
+    "yii 2",
+    "file",
+    "fileupload",
+    "upload"
+  ],
+  "homepage": "https://github.com/t-kanstantsin/yii2-fileupload",
+  "license": "BSD-3-Clause",
+  "authors": [
+    {
+      "name": "Konstantin Timoshenko",
+      "email": "t.kanstantsin@gmail.com",
+      "homepage": "https://github.com/t-kanstantsin",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": ">=5.5.0",
+    "yiisoft/yii2": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "tkanstantsin\\yii2\\fileupload\\": "src"
+    }
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "1.0.x-dev"
+    }
+  }
+}
