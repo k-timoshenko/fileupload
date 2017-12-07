@@ -26,9 +26,13 @@
     "yiisoft/yii2": "^2.0.0",
     "t-kanstantsin/yii2-flysystem": "^1.0"
   },
+  "suggest": {
+    "fortawesome/font-awesome": "For file types without preview generator"
+  },
   "autoload": {
     "psr-4": {
-      "tkanstantsin\\yii2\\fileupload\\": "src"
+      "tkanstantsin\\fileupload\\": "src/file",
+      "tkanstantsin\\yii2fileupload\\": "src/yii2"
     }
   },
   "extra": {
