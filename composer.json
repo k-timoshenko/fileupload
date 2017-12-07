@@ -1,12 +1,8 @@
 {
-  "name": "t-kanstantsin/yii2-fileupload",
-  "description": "File upload widget.",
-  "type": "yii2-extension",
+  "name": "t-kanstantsin/fileupload",
+  "description": "File upload and store utilities",
+  "type": "library",
   "keywords": [
-    "yii",
-    "extension",
-    "yii2",
-    "yii 2",
     "file",
     "fileupload",
     "upload"
