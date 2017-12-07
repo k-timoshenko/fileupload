@@ -22,6 +22,7 @@
     }
   ],
   "require": {
+    "roave/security-advisories": "dev-master",
     "php": ">=7.1",
     "yiisoft/yii2": "^2.0.0",
     "t-kanstantsin/yii2-flysystem": "^1.0"
