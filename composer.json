@@ -22,8 +22,9 @@
     }
   ],
   "require": {
-    "php": ">=5.5.0",
-    "yiisoft/yii2": "*"
+    "php": ">=7.1",
+    "yiisoft/yii2": "^2.0.0",
+    "t-kanstantsin/yii2-flysystem": "^1.0"
   },
   "autoload": {
     "psr-4": {
