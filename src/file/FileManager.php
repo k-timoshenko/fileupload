@@ -284,7 +284,7 @@ class FileManager
     public function cacheFile(IFile $file, array $config = []): bool
     {
         try {
-            $config['filePath'] = $this->getFilePath($file);
+            $config['filePath'] = $config['filePath'] ?? $this->getFilePath($file);
             $processor = (new processor\Factory($this))->build($file, $this->uploadFS, $config);
             $fileCache = new CacheComponent($file, $this->webFS, $this->getAssetPath($file, $config));
 
