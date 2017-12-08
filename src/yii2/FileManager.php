@@ -33,11 +33,11 @@ class FileManager extends Component
      */
     public function init(): void
     {
-        $this->manager['uploadFS'] = \Yii::$app->{$this->manager['uploadFS']};
-        $this->manager['webFS'] = \Yii::$app->{$this->manager['webFS']};
+        $this->manager['uploadFS'] = \Yii::$app->{$this->manager['uploadFS']}->getFileSystem();
+        $this->manager['webFS'] = \Yii::$app->{$this->manager['webFS']}->getFileSystem();
 
         $class = ArrayHelper::remove($this->manager, 'class', BaseFileManager::class);
-        $this->manager = \Yii::createObject($class, $this->manager);
+        $this->manager = new $class($this->manager);
         if (!($this->manager instanceof BaseFileManager)) {
             throw new InvalidConfigException(\Yii::t('yii2fileupload', 'Invalid file manager config'));
         }
