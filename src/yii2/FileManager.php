@@ -14,6 +14,7 @@ use tkanstantsin\yii2fileupload\model\File;
 use tkanstantsin\fileupload\FileManager as BaseFileManager;
 use yii\base\Component;
 use yii\base\InvalidConfigException;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 
 /**
@@ -35,7 +36,8 @@ class FileManager extends Component
         $this->manager['uploadFS'] = \Yii::$app->{$this->manager['uploadFS']};
         $this->manager['webFS'] = \Yii::$app->{$this->manager['webFS']};
 
-        $this->manager = \Yii::createObject($this->manager);
+        $class = ArrayHelper::remove($this->manager, 'class', BaseFileManager::class);
+        $this->manager = \Yii::createObject($class, $this->manager);
         if (!($this->manager instanceof BaseFileManager)) {
             throw new InvalidConfigException(\Yii::t('yii2fileupload', 'Invalid file manager config'));
         }
