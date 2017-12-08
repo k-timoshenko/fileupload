@@ -19,12 +19,12 @@
   ],
   "require": {
     "php": ">=7.1",
-    "yiisoft/yii2": "^2.0.0",
     "t-kanstantsin/yii2-flysystem": "^1.0",
     "guzzlehttp/guzzle": "^6.3.0",
     "imagine/imagine": "^0.7.1"
   },
   "require-dev": {
+    "yiisoft/yii2": "^2.0.12"
   },
   "suggest": {
     "fortawesome/font-awesome": "For file types without preview generator"
