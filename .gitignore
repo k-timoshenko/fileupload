@@ -3,6 +3,12 @@ build
 docs
 vendor
 
+# tests
+codecept
+tests/_support/_generated/*
+tests/_data/*
+tests/_output/*
+
 # Cache directories
 Thumbs.db
 *.DS_Store
