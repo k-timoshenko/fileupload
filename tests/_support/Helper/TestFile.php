@@ -6,6 +6,7 @@ use tkanstantsin\fileupload\model\IFile;
 
 /**
  * Class TestFile
+ * @todo: create factory for model.
  */
 class TestFile implements IFile
 {
