@@ -77,7 +77,7 @@ before_script:
 
 script:
   # PHP tests
-  - vendor/bin/codecept --verbose $CODECEPT_FLAGS --exclude-group oci,xcache,zenddata,cubrid
+  - vendor/bin/codecept --verbose $CODECEPT_FLAGS
 
 after_script:
   - |
