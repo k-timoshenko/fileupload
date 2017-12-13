@@ -4,7 +4,7 @@
 dist: trusty
 
 # faster builds on new travis setup not using sudo
-sudo: false
+sudo: true
 group: edge
 
 language: php
@@ -51,6 +51,7 @@ install:
     if [ $TASK_TESTS_PHP == 1 ]; then
       tests/data/travis/image.sh
     fi
+
 before_script:
   # show some versions and env information
   - php --version
@@ -73,9 +74,11 @@ before_script:
       echo 'error_reporting = E_ALL & ~E_DEPRECATED' >> /tmp/php-config.ini;
       phpenv config-add /tmp/php-config.ini;
     fi
+
 script:
   # PHP tests
   - vendor/bin/codecept --verbose $CODECEPT_FLAGS --exclude-group oci,xcache,zenddata,cubrid
+
 after_script:
   - |
     if [ $TASK_TESTS_COVERAGE == 1 ]; then
