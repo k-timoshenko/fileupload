@@ -41,7 +41,7 @@ install:
   - travis_retry composer install $DEFAULT_COMPOSER_FLAGS
 
   # setup PHP extension
-  #- tests/data/travis/image.sh
+  - tests/data/travis/image.sh
 
 before_script:
   # show some versions and env information
