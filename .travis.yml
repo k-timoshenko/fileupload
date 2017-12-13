@@ -47,10 +47,10 @@ install:
   - travis_retry composer install $DEFAULT_COMPOSER_FLAGS
 
   # setup PHP extension
-  - |
-    if [ $TASK_TESTS_PHP == 1 ]; then
-      tests/data/travis/image.sh
-    fi
+  #- |
+  #  if [ $TASK_TESTS_PHP == 1 ]; then
+  #    tests/data/travis/image.sh
+  #  fi
 
 before_script:
   # show some versions and env information
