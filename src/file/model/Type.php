@@ -15,10 +15,18 @@ class Type
 {
     public const FILE = 1;
     public const IMAGE = 2;
+    public const DOC = 3;
+    public const VIDEO = 4;
+    public const AUDIO = 5;
+    public const ARCHIVE = 5;
 
     public static $folderPrefix = [
         self::FILE => 'file',
         self::IMAGE => 'image',
+        self::DOC => 'doc',
+        self::VIDEO => 'video',
+        self::AUDIO => 'audio',
+        self::ARCHIVE => 'archive',
     ];
 
     /**
@@ -29,6 +37,10 @@ class Type
         return [
             self::FILE => 'File',
             self::IMAGE => 'Image',
+            self::DOC => 'Document',
+            self::VIDEO => 'Video',
+            self::AUDIO => 'Audio',
+            self::ARCHIVE => 'Archive',
         ];
     }
 
@@ -36,9 +48,9 @@ class Type
      * @param int $id
      * @return string
      */
-    public static function get(int $id): string
+    public static function get(int $id): ?string
     {
-        return static::all()[$id] ?? 'Not set';
+        return static::all()[$id] ?? null;
     }
 
     /**

@@ -1,17 +1,11 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: konstantin
- * Date: 10/16/16
- * Time: 11:11 PM
- */
 
-namespace tkanstantsin\fileupload\processor;
+namespace tkanstantsin\fileupload\config\formatter;
 
 /**
  * Class ImageConfig
  */
-class ImageConfig extends FileConfig
+class Image extends File
 {
     /**
      * @var int

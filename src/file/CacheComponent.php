@@ -11,7 +11,7 @@ namespace tkanstantsin\fileupload;
 use League\Flysystem\Filesystem;
 use League\Flysystem\FilesystemInterface;
 use tkanstantsin\fileupload\model\IFile;
-use tkanstantsin\fileupload\processor\FileProcessor;
+use tkanstantsin\fileupload\formatter\File;
 
 /**
  * Class Cache allows store files processed files.
@@ -50,13 +50,13 @@ class CacheComponent
     /**
      * Copies, processes and saves file in Cache::$filesystem
      * @todo: add cleanup of cached files.
-     * @param \tkanstantsin\fileupload\processor\FileProcessor $processor
+     * @param \tkanstantsin\fileupload\formatter\File $processor
      * @return bool
      * @throws \InvalidArgumentException
      * @throws \League\Flysystem\FileExistsException
      * @throws \League\Flysystem\FileNotFoundException
      */
-    public function cache(FileProcessor $processor): bool
+    public function cache(File $processor): bool
     {
         if ($this->isCached()) {
             return true;
@@ -80,8 +80,8 @@ class CacheComponent
      * @param $content
      * @return bool
      * @throws \League\Flysystem\FileExistsException
-     * @throws \InvalidArgumentException
      * @throws \League\Flysystem\FileNotFoundException
+     * @throws \InvalidArgumentException
      */
     protected function saveIntoCache($content): bool
     {

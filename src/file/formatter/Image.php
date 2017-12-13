@@ -6,17 +6,18 @@
  * Time: 2:54 PM
  */
 
-namespace tkanstantsin\fileupload\processor;
+namespace tkanstantsin\fileupload\formatter;
 
 use Imagine\Image\Box;
 use Imagine\Imagick\Imagine;
+use tkanstantsin\fileupload\config\formatter\Image as ImageConfig;
 
 /**
  * Class ImageProcessor
  *
  * @property ImageConfig $formatConfig
  */
-class ImageProcessor extends FileProcessor
+class Image extends File
 {
     public const DEFAULT_EXTENSION = 'jpg';
 
@@ -40,7 +41,7 @@ class ImageProcessor extends FileProcessor
      */
     public function getContentInternal()
     {
-        $image = (new Imagine())->read($this->filesystem->readStream($this->filePath));
+        $image = (new Imagine())->read($this->filesystem->readStream($this->path));
         $box = $this->formatConfig->width !== null && $this->formatConfig->height !== null
             ? new Box($this->formatConfig->width, $this->formatConfig->height)
             : $image->getSize(); // means don't change image size

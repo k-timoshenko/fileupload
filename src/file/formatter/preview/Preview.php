@@ -5,7 +5,7 @@
  * Date: 2/2/16 at 11:47 PM
  */
 
-namespace tkanstantsin\fileupload\processor;
+namespace tkanstantsin\fileupload\formatter\preview;
 
 use tkanstantsin\fileupload\model\IFile;
 use tkanstantsin\fileupload\model\Type;
@@ -13,16 +13,16 @@ use yii\helpers\Url;
 
 /**
  * Class PreviewCreator
- * @package common\components\file\models
+ * @todo: refactor.
  */
-class PreviewCreator
+class Preview
 {
     public const DEFAULT_PREVIEW = 'default';
 
     /**
      * @var array
      */
-    public static $previewArray = [
+    public static $iconPreviewArray = [
         'file' => ['txt', 'doc',],
     ];
 
@@ -59,7 +59,7 @@ class PreviewCreator
     public static function getIcon(IFile $file)
     {
         // return icon
-        foreach (static::$previewArray as $preview => $extensionArray) {
+        foreach (static::$iconPreviewArray as $preview => $extensionArray) {
             if (\in_array($file->getExtension(), $extensionArray, true)) {
                 return static::getPreviewIcon($preview);
             }

@@ -1,20 +1,15 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: konstantin
- * Date: 10/16/16
- * Time: 2:53 PM
- */
 
-namespace tkanstantsin\fileupload\processor;
+namespace tkanstantsin\fileupload\formatter;
 
 use League\Flysystem\FilesystemInterface;
 use tkanstantsin\fileupload\model\IFile;
+use tkanstantsin\fileupload\config\formatter\File as FileConfig;
 
 /**
- * Class File
+ * Class FileProcessor
  */
-class FileProcessor
+class File
 {
     /**
      * @var IFile
@@ -24,7 +19,7 @@ class FileProcessor
      * Path to original file in contentFS
      * @var string
      */
-    public $filePath;
+    public $path;
     /**
      * @var FilesystemInterface
      */
@@ -64,7 +59,7 @@ class FileProcessor
      */
     public function init(): void
     {
-        if ($this->filePath === null) {
+        if ($this->path === null) {
             throw new \ErrorException('File path property must be defined and be not empty');
         }
     }
@@ -83,7 +78,7 @@ class FileProcessor
      */
     public function getContent()
     {
-        return $this->filesystem->has($this->filePath)
+        return $this->filesystem->has($this->path)
             ? $this->getContentInternal()
             : false;
     }
@@ -94,6 +89,6 @@ class FileProcessor
      */
     protected function getContentInternal()
     {
-        return $this->filesystem->readStream($this->filePath);
+        return $this->filesystem->readStream($this->path);
     }
 }

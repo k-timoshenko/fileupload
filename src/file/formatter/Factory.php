@@ -6,7 +6,7 @@
  * Time: 12.41
  */
 
-namespace tkanstantsin\fileupload\processor;
+namespace tkanstantsin\fileupload\formatter;
 
 use League\Flysystem\FilesystemInterface;
 use tkanstantsin\fileupload\FileManager;
@@ -21,9 +21,9 @@ class Factory
     /**
      * @var array
      */
-    public static $fileProcessors = [
-        Type::FILE => FileProcessor::class,
-        Type::IMAGE => ImageProcessor::class,
+    public static $fileFormatterArray = [
+        Type::FILE => File::class,
+        Type::IMAGE => Image::class,
     ];
 
     /**
@@ -44,15 +44,15 @@ class Factory
      * @param IFile $file
      * @param FilesystemInterface $filesystem
      * @param array $config
-     * @return FileProcessor
+     * @return File
      * @throws \ErrorException
      */
-    public function build(IFile $file, FilesystemInterface $filesystem, array $config): FileProcessor
+    public function build(IFile $file, FilesystemInterface $filesystem, array $config): File
     {
-        $class = static::$fileProcessors[$file->getType()] ?? null;
+        $class = static::$fileFormatterArray[$file->getType()] ?? null;
 
         if ($class === null) {
-            throw new \ErrorException('Processors for type `' . $file->getType() . '` not found');
+            throw new \ErrorException(sprintf('Formatter for type `%s` not found', $file->getType()));
         }
 
         $format = $config['format'] ?? null;
