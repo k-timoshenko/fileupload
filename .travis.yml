@@ -49,7 +49,7 @@ install:
   # setup PHP extension
   - |
     if [ $TASK_TESTS_PHP == 1 ]; then
-      tests/data/travis/imagick-setup.sh
+      tests/data/travis/image.sh
     fi
 before_script:
   # show some versions and env information
