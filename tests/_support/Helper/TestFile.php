@@ -12,7 +12,47 @@ class TestFile implements IFile
     /**
      * @var int|null
      */
-    public $id;
+    private $id;
+    /**
+     * @var string|null
+     */
+    private $modelName;
+    /**
+     * @var int|null
+     */
+    private $modelId;
+    /**
+     * @var string|null
+     */
+    private $name;
+    /**
+     * @var string|null
+     */
+    private $extension;
+    /**
+     * @var int|null
+     */
+    private $size;
+    /**
+     * @var int|null
+     */
+    private $type;
+    /**
+     * @var string|null
+     */
+    private $mimeType;
+    /**
+     * @var string|null
+     */
+    private $hash;
+    /**
+     * @var int|null
+     */
+    private $createdAt;
+    /**
+     * @var int|null
+     */
+    private $updatedAt;
 
     /**
      * @return int|null
@@ -32,30 +72,12 @@ class TestFile implements IFile
     }
 
     /**
-     * @see Type
-     * @return int
-     */
-    public function getType(): int
-    {
-        // TODO: Implement getType() method.
-    }
-
-    /**
-     * @see Type
-     * @param int $type
-     */
-    public function setType(int $type): void
-    {
-        // TODO: Implement setType() method.
-    }
-
-    /**
      * Alias of associated model
      * @return null|string
      */
     public function getModelAlias(): ?string
     {
-        // TODO: Implement getModelAlias() method.
+        return $this->modelName;
     }
 
     /**
@@ -63,7 +85,7 @@ class TestFile implements IFile
      */
     public function setModelAlias(string $alias): void
     {
-        // TODO: Implement setModelAlias() method.
+        $this->modelName = $alias;
     }
 
     /**
@@ -72,7 +94,7 @@ class TestFile implements IFile
      */
     public function getModelId(): ?int
     {
-        // TODO: Implement getModelId() method.
+        return $this->modelId ? (int) $this->modelId : null;
     }
 
     /**
@@ -80,8 +102,9 @@ class TestFile implements IFile
      */
     public function setModelId(int $modelId): void
     {
-        // TODO: Implement setModelId() method.
+        $this->modelId = $modelId;
     }
+
 
     /**
      * Get name without extension
@@ -89,7 +112,7 @@ class TestFile implements IFile
      */
     public function getName(): ?string
     {
-        // TODO: Implement getName() method.
+        return $this->name;
     }
 
     /**
@@ -98,17 +121,18 @@ class TestFile implements IFile
      */
     public function setName(string $name): void
     {
-        // TODO: Implement setName() method.
+        $this->name = $name;
     }
 
     /**
-     * Generate full file name (name itself + extension if exists)
-     * @return null|string
+     * Returns full name of file with extension
+     * @return string
      */
-    public function getFullName(): ?string
+    public function getFullName(): string
     {
-        // TODO: Implement getFullName() method.
+        return $this->name . ($this->extension !== null ? '.' . $this->extension : '');
     }
+
 
     /**
      * Get file extension
@@ -116,7 +140,7 @@ class TestFile implements IFile
      */
     public function getExtension(): ?string
     {
-        // TODO: Implement getExtension() method.
+        return $this->extension;
     }
 
     /**
@@ -125,92 +149,66 @@ class TestFile implements IFile
      */
     public function setExtension(string $extension): void
     {
-        // TODO: Implement setExtension() method.
+        $this->extension = $extension;
     }
 
-    /**
-     * Size int bytes
-     * @return int
-     */
     public function getSize(): int
     {
-        // TODO: Implement getSize() method.
+        return $this->size;
     }
 
-    /**
-     * Set size
-     * @param int $size
-     */
     public function setSize(int $size): void
     {
-        // TODO: Implement setSize() method.
+        $this->size = $size;
     }
 
-    /**
-     * @return null|string
-     */
+    public function getType(): int
+    {
+        return $this->type;
+    }
+
+    public function setType(int $type): void
+    {
+        $this->type = $type;
+    }
+
     public function getMimeType(): ?string
     {
-        // TODO: Implement getMimeType() method.
+        return $this->mimeType;
     }
 
-    /**
-     * @param string $mimeType
-     */
     public function setMimeType(string $mimeType): void
     {
-        // TODO: Implement setMimeType() method.
+        $this->mimeType = $mimeType;
     }
 
-    /**
-     * @return string
-     */
     public function getHash(): string
     {
-        // TODO: Implement getHash() method.
+        return $this->hash;
     }
 
-    /**
-     * @param string $hash
-     */
     public function setHash(string $hash): void
     {
-        // TODO: Implement setHash() method.
+        $this->hash = $hash;
     }
 
-    /**
-     * Unix timestamp
-     * @return int
-     */
     public function getCreatedAt(): int
     {
-        // TODO: Implement getCreatedAt() method.
+        return $this->createdAt;
     }
 
-    /**
-     * Unix timestamp
-     * @param int $createdAt
-     */
     public function setCreatedAt(int $createdAt): void
     {
-        // TODO: Implement setCreatedAt() method.
+        $this->createdAt = $createdAt;
     }
 
-    /**
-     * Unix timestamp
-     * @return int|null
-     */
     public function getUpdatedAt(): ?int
     {
-        // TODO: Implement getUpdatedAt() method.
+        return $this->updatedAt;
     }
 
-    /**
-     * Unix timestamp. MUST be set on create
-     * @param int $updatedAt
-     */
     public function setUpdatedAt(int $updatedAt): void
     {
-        // TODO: Implement setUpdatedAt() method.
+        $this->updatedAt = $updatedAt;
     }
 }
