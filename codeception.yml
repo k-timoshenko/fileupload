@@ -9,6 +9,12 @@ settings:
     bootstrap: _bootstrap.php
     colors: true
     memory_limit: 1024M
+coverage:
+    enabled: true
+    low_limit: 30
+    high_limit: 60
+    include:
+        - src/file/*
 extensions:
     enabled:
         - Codeception\Extension\RunFailed
