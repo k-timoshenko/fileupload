@@ -10,21 +10,12 @@ namespace tkanstantsin\fileupload\formatter;
 
 use League\Flysystem\FilesystemInterface;
 use tkanstantsin\fileupload\model\IFile;
-use tkanstantsin\fileupload\model\Type;
 
 /**
  * Class Factory
  */
 class Factory
 {
-    /**
-     * @var array
-     */
-    public static $fileFormatterArray = [
-        Type::FILE => File::class,
-        Type::IMAGE => Image::class,
-    ];
-
     // File formatter constants
     public const FILE_ORIGINAL = 'original';
     public const IMAGE_LARGE = 'large';
