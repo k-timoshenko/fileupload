@@ -11,7 +11,7 @@ class Factory
      * @see Alias
      * @var array
      */
-    public $defaultConfig;
+    public $defaultAliasConfig;
 
     /**
      * @var Alias[]
@@ -38,22 +38,22 @@ class Factory
     }
 
     /**
-     * @param array $config
+     * @param array $defaultAliasConfig
      * @return Factory
      */
-    public static function build(array $config): self
+    public static function build(array $defaultAliasConfig): self
     {
-        return new static($config);
+        return new static($defaultAliasConfig);
     }
 
     /**
      * Factory constructor.
-     * @param array $config
+     * @param array $defaultAliasConfig
      */
-    public function __construct(array $config)
+    public function __construct(array $defaultAliasConfig)
     {
-        $this->defaultConfig = $config;
-        $this->defaultConfig['multiple'] = ($this->defaultConfig['max_count'] ?? 0) > 1;
+        $this->defaultAliasConfig = $defaultAliasConfig;
+        $this->defaultAliasConfig['multiple'] = ($this->defaultAliasConfig['max_count'] ?? 0) > 1;
     }
 
     /**
@@ -111,7 +111,7 @@ class Factory
         }
 
         // add default options
-        $config = array_replace($this->defaultConfig, $config);
+        $config = array_replace($this->defaultAliasConfig, $config);
         $config = array_merge($config, [
             'alias' => $name,
             'directory' => $config['directory'] ?? $name,
