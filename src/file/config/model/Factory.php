@@ -14,6 +14,39 @@ class Factory
     public $defaultConfig;
 
     /**
+     * @var Alias[]
+     */
+    protected $aliasArray = [];
+
+    /**
+     * Prepares aliases config in proper view.
+     * @param array $defaultAliasConfig
+     * @param array $aliasArray
+     * @return array
+     * @throws \ErrorException
+     * @todo: create Alias class.
+     */
+    public static function prepareAliases(array $defaultAliasConfig, array $aliasArray): array
+    {
+        $factory = new static($defaultAliasConfig);
+        foreach ($aliasArray as $name => $config) {
+            $name = (string) $name;
+            $aliasArray[$name] = $factory->createAlias($name, $config);
+        }
+
+        return $aliasArray;
+    }
+
+    /**
+     * @param array $config
+     * @return Factory
+     */
+    public static function build(array $config): self
+    {
+        return new static($config);
+    }
+
+    /**
      * Factory constructor.
      * @param array $config
      */
@@ -24,12 +57,49 @@ class Factory
     }
 
     /**
+     * Add config
+     * @param string $name
+     * @param $config
+     * @throws \ErrorException
+     */
+    public function add(string $name, $config): void
+    {
+        $this->aliasArray[] = $this->createAlias($name, $config);
+    }
+
+    /**
+     * @param array $configArray
+     * @throws \ErrorException
+     */
+    public function addMultiple(array $configArray): void
+    {
+        foreach ($configArray as $name => $config) {
+            $this->add((string) $name, $config);
+        }
+    }
+
+    /**
+     * @param string $name
+     * @return Alias
+     * @throws \ErrorException
+     */
+    public function getAliasConfig(string $name): Alias
+    {
+        $aliasConfig = $this->aliasArray[$name] ?? null;
+        if ($aliasConfig === null) {
+            throw new \ErrorException(sprintf('Alias with key `%s` not defined.', $name));
+        }
+
+        return $aliasConfig;
+    }
+
+    /**
      * @param string|int $name
      * @param array|string $config
      * @return Alias
      * @throws \ErrorException
      */
-    public function build(string $name, $config): Alias
+    protected function createAlias(string $name, $config): Alias
     {
         if (!\is_string($config) && !\is_array($config)) {
             throw new \ErrorException('Invalid alias config for fileupload.');

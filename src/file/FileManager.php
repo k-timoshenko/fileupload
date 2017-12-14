@@ -1,15 +1,12 @@
 <?php
-/**
- * Created by Konstantin Timoshenko
- * Email: t.kanstantsin@gmail.com
- * Date: 4/6/16 at 2:13 AM
- */
 
 namespace tkanstantsin\fileupload;
 
 use League\Flysystem\Filesystem;
 use tkanstantsin\fileupload\config\model\Alias;
 use tkanstantsin\fileupload\formatter\icon\IconGenerator;
+use tkanstantsin\fileupload\config\formatter\Factory as FormatterConfigFactory;
+use tkanstantsin\fileupload\config\model\Factory as AliasConfigFactory;
 use tkanstantsin\fileupload\model\IFile;
 use tkanstantsin\fileupload\model\Type;
 
@@ -18,22 +15,6 @@ use tkanstantsin\fileupload\model\Type;
  */
 class FileManager
 {
-    /**
-     * @see config\model\Alias
-     * @var array
-     */
-    public $aliasArray;
-    /**
-     * @see config\model\Alias
-     * @var array
-     */
-    public $defaultAlias = [
-        'maxSize' => config\model\Alias::DEFAULT_MAX_SIZE,
-        'maxCount' => config\model\Alias::DEFAULT_MAX_COUNT,
-        'hashMethod' => config\model\Alias::DEFAULT_HASH_METHOD,
-        'cacheHashLength' => config\model\Alias::DEFAULT_HASH_LENGTH,
-    ];
-
     /**
      * Base url for uploading files
      * @var string
@@ -58,11 +39,6 @@ class FileManager
     public $fileNotFoundUrl;
 
     /**
-     * @var array
-     */
-    public $formatConfig = [];
-
-    /**
      * For uploading
      * @var Filesystem
      */
@@ -71,7 +47,27 @@ class FileManager
      * Web accessible FS
      * @var Filesystem
      */
-    public $webFS;
+    public $cacheFS;
+
+    /**
+     * @see config\model\Alias
+     * @var array
+     */
+    public $aliasArray;
+    /**
+     * @see config\model\Alias
+     * @var array
+     */
+    public $defaultAlias = [
+        'maxSize' => config\model\Alias::DEFAULT_MAX_SIZE,
+        'maxCount' => config\model\Alias::DEFAULT_MAX_COUNT,
+        'hashMethod' => config\model\Alias::DEFAULT_HASH_METHOD,
+        'cacheHashLength' => config\model\Alias::DEFAULT_HASH_LENGTH,
+    ];
+    /**
+     * @var AliasConfigFactory
+     */
+    private $aliasFactory;
 
     /**
      * Icon set class for icons
@@ -84,6 +80,15 @@ class FileManager
      * @var IconGenerator
      */
     private $iconGenerator;
+
+    /**
+     * @var array
+     */
+    public $formatterConfig = [];
+    /**
+     * @var FormatterConfigFactory
+     */
+    private $formatterFactory;
 
     /**
      * FileManagerComponent constructor.
@@ -105,20 +110,30 @@ class FileManager
      */
     public function init(): void
     {
-        if (empty($this->uploadBaseUrl)) {
+        if (!($this->uploadFS instanceof Filesystem)) {
+            throw new \ErrorException(sprintf('UploadFS must be instance of %s.', Filesystem::class));
+        }
+        if (!($this->cacheFS instanceof Filesystem)) {
+            throw new \ErrorException(sprintf('CacheFS must be instance of %s.', Filesystem::class));
+        }
+        if ($this->uploadBaseUrl === null) {
             throw new \ErrorException('Base upload url must be defined.');
         }
-        if (empty($this->cacheBasePath)) {
+        if ($this->cacheBasePath === null) {
             throw new \ErrorException('Base path for cache must be defined.');
         }
-        if ($this->formatConfig === null || $this->fileNotFoundUrl === null) {
+        if ($this->imageNotFoundUrl === null || $this->fileNotFoundUrl === null) {
             throw new \ErrorException('URLs for not founded image and file must be defined.');
         }
 
         $this->iconGenerator = IconGenerator::build($this->iconSet);
-        $this->formatConfig = array_merge(config\formatter\Factory::$defaultFormatterArray, $this->formatConfig);
-        $this->prepareAliases();
+        $this->formatterFactory = FormatterConfigFactory::build((array) $this->formatterConfig);
+        $this->aliasFactory = AliasConfigFactory::build($this->defaultAlias);
+        $this->aliasFactory->addMultiple($this->aliasArray);
     }
+
+
+    /* PROXY methods */
 
     /**
      * @param string $name
@@ -127,12 +142,7 @@ class FileManager
      */
     public function getAliasConfig(string $name): Alias
     {
-        $aliasConfig = $this->aliasArray[$name] ?? null;
-        if ($aliasConfig === null) {
-            throw new \ErrorException(sprintf('Alias with key `%s` not defined.', $name));
-        }
-
-        return $aliasConfig;
+        return $this->aliasFactory->getAliasConfig($name);
     }
 
     /**
@@ -146,43 +156,28 @@ class FileManager
     }
 
     /**
-     * @param string $name
-     * @param string $value E.g. directory name
+     * @see IconGenerator::getIcon()
+     * @param null|string $extension
      * @return string
-     * @throws \ErrorException
      */
-    public function getDirectoryHash(string $name, string $value): ?string
+    public function getIcon(?string $extension): ?string
     {
-        $aliasConfig = $this->getAliasConfig($name);
-
-        return $aliasConfig->cacheHashLength > 0
-            ? mb_substr(hash($aliasConfig->hashMethod, $value), 0, $aliasConfig->cacheHashLength)
-            : null;
+        return $this->iconGenerator->getIcon($extension);
     }
 
     /**
-     * Returns target directory for uploaded file
-     * @param IFile $file
-     * @return string
-     * @throws \ErrorException
+     * @param string|null $format
+     * @return config\formatter\File
+     * @throws \RuntimeException
+     * @throws \Exception
      */
-    public function getFileDirectory(IFile $file): string
+    public function getFormatterConfig(?string $format): config\formatter\File
     {
-        $aliasConfig = $this->getAliasConfig($file->getModelAlias());
-
-        return $aliasConfig->directory
-            . DIRECTORY_SEPARATOR
-            . $this->getDirectoryHash($aliasConfig->name, (string) $file->getId());
+        return $this->formatterFactory->getConfig($format);
     }
 
-    /**
-     * @param IFile $file
-     * @return string
-     */
-    public function getFileName(IFile $file): string
-    {
-        return $file->getId() . ($file->getExtension() !== null ? '.' . $file->getExtension() : '');
-    }
+
+    /* OTHER methods */
 
     /**
      * Generates url for upload file with upload widget.
@@ -203,27 +198,32 @@ class FileManager
      * @param IFile $file
      * @param array $config
      * @return array|string
+     * @throws \RuntimeException
      * @throws \ErrorException
+     * @throws \Exception
      */
     public function getFileUrl(IFile $file, array $config = [])
     {
         if ($file->getId() === null || !$this->cacheFile($file, $config)) {
-            return $file->getType() === Type::IMAGE
-                ? $this->imageNotFoundUrl
-                : $this->fileNotFoundUrl;
+            return $this->getNotFoundUrl($file);
         }
 
         return [$this->getAssetPath($file, $config)];
     }
 
     /**
-     * @see IconGenerator::getIcon()
-     * @param null|string $extension
+     * Choose 404 url
+     * @param IFile $file
      * @return string
      */
-    public function getIcon(?string $extension): ?string
+    public function getNotFoundUrl(IFile $file): string
     {
-        return $this->iconGenerator->getIcon($extension);
+        switch ($file->getType()) {
+            case Type::IMAGE:
+                return $this->imageNotFoundUrl;
+            default:
+                return $this->fileNotFoundUrl;
+        }
     }
 
     /**
@@ -238,7 +238,7 @@ class FileManager
         try {
             $config['filePath'] = $config['filePath'] ?? $this->getFilePath($file);
             $processor = (new formatter\Factory($this))->build($file, $this->uploadFS, $config);
-            $fileCache = new CacheComponent($file, $this->webFS, $this->getAssetPath($file, $config));
+            $fileCache = new CacheComponent($file, $this->cacheFS, $this->getAssetPath($file, $config));
 
             return $fileCache->cache($processor);
         } catch (\Exception $e) {
@@ -247,16 +247,21 @@ class FileManager
         }
     }
 
+
+    /* FILE PATH builders */
+
     /**
      * Returns path for caching files.
      * @param IFile $file
      * @param array $config
      * @return string
+     * @throws \RuntimeException
      * @throws \ErrorException
+     * @throws \Exception
      */
     public function getAssetPath(IFile $file, array $config = []): string
     {
-        $formatConfig = $this->getFormatConfig($file->getType(), $config['format'] ?? null);
+        $formatConfig = $this->getFormatterConfig($config['format'] ?? null);
         $aliasConfig = $this->getAliasConfig($file->getModelAlias());
 
         return implode('/', [
@@ -283,38 +288,41 @@ class FileManager
     }
 
     /**
-     * @param int $type of file
-     * @param string $format
-     * @return config\formatter\File
-     * @throws \ErrorException
+     * @param IFile $file
+     * @return string
      */
-    public function getFormatConfig(int $type, string $format = null): config\formatter\File
+    public function getFileName(IFile $file): string
     {
-        $formatConfig = $this->formatConfig[$format] ?? null;
-
-        if ($formatConfig === null) { // config not found
-            return $this->getFormatConfig($type, config\formatter\Factory::getDefaultFormat($type));
-        }
-        if (\is_string($formatConfig)) { // for legacy configs
-            return $this->getFormatConfig($type, $formatConfig);
-        }
-
-        return config\formatter\Factory::createFormatConfig($type, array_merge($formatConfig, [
-            'name' => $format,
-        ]));
+        return $file->getId() . ($file->getExtension() !== null ? '.' . $file->getExtension() : '');
     }
 
     /**
-     * Prepares aliases config in proper view.
+     * Returns target directory for uploaded file
+     * @param IFile $file
+     * @return string
      * @throws \ErrorException
-     * @todo: create Alias class.
      */
-    protected function prepareAliases(): void
+    public function getFileDirectory(IFile $file): string
     {
-        $factory = new config\model\Factory($this->defaultAlias);
-        foreach ($this->aliasArray as $name => $config) {
-            $name = (string) $name;
-            $this->aliasArray[$name] = $factory->build($name, $config);
-        }
+        $aliasConfig = $this->getAliasConfig($file->getModelAlias());
+
+        return $aliasConfig->directory
+            . DIRECTORY_SEPARATOR
+            . $this->getDirectoryHash($aliasConfig->name, (string) $file->getId());
+    }
+
+    /**
+     * @param string $name
+     * @param string $value E.g. directory name
+     * @return string
+     * @throws \ErrorException
+     */
+    protected function getDirectoryHash(string $name, string $value): ?string
+    {
+        $aliasConfig = $this->getAliasConfig($name);
+
+        return $aliasConfig->cacheHashLength > 0
+            ? mb_substr(hash($aliasConfig->hashMethod, $value), 0, $aliasConfig->cacheHashLength)
+            : null;
     }
 }

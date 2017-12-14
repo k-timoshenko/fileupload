@@ -12,11 +12,6 @@ class File
      * @var string
      */
     public $name;
-    /**
-     * @see \tkanstantsin\fileupload\model\Type
-     * @var int
-     */
-    public $fileTypeId;
 
     /**
      * FileConfig constructor.

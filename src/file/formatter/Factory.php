@@ -45,7 +45,9 @@ class Factory
      * @param FilesystemInterface $filesystem
      * @param array $config
      * @return File
+     * @throws \RuntimeException
      * @throws \ErrorException
+     * @throws \Exception
      */
     public function build(IFile $file, FilesystemInterface $filesystem, array $config): File
     {
@@ -57,7 +59,7 @@ class Factory
 
         $format = $config['format'] ?? null;
         unset($config['format']);
-        $config['formatConfig'] = $this->fileManager->getFormatConfig($file->getType(), $format);
+        $config['formatConfig'] = $this->fileManager->getFormatterConfig($format);
 
         // TODO: fix file type.
         return new $class($file, $filesystem, $config);

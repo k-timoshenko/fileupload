@@ -2,7 +2,6 @@
 
 namespace tkanstantsin\fileupload\config\formatter;
 
-use tkanstantsin\fileupload\model\Type;
 
 /**
  * Class FormatHelper
@@ -29,87 +28,73 @@ class Factory
      */
     public static $defaultFormatterArray = [
         self::FILE_ORIGINAL => [
-            'fileTypeId' => Type::FILE,
+            'class' => File::class,
         ],
 
         self::IMAGE_LARGE => [
+            'class' => Image::class,
             'width' => 1280,
             'height' => 1024,
-            'fileTypeId' => Type::IMAGE,
         ],
         self::IMAGE_FULL_HD => [
+            'class' => Image::class,
             'width' => 1920,
             'height' => 1080,
-            'fileTypeId' => Type::IMAGE,
         ],
     ];
 
     /**
-     * Associative array of file types with their formatters
      * @var array
      */
-    public static $fileTypeToConfigArray = [
-        Type::FILE => File::class,
-        Type::IMAGE => Image::class,
-        Type::DOC => File::class,
-        Type::VIDEO => File::class,
-        Type::AUDIO => File::class,
-    ];
+    protected $formatterConfigArray;
+    /**
+     * @var File[]
+     */
+    protected $formatterArray = [];
 
     /**
-     * @param int $type
+     * Create instance of factory
      * @param array $config
-     * @return File
-     * @throws \ErrorException
+     * @return Factory
      */
-    public static function createFormatConfig(int $type, array $config): File
+    public static function build(array $config): self
     {
-        $class = static::getConfigClass($type);
-
-        return new $class($config);
+        return new static($config);
     }
 
     /**
-     * @param int $type
+     * Factory constructor.
      * @param array $config
-     * @return File
-     * @throws \ErrorException
      */
-    public function build(int $type, array $config): File
+    public function __construct(array $config)
     {
-        $class = static::getConfigClass($type);
-
-        return new $class($config);
+        $this->formatterConfigArray = $config + static::$defaultFormatterArray;
     }
 
     /**
-     * @param int $type
-     * @return string
-     * @throws \ErrorException
+     * @param string $format
+     * @return File
+     * @throws \RuntimeException
+     * @throws \Exception
      */
-    public static function getConfigClass(int $type): string
+    public function getConfig(?string $format): File
     {
-        $class = static::$fileTypeToConfigArray[$type] ?? null;
-        if ($class === null) {
-            throw new \ErrorException(sprintf('Type `%s` not found.', $type));
+        $format = $format ?? static::FILE_DEFAULT_FORMAT;
+
+        $formatter = $this->formatterArray[$format] ?? null;
+        if ($formatter === null) {
+            $formatterConfig = $this->formatterConfig[$format] ?? null;
+            if ($formatterConfig === null) {
+                throw new \RuntimeException(sprintf('Format `%s` not found in config.', $format));
+            }
+
+            $class = $formatterConfig['class'];
+            unset($formatterConfig['class']);
+
+            $formatter = new $class($formatterConfig);
+            $this->formatterArray[$format] = $formatter;
         }
 
-        return $class;
-    }
-
-    /**
-     * @see Type
-     * @param int $fileType
-     * @return string
-     */
-    public static function getDefaultFormat(int $fileType): string
-    {
-        switch ($fileType) {
-            case Type::IMAGE:
-                return static::IMAGE_DEFAULT_FORMAT;
-            case Type::FILE:
-            default:
-                return static::FILE_DEFAULT_FORMAT;
-        }
+        return $formatter;
     }
 }
