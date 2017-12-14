@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: konstantin
- * Date: 5.7.17
- * Time: 13.40
- */
 
 namespace tkanstantsin\yii2fileupload\model;
 

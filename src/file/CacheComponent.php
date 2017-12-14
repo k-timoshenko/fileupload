@@ -50,19 +50,19 @@ class CacheComponent
     /**
      * Copies, processes and saves file in Cache::$filesystem
      * @todo: add cleanup of cached files.
-     * @param \tkanstantsin\fileupload\formatter\File $processor
+     * @param \tkanstantsin\fileupload\formatter\File $formatter
      * @return bool
      * @throws \InvalidArgumentException
      * @throws \League\Flysystem\FileExistsException
      * @throws \League\Flysystem\FileNotFoundException
      */
-    public function cache(File $processor): bool
+    public function cache(File $formatter): bool
     {
         if ($this->isCached()) {
             return true;
         }
 
-        return $this->saveIntoCache($processor->getContent());
+        return $this->saveIntoCache($formatter->getContent());
     }
 
     /**

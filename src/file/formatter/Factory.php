@@ -9,7 +9,6 @@
 namespace tkanstantsin\fileupload\formatter;
 
 use League\Flysystem\FilesystemInterface;
-use tkanstantsin\fileupload\FileManager;
 use tkanstantsin\fileupload\model\IFile;
 use tkanstantsin\fileupload\model\Type;
 
@@ -26,42 +25,84 @@ class Factory
         Type::IMAGE => Image::class,
     ];
 
+    // File formatter constants
+    public const FILE_ORIGINAL = 'original';
+    public const IMAGE_LARGE = 'large';
+    public const IMAGE_FULL_HD = 'full_hd';
+
+    // Default file formatters
+    public const FILE_DEFAULT_FORMAT = self::FILE_ORIGINAL;
+    public const IMAGE_DEFAULT_FORMAT = self::IMAGE_LARGE;
+
     /**
-     * @var FileManager
+     * Default set of configs for files and images. It can be supplemented in
+     * config file. For new formatter add element if following format:
+     * - key - unique constant;
+     * - value - fields for one of `formatter\config\*.
+     *
+     * @var array
      */
-    private $fileManager;
+    public const DEFAULT_FORMATTER_ARRAY = [
+        self::FILE_ORIGINAL => [
+            'class' => File::class,
+        ],
+
+        self::IMAGE_LARGE => [
+            'class' => Image::class,
+            'width' => 1280,
+            'height' => 1024,
+        ],
+        self::IMAGE_FULL_HD => [
+            'class' => Image::class,
+            'width' => 1920,
+            'height' => 1080,
+        ],
+    ];
+
+    /**
+     * @var array
+     */
+    protected $formatterConfigArray;
 
     /**
      * Factory constructor.
-     * @param FileManager $fileManager
+     * @param array $formatterConfigArray
      */
-    public function __construct(FileManager $fileManager)
+    public function __construct(array $formatterConfigArray)
     {
-        $this->fileManager = $fileManager;
+        $this->formatterConfigArray = $formatterConfigArray + static::DEFAULT_FORMATTER_ARRAY;
     }
 
     /**
      * @param IFile $file
      * @param FilesystemInterface $filesystem
-     * @param array $config
+     * @param string $key
      * @return File
      * @throws \RuntimeException
-     * @throws \ErrorException
-     * @throws \Exception
      */
-    public function build(IFile $file, FilesystemInterface $filesystem, array $config): File
+    public function build(IFile $file, FilesystemInterface $filesystem, string $key): File
     {
-        $class = static::$fileFormatterArray[$file->getType()] ?? null;
-
-        if ($class === null) {
-            throw new \ErrorException(sprintf('Formatter for type `%s` not found', $file->getType()));
+        $formatterConfig = $this->formatterConfigArray[$key] ?? null;
+        if ($formatterConfig === null) {
+            throw new \RuntimeException(sprintf('Formatter for key `%s` not found', $key));
         }
 
-        $format = $config['format'] ?? null;
-        unset($config['format']);
-        $config['formatConfig'] = $this->fileManager->getFormatterConfig($format);
+        $class = null;
+        $params = [];
 
-        // TODO: fix file type.
-        return new $class($file, $filesystem, $config);
+        if (\is_array($formatterConfig)) {
+            $class = $formatterConfig['class'];
+            unset($formatterConfig['class']);
+            $params = $formatterConfig;
+        } elseif (\is_string($formatterConfig)) {
+            $class = $formatterConfig;
+        }
+
+        if (!($class instanceof File)) {
+            throw new \RuntimeException('Invalid formatter config.');
+        }
+
+        /* @see File::__construct() */
+        return new $class($file, $filesystem, $key, $params);
     }
 }

@@ -83,13 +83,14 @@ class Uploader extends File
      * @return bool
      * @throws \League\Flysystem\FileExistsException
      * @throws \InvalidArgumentException
+     * @throws \ErrorException
      */
     public function upload(): bool
     {
         $saved = $this->save();
 
         // ignore saving error
-        $this->uploadFile($this->fileManager->getFileDirectory($this), $this->fileManager->getFileName($this));
+        $this->uploadFile($this->aliasConfig->getFileDirectory($this), $this->aliasConfig->getFileName($this));
 
         return $saved;
     }

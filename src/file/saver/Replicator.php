@@ -70,6 +70,7 @@ class Replicator
     /**
      * @param \tkanstantsin\yii2fileupload\model\File $file
      * @return bool
+     * @throws \ErrorException
      */
     protected function replicateFile(File $file): bool
     {
@@ -81,7 +82,10 @@ class Replicator
         $newFile->is_confirmed = true;
 
         $saved = $newFile->save();
-        $saved = $saved && $this->filesystem->copy($this->fileManager->getFilePath($file), $this->fileManager->getFilePath($newFile));
+
+        $aliasConfig = $this->fileManager->getAliasConfig($file->getModelAlias());
+
+        $saved = $saved && $this->filesystem->copy($aliasConfig->getFilePath($file), $aliasConfig->getFilePath($newFile));
 
         return $saved;
     }

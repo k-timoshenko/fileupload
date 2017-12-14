@@ -2,6 +2,8 @@
 
 namespace tkanstantsin\fileupload\config\model;
 
+use tkanstantsin\fileupload\model\IFile;
+
 /**
  * Class Alias represent config for model
  * @todo: add `accept` type.
@@ -80,5 +82,63 @@ class Alias
         if (!\in_array($this->hashMethod, hash_algos(), true)) {
             throw new \ErrorException(sprintf('Hash method `%s` not found.', $this->hashMethod));
         }
+    }
+
+    /**
+     * Returns file path in contentFS
+     * @param IFile $file
+     * @return string|null
+     */
+    public function getFilePath(IFile $file): ?string
+    {
+        if ($file->getId() === null) {
+            return null;
+        }
+
+        return $this->getFileDirectory($file) . DIRECTORY_SEPARATOR . $this->getFileName($file);
+    }
+
+    /**
+     * @param IFile $file
+     * @return string
+     */
+    public function getAssetName(IFile $file): string
+    {
+        return $file->getId() . '_' . $file->getFullName();
+    }
+
+    /**
+     * @param IFile $file
+     * @return string
+     */
+    public function getFileName(IFile $file): string
+    {
+        return $file->getId() . ($file->getExtension() !== null ? '.' . $file->getExtension() : '');
+    }
+
+    /**
+     * Returns target directory for uploaded file
+     * @param IFile $file
+     * @return string
+     */
+    public function getFileDirectory(IFile $file): string
+    {
+        return implode(DIRECTORY_SEPARATOR, array_filter([
+            $this->directory,
+            // TODO: check if used correct hash.
+            // Which value should be passed into getDirectoryHash? Directory name or file id?
+            $this->getDirectoryHash((string) $file->getId()),
+        ]));
+    }
+
+    /**
+     * @param string $value E.g. directory name
+     * @return string
+     */
+    protected function getDirectoryHash(string $value): ?string
+    {
+        return $this->cacheHashLength > 0
+            ? mb_substr(hash($this->hashMethod, $value), 0, $this->cacheHashLength)
+            : null;
     }
 }

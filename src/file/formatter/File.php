@@ -4,35 +4,39 @@ namespace tkanstantsin\fileupload\formatter;
 
 use League\Flysystem\FilesystemInterface;
 use tkanstantsin\fileupload\model\IFile;
-use tkanstantsin\fileupload\config\formatter\File as FileConfig;
 
 /**
  * Class FileProcessor
+ * TODO: create callbacks or interfaces for getting customized file name or
+ * filepath
  */
 class File
 {
     /**
+     * @see Factory::DEFAULT_FORMATTER_ARRAY
+     * @example file, _normal, _product_preview
+     * @var string
+     */
+    public $name;
+
+    /**
      * @var IFile
      */
-    public $file;
+    protected $file;
     /**
      * Path to original file in contentFS
      * @var string
      */
-    public $path;
+    protected $path;
     /**
      * @var FilesystemInterface
      */
-    public $filesystem;
-    /**
-     * @var FileConfig
-     */
-    public $formatConfig;
+    protected $filesystem;
 
     /**
      * @var IFormatAdapter[]|array
      */
-    public $formatAdapterArray = [];
+    protected $formatAdapterArray = [];
 
     /**
      * Additional dynamic config for processor class.
@@ -44,13 +48,15 @@ class File
      * FileProcessor constructor.
      * @param IFile $file
      * @param FilesystemInterface $filesystem
+     * @param string $name
      * @param array $config
      * @throws \RuntimeException
      */
-    public function __construct(IFile $file, FilesystemInterface $filesystem, array $config = [])
+    public function __construct(IFile $file, FilesystemInterface $filesystem, string $name, array $config = [])
     {
         $this->file = $file;
         $this->filesystem = $filesystem;
+        $this->name = $name;
         foreach ($config as $key => $value) {
             $this->$key = $value;
         }
@@ -75,16 +81,9 @@ class File
                 throw new \RuntimeException(sprintf('Format adapter must be instance of %s.', IFormatAdapter::class));
             }
         }
-
     }
 
-    /**
-     * @param FileConfig $config
-     */
-    public function setFormatConfig(FileConfig $config): void
-    {
-        $this->formatConfig = $config;
-    }
+
 
     /**
      * @return resource|string|bool

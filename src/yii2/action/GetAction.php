@@ -4,6 +4,7 @@ namespace tkanstantsin\yii2fileupload\action;
 
 
 use League\Flysystem\Filesystem;
+use tkanstantsin\fileupload\config\model\Alias;
 use tkanstantsin\fileupload\model\Type;
 use tkanstantsin\yii2fileupload\model\File;
 use yii\helpers\StringHelper;
@@ -38,11 +39,18 @@ class GetAction extends AbstractAction
     public $webFS;
 
     /**
+     * @var Alias
+     */
+    protected $aliasConfig;
+
+    /**
      * @inheritdoc
      * @param string $fileType
      * @param string $hash
      * @param int $id
      * @param string $fileName
+     * @throws \Exception
+     * @throws \RuntimeException
      * @throws \League\Flysystem\FileExistsException
      * @throws \League\Flysystem\FileNotFoundException
      * @throws \yii\base\ExitException
@@ -54,10 +62,10 @@ class GetAction extends AbstractAction
         $this->init();
 
         $file = $this->findModel($id);
-        $extension = pathinfo($file->name, PATHINFO_EXTENSION);
-        $assetPath = '/files/' . $fileType . '/' . $hash . '/' . $id . ($extension !== null ? '.' . $extension : '');
+        $this->aliasConfig = $this->fileManager->getAliasConfig($file->getModelAlias());
+        $pathBuilder = $this->fileManager->getPathBuilder($file, '');
 
-        if (!$this->contentFS->has($this->fileManager->getFilePath($file))) {
+        if (!$this->contentFS->has($this->aliasConfig->getFilePath($file))) {
             header('HTTP/1.0 404 Not Found');
             \Yii::$app->end();
         }
@@ -68,7 +76,7 @@ class GetAction extends AbstractAction
 
         switch ($clearFileType) {
             case 'image': // TODO: constant!
-                $this->displayImage($file, $fileOptions, $assetPath);
+                $this->displayImage($file, $fileOptions, $pathBuilder->getCachePath());
                 break;
             case 'file':
                 $this->displayFile($file, $fileOptions);
@@ -113,7 +121,7 @@ class GetAction extends AbstractAction
      */
     protected function displayFile(File $file, $fileOption): void
     {
-        $stream = $this->contentFS->readStream($this->fileManager->getFilePath($file));
+        $stream = $this->contentFS->readStream($this->aliasConfig->getFilePath($file));
         echo stream_get_contents($stream);
         fclose($stream);
     }
@@ -129,7 +137,7 @@ class GetAction extends AbstractAction
      */
     protected function displayImage(File $file, $fileOptions, string $assetPath): void
     {
-        $filePath = $this->fileManager->getFilePath($file);
+        $filePath = $this->aliasConfig->getFilePath($file);
         $content = null;
         if ($this->webFS->has($assetPath)) {
             $content = $this->webFS->read($assetPath);

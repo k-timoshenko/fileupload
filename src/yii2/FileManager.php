@@ -10,7 +10,7 @@ namespace tkanstantsin\yii2fileupload;
 use tkanstantsin\fileupload\FileManager as BaseFileManager;
 use tkanstantsin\fileupload\model\IFile;
 use tkanstantsin\fileupload\model\Type as FileType;
-use tkanstantsin\fileupload\config\formatter\Factory as ConfigFormatterFactory;
+use tkanstantsin\fileupload\formatter\Factory as FormatterFactory;
 use tkanstantsin\yii2fileupload\model\File;
 use yii\base\Component;
 use yii\base\InvalidConfigException;
@@ -71,10 +71,10 @@ class FileManager extends Component
             'is_confirmed' => (integer) $file->is_confirmed,
             // urls
             // path to full image or file itself.
-            'url' => Url::to($this->manager->getFileUrl($file, ['format' => ConfigFormatterFactory::FILE_ORIGINAL])),
+            'url' => Url::to($this->manager->getFileUrl($file, FormatterFactory::FILE_ORIGINAL)),
             // path to image thumbnail or file icon.
             'preview_url' => $file->getType() === FileType::IMAGE
-                ? Url::to($this->manager->getFileUrl($file, ['format' => ConfigFormatterFactory::IMAGE_DEFAULT_FORMAT]))
+                ? Url::to($this->manager->getFileUrl($file, FormatterFactory::IMAGE_DEFAULT_FORMAT))
                 : null,
             'icon' => $this->manager->getIcon($file->getExtension()),
         ];
