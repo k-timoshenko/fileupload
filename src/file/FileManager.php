@@ -3,10 +3,10 @@
 namespace tkanstantsin\fileupload;
 
 use League\Flysystem\Filesystem;
-use tkanstantsin\fileupload\config\model\Alias;
-use tkanstantsin\fileupload\formatter\icon\IconGenerator;
+use tkanstantsin\fileupload\config\Alias;
+use tkanstantsin\fileupload\config\Factory as AliasFactory;
 use tkanstantsin\fileupload\formatter\Factory as FormatterFactory;
-use tkanstantsin\fileupload\config\model\Factory as AliasConfigFactory;
+use tkanstantsin\fileupload\formatter\icon\IconGenerator;
 use tkanstantsin\fileupload\model\IFile;
 use tkanstantsin\fileupload\model\Type;
 
@@ -59,13 +59,13 @@ class FileManager
      * @var array
      */
     public $defaultAlias = [
-        'maxSize' => config\model\Alias::DEFAULT_MAX_SIZE,
-        'maxCount' => config\model\Alias::DEFAULT_MAX_COUNT,
-        'hashMethod' => config\model\Alias::DEFAULT_HASH_METHOD,
-        'cacheHashLength' => config\model\Alias::DEFAULT_HASH_LENGTH,
+        'maxSize' => config\Alias::DEFAULT_MAX_SIZE,
+        'maxCount' => config\Alias::DEFAULT_MAX_COUNT,
+        'hashMethod' => config\Alias::DEFAULT_HASH_METHOD,
+        'cacheHashLength' => config\Alias::DEFAULT_HASH_LENGTH,
     ];
     /**
-     * @var AliasConfigFactory
+     * @var AliasFactory
      */
     private $aliasFactory;
 
@@ -128,7 +128,7 @@ class FileManager
 
         $this->iconGenerator = IconGenerator::build($this->iconSet);
         $this->formatterFactory = new FormatterFactory((array) $this->formatterConfigArray);
-        $this->aliasFactory = AliasConfigFactory::build($this->defaultAlias);
+        $this->aliasFactory = AliasFactory::build($this->defaultAlias);
         $this->aliasFactory->addMultiple($this->aliasArray);
     }
 

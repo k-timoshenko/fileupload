@@ -1,6 +1,6 @@
 <?php
 
-namespace tkanstantsin\fileupload\config\model;
+namespace tkanstantsin\fileupload\config;
 
 use tkanstantsin\fileupload\model\IFile;
 

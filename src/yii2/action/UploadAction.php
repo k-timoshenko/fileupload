@@ -11,7 +11,7 @@ use yii\web\UploadedFile;
 
 /**
  * Class UploadAction saves any file according config defined in aliases.
- * @see \tkanstantsin\fileupload\config\model\Alias
+ * @see \tkanstantsin\fileupload\config\Alias
  *
  * @example acton definition:
  * public function actions()

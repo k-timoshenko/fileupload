@@ -2,7 +2,7 @@
 
 namespace tkanstantsin\fileupload;
 
-use tkanstantsin\fileupload\config\model\Alias;
+use tkanstantsin\fileupload\config\Alias;
 use tkanstantsin\fileupload\formatter\File as FileFormatter;
 use tkanstantsin\fileupload\model\IFile;
 use tkanstantsin\fileupload\model\Type;

@@ -3,7 +3,7 @@
 namespace common\components\file\savers;
 
 use League\Flysystem\FilesystemInterface;
-use tkanstantsin\fileupload\config\model\Alias;
+use tkanstantsin\fileupload\config\Alias;
 use tkanstantsin\fileupload\FileManager;
 use tkanstantsin\fileupload\model\Type;
 use tkanstantsin\yii2fileupload\model\File;
