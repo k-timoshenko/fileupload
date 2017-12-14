@@ -30,6 +30,11 @@ class File
     public $formatConfig;
 
     /**
+     * @var IFormatAdapter[]|array
+     */
+    public $formatAdapterArray = [];
+
+    /**
      * Additional dynamic config for processor class.
      * @var array
      */
@@ -40,7 +45,7 @@ class File
      * @param IFile $file
      * @param FilesystemInterface $filesystem
      * @param array $config
-     * @throws \ErrorException
+     * @throws \RuntimeException
      */
     public function __construct(IFile $file, FilesystemInterface $filesystem, array $config = [])
     {
@@ -54,14 +59,23 @@ class File
     }
 
     /**
-     * @inheritdoc
-     * @throws \ErrorException
+     * Initialize app
+     * @throws \RuntimeException
      */
     public function init(): void
     {
         if ($this->path === null) {
-            throw new \ErrorException('File path property must be defined and be not empty');
+            throw new \RuntimeException('File path property must be defined and be not empty');
         }
+        foreach ($this->formatAdapterArray as $key => $formatAdapter) {
+            if (\is_string($formatAdapter) && class_exists($formatAdapter)) {
+                $this->formatAdapterArray[$key] = new $formatAdapter;
+            }
+            if (!($formatAdapter instanceof IFormatAdapter)) {
+                throw new \RuntimeException(sprintf('Format adapter must be instance of %s.', IFormatAdapter::class));
+            }
+        }
+
     }
 
     /**
@@ -78,9 +92,16 @@ class File
      */
     public function getContent()
     {
-        return $this->filesystem->has($this->path)
-            ? $this->getContentInternal()
-            : false;
+        if (!$this->filesystem->has($this->path)) {
+            return false;
+        }
+
+        $content = $this->getContentInternal();
+        foreach ($this->formatAdapterArray as $formatAdapter) {
+            $content = $formatAdapter->exec($content);
+        }
+
+        return $content;
     }
 
     /**
