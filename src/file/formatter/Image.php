@@ -19,7 +19,29 @@ use tkanstantsin\fileupload\config\formatter\Image as ImageConfig;
  */
 class Image extends File
 {
+    /**
+     * Like background `cover` in css.
+     */
+    public const RESIZE_OUTBOUND = \Imagine\Image\ImageInterface::THUMBNAIL_OUTBOUND;
+    /**
+     * Like background `contain` in css.
+     */
+    public const RESIZE_INSET = \Imagine\Image\ImageInterface::THUMBNAIL_INSET;
+
     public const DEFAULT_EXTENSION = 'jpg';
+
+    /**
+     * @var int
+     */
+    public $width;
+    /**
+     * @var int
+     */
+    public $height;
+    /**
+     * @var string
+     */
+    public $mode = self::RESIZE_INSET;
 
     /**
      * @inheritdoc
@@ -41,7 +63,7 @@ class Image extends File
      */
     public function getContentInternal()
     {
-        $image = (new Imagine())->read($this->filesystem->readStream($this->path));
+        $image = (new Imagine())->read(parent::getContentInternal());
         $box = $this->formatConfig->width !== null && $this->formatConfig->height !== null
             ? new Box($this->formatConfig->width, $this->formatConfig->height)
             : $image->getSize(); // means don't change image size
