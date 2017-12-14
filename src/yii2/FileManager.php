@@ -51,8 +51,11 @@ class FileManager extends Component
      * Generates file info for response to jQueryFileUpload widget.
      * @param File $file
      * @return array
+     * @throws \RuntimeException
      * @throws \yii\base\InvalidParamException
      * @throws \ErrorException
+     * @throws \Exception
+     * @throws \Exception
      */
     public function getFileData(File $file): array
     {
