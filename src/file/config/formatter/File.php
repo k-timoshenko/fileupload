@@ -8,7 +8,7 @@ namespace tkanstantsin\fileupload\config\formatter;
 class File
 {
     /**
-     * Value of config constant, that was use to generate this config.
+     * Value of config constant, that was used to generate this config.
      * @var string
      */
     public $name;
