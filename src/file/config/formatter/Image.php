@@ -4,6 +4,8 @@ namespace tkanstantsin\fileupload\config\formatter;
 
 /**
  * Class ImageConfig
+ *
+ * @todo custom 404 image for each formatter.
  */
 class Image extends File
 {
