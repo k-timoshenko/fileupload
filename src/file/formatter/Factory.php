@@ -34,9 +34,7 @@ class Factory
      * @var array
      */
     public const DEFAULT_FORMATTER_ARRAY = [
-        self::FILE_ORIGINAL => [
-            'class' => File::class,
-        ],
+        self::FILE_ORIGINAL => File::class,
 
         self::IMAGE_LARGE => [
             'class' => Image::class,
@@ -51,6 +49,25 @@ class Factory
     ];
 
     /**
+     * Configs for availabe formatters.
+     * May contain: class name or array with class name and parameters.
+     * @example: \tkanstantsin\fileupload\formatter\File
+     * ```php
+     * [
+     *     \tkanstantsin\fileupload\formatter\File::class,
+     *     'full_hd' => [
+     *         'class' => \tkanstantsin\fileupload\formatter\Image::class,,
+     *         'width' => 1920,
+     *         'height' => 1080,
+     *         'mode' => \tkanstantsin\fileupload\formatter\Image::RESIZE_OUTBOUND,
+     *         'formatAdapterArray' => [
+     *             SomeAdapter::class,
+     *             SecondAdapter::class,
+     *         ],
+     *     ],
+     * ]
+     * ```
+     *
      * @var array
      */
     protected $formatterConfigArray;
