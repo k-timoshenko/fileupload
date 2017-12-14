@@ -61,6 +61,15 @@ class Alias
      */
     public $cacheHashLength;
 
+    /**
+     * @var callable
+     */
+    public $filePathClosure;
+    /**
+     * @var callable
+     */
+    public $assetNameClosure;
+
 
     /**
      * Alias constructor.
@@ -82,6 +91,14 @@ class Alias
         if (!\in_array($this->hashMethod, hash_algos(), true)) {
             throw new \ErrorException(sprintf('Hash method `%s` not found.', $this->hashMethod));
         }
+        // TODO: create interface with all such methods.
+        // Implement base version. And allow to use custom realizations.
+        if ($this->filePathClosure !== null && !\is_callable($this->filePathClosure)) {
+            throw new \ErrorException('FilePathClosure must be callable.');
+        }
+        if ($this->assetNameClosure !== null && !\is_callable($this->assetNameClosure)) {
+            throw new \ErrorException('AssetNameClosure must be callable.');
+        }
     }
 
     /**
@@ -91,11 +108,13 @@ class Alias
      */
     public function getFilePath(IFile $file): ?string
     {
-        if ($file->getId() === null) {
-            return null;
+        if ($this->filePathClosure !== null) {
+            return \call_user_func($this->filePathClosure, $file);
         }
 
-        return $this->getFileDirectory($file) . DIRECTORY_SEPARATOR . $this->getFileName($file);
+        return $file->getId() !== null
+            ? $this->getFileDirectory($file) . DIRECTORY_SEPARATOR . $this->getFileName($file)
+            : null;
     }
 
     /**
@@ -104,6 +123,10 @@ class Alias
      */
     public function getAssetName(IFile $file): string
     {
+        if ($this->assetNameClosure !== null) {
+            return \call_user_func($this->assetNameClosure, $file);
+        }
+
         return $file->getId() . '_' . $file->getFullName();
     }
 
