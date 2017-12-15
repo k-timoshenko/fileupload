@@ -2,6 +2,8 @@
 
 namespace tkanstantsin\fileupload\formatter;
 
+use tkanstantsin\fileupload\model\IFile;
+
 /**
  * Interface IFormatAdapter
  */
@@ -10,8 +12,10 @@ interface IFormatAdapter
     /**
      * Applies filters or something to content and return it
      *
-     * @param $content
+     * @param IFile $file
+     * @param       $content
+     *
      * @return mixed
      */
-    public function exec($content);
+    public function exec(IFile $file, $content);
 }

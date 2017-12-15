@@ -106,7 +106,7 @@ class File extends BaseObject
 
         $content = $this->getContentInternal();
         foreach ($this->formatAdapterArray as $formatAdapter) {
-            $content = $formatAdapter->exec($content);
+            $content = $formatAdapter->exec($this->file, $content);
         }
 
         return $content;
