@@ -64,7 +64,7 @@ class Factory
      */
     public function add(string $name, $config): void
     {
-        $this->aliasArray[] = $this->createAlias($name, $config);
+        $this->aliasArray[$name] = $this->createAlias($name, $config);
     }
 
     /**
