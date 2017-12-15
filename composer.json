@@ -35,7 +35,8 @@
     "codeception/verify": "~0.3.1",
     "league/factory-muffin": "^3.0",
     "league/factory-muffin-faker": "^1.0",
-    "fzaninotto/faker": "1.5.*"
+    "fzaninotto/faker": "1.5.*",
+    "ralouphie/mimey": "^1.0"
   },
   "suggest": {
     "fortawesome/font-awesome": "For file types without preview generator"
