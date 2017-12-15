@@ -20,5 +20,15 @@ class BaseObject
             }
             $this->$key = $value;
         }
+
+        $this->init();
+    }
+
+    /**
+     * Initialize object
+     * E.g. instantiate some variables or check correct data
+     */
+    public function init(): void
+    {
     }
 }

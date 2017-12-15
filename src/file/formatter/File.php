@@ -3,6 +3,7 @@
 namespace tkanstantsin\fileupload\formatter;
 
 use League\Flysystem\FilesystemInterface;
+use tkanstantsin\fileupload\model\BaseObject;
 use tkanstantsin\fileupload\model\IFile;
 
 /**
@@ -10,7 +11,7 @@ use tkanstantsin\fileupload\model\IFile;
  * TODO: create callbacks or interfaces for getting customized file name or
  * filepath
  */
-class File
+class File extends BaseObject
 {
     /**
      * @see Factory::DEFAULT_FORMATTER_ARRAY
@@ -57,9 +58,7 @@ class File
         $this->file = $file;
         $this->filesystem = $filesystem;
         $this->name = $name;
-        foreach ($config as $key => $value) {
-            $this->$key = $value;
-        }
+        parent::__construct($config);
 
         $this->init();
     }
@@ -70,6 +69,8 @@ class File
      */
     public function init(): void
     {
+        parent::init();
+
         if ($this->path === null) {
             throw new \RuntimeException('File path property must be defined and be not empty');
         }
