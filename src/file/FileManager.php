@@ -178,7 +178,7 @@ class FileManager
     public function getPathBuilder(IFile $file, string $format): PathBuilder
     {
         $alias = $this->getAliasConfig($file->getModelAlias());
-        $formatter = $this->formatterFactory->build($file, $this->uploadFS, $format);
+        $formatter = $this->formatterFactory->build($file, $alias, $this->uploadFS, $format);
 
         return new PathBuilder($file, $alias, $formatter);
     }

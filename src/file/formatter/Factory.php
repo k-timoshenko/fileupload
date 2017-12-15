@@ -9,6 +9,7 @@
 namespace tkanstantsin\fileupload\formatter;
 
 use League\Flysystem\FilesystemInterface;
+use tkanstantsin\fileupload\config\Alias;
 use tkanstantsin\fileupload\model\IFile;
 
 /**
@@ -84,12 +85,12 @@ class Factory
 
     /**
      * @param IFile $file
+     * @param Alias $alias
      * @param FilesystemInterface $filesystem
      * @param string $key
      * @return File
-     * @throws \RuntimeException
      */
-    public function build(IFile $file, FilesystemInterface $filesystem, string $key): File
+    public function build(IFile $file, Alias $alias, FilesystemInterface $filesystem, string $key): File
     {
         $formatterConfig = $this->formatterConfigArray[$key] ?? null;
         if ($formatterConfig === null) {
@@ -108,6 +109,7 @@ class Factory
         }
 
         $params['name'] = $key;
+        $params['path'] = $alias->getFilePath($file);
 
         /* @see File::__construct() */
         return new $class($file, $filesystem, $params);
