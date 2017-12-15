@@ -2,58 +2,59 @@
 
 namespace Helper;
 
+use tkanstantsin\fileupload\model\BaseObject;
 use tkanstantsin\fileupload\model\IFile;
 
 /**
  * Class TestFile
  * @todo: create factory for model.
  */
-class TestFile implements IFile
+class TestFile extends BaseObject implements IFile
 {
     /**
      * @var int|null
      */
-    private $id;
+    protected $id;
     /**
      * @var string|null
      */
-    private $modelName;
+    protected $modelAlias;
     /**
      * @var int|null
      */
-    private $modelId;
+    protected $modelId;
     /**
      * @var string|null
      */
-    private $name;
+    protected $name;
     /**
      * @var string|null
      */
-    private $extension;
+    protected $extension;
     /**
      * @var int|null
      */
-    private $size;
+    protected $size;
     /**
      * @var int|null
      */
-    private $type;
+    protected $type;
     /**
      * @var string|null
      */
-    private $mimeType;
+    protected $mimeType;
     /**
      * @var string|null
      */
-    private $hash;
+    protected $hash;
     /**
      * @var int|null
      */
-    private $createdAt;
+    protected $createdAt;
     /**
      * @var int|null
      */
-    private $updatedAt;
+    protected $updatedAt;
 
     /**
      * @return int|null
@@ -78,7 +79,7 @@ class TestFile implements IFile
      */
     public function getModelAlias(): ?string
     {
-        return $this->modelName;
+        return $this->modelAlias;
     }
 
     /**
@@ -86,7 +87,7 @@ class TestFile implements IFile
      */
     public function setModelAlias(string $alias): void
     {
-        $this->modelName = $alias;
+        $this->modelAlias = $alias;
     }
 
     /**
