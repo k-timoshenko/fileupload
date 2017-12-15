@@ -73,7 +73,7 @@ class PathBuilder
     {
         return implode('/', array_filter([
             $this->cacheBasePath,
-            Type::$folderPrefix[$this->file->getType()] . '_' . $this->formatter->name,
+            Type::$folderPrefix[$this->file->getType()] . '_' . $this->formatter->getName(),
             mb_substr($this->file->getHash(), 0, $this->alias->cacheHashLength),
             $this->alias->getAssetName($this->file),
         ]));

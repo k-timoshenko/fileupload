@@ -14,25 +14,26 @@ use tkanstantsin\fileupload\model\IFile;
 class File extends BaseObject
 {
     /**
+     * @var IFile
+     */
+    protected $file;
+    /**
+     * @var FilesystemInterface
+     */
+    protected $filesystem;
+
+    /**
      * @see Factory::DEFAULT_FORMATTER_ARRAY
      * @example file, _normal, _product_preview
      * @var string
      */
-    public $name;
+    protected $name;
 
-    /**
-     * @var IFile
-     */
-    protected $file;
     /**
      * Path to original file in contentFS
      * @var string
      */
     protected $path;
-    /**
-     * @var FilesystemInterface
-     */
-    protected $filesystem;
 
     /**
      * @var IFormatAdapter[]|array
@@ -49,15 +50,13 @@ class File extends BaseObject
      * FileProcessor constructor.
      * @param IFile $file
      * @param FilesystemInterface $filesystem
-     * @param string $name
      * @param array $config
      * @throws \RuntimeException
      */
-    public function __construct(IFile $file, FilesystemInterface $filesystem, string $name, array $config = [])
+    public function __construct(IFile $file, FilesystemInterface $filesystem, array $config = [])
     {
         $this->file = $file;
         $this->filesystem = $filesystem;
-        $this->name = $name;
         parent::__construct($config);
 
         $this->init();
@@ -71,6 +70,9 @@ class File extends BaseObject
     {
         parent::init();
 
+        if ($this->name === null || !\is_string($this->name) || $this->name === '') {
+            throw new \RuntimeException('Formatter name must be defined');
+        }
         if ($this->path === null) {
             throw new \RuntimeException('File path property must be defined and be not empty');
         }
@@ -84,7 +86,13 @@ class File extends BaseObject
         }
     }
 
-
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
 
     /**
      * @return resource|string|bool

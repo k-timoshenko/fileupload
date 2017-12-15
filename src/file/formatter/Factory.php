@@ -107,7 +107,9 @@ class Factory
             $class = $formatterConfig;
         }
 
+        $params['name'] = $key;
+
         /* @see File::__construct() */
-        return new $class($file, $filesystem, $key, $params);
+        return new $class($file, $filesystem, $params);
     }
 }
