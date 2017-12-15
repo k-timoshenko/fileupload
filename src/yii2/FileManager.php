@@ -36,7 +36,7 @@ class FileManager extends Component
     public function init(): void
     {
         $this->manager['uploadFS'] = \Yii::$app->{$this->manager['uploadFS']}->getFileSystem();
-        $this->manager['webFS'] = \Yii::$app->{$this->manager['webFS']}->getFileSystem();
+        $this->manager['cacheFS'] = \Yii::$app->{$this->manager['cacheFS']}->getFileSystem();
 
         $class = ArrayHelper::remove($this->manager, 'class', BaseFileManager::class);
         $this->manager = new $class($this->manager);
