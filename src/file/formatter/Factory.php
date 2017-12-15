@@ -59,7 +59,8 @@ class Factory
      *         'class' => \tkanstantsin\fileupload\formatter\Image::class,,
      *         'width' => 1920,
      *         'height' => 1080,
-     *         'mode' => \tkanstantsin\fileupload\formatter\Image::RESIZE_OUTBOUND,
+     *         'mode' =>
+     *     \tkanstantsin\fileupload\formatter\Image::RESIZE_OUTBOUND,
      *         'formatAdapterArray' => [
      *             SomeAdapter::class,
      *             SecondAdapter::class,
@@ -104,10 +105,6 @@ class Factory
             $params = $formatterConfig;
         } elseif (\is_string($formatterConfig)) {
             $class = $formatterConfig;
-        }
-
-        if (!($class instanceof File)) {
-            throw new \RuntimeException('Invalid formatter config.');
         }
 
         /* @see File::__construct() */
