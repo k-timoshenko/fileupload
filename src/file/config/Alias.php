@@ -3,6 +3,7 @@
 namespace tkanstantsin\fileupload\config;
 
 use tkanstantsin\fileupload\model\IFile;
+use tkanstantsin\fileupload\model\Type;
 
 /**
  * Class Alias represent config for model
@@ -115,6 +116,23 @@ class Alias
         return $file->getId() !== null
             ? $this->getFileDirectory($file) . DIRECTORY_SEPARATOR . $this->getFileName($file)
             : null;
+    }
+
+    /**
+     * Returns path for caching files.
+     *
+     * @param IFile  $file
+     * @param string $formatName
+     *
+     * @return string
+     */
+    public function getCachePath(IFile $file, string $formatName): string
+    {
+        return implode('/', array_filter([
+            Type::$folderPrefix[$file->getType()] . '_' . $formatName,
+            mb_substr($file->getHash(), 0, $this->cacheHashLength),
+            $this->getAssetName($file),
+        ]));
     }
 
     /**

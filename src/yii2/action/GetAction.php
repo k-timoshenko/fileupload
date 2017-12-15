@@ -76,7 +76,7 @@ class GetAction extends AbstractAction
 
         switch ($clearFileType) {
             case 'image': // TODO: constant!
-                $this->displayImage($file, $fileOptions, $pathBuilder->getCachePath());
+                $this->displayImage($file, $fileOptions, $this->aliasConfig->getCachePath($file, $pathBuilder->formatter->getName()));
                 break;
             case 'file':
                 $this->displayFile($file, $fileOptions);

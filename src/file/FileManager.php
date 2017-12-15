@@ -6,6 +6,7 @@ use League\Flysystem\Filesystem;
 use tkanstantsin\fileupload\config\Alias;
 use tkanstantsin\fileupload\config\Factory as AliasFactory;
 use tkanstantsin\fileupload\formatter\Factory as FormatterFactory;
+use tkanstantsin\fileupload\formatter\File as FileFormatter;
 use tkanstantsin\fileupload\formatter\icon\IconGenerator;
 use tkanstantsin\fileupload\model\IFile;
 use tkanstantsin\fileupload\model\Type;
@@ -201,7 +202,6 @@ class FileManager
      * Caches file and returns url to it.
      * @param IFile $file
      * @param string $format
-     * @param array $config
      * @return string
      * @throws \RuntimeException
      * @throws \ErrorException
@@ -211,8 +211,8 @@ class FileManager
     {
         if ($file->getId()) {
             $pathBuilder = $this->getPathBuilder($file, $format);
-            if ($this->cacheFile($pathBuilder)) {
-                return $pathBuilder->getCachePath();
+            if ($this->cacheFile($file, $pathBuilder->alias, $pathBuilder->formatter)) {
+                return $this->cacheBasePath . DIRECTORY_SEPARATOR . $pathBuilder->alias->getCachePath($file, $format);
             }
         }
 
@@ -236,16 +236,19 @@ class FileManager
 
     /**
      * Caches file available in web.
-     * @param PathBuilder $fileBuilder
+     *
+     * @param IFile $file
+     * @param Alias $alias
+     * @param FileFormatter $formatter
      * @return bool
      * @internal param string $fileType
      */
-    protected function cacheFile(PathBuilder $fileBuilder): bool
+    protected function cacheFile(IFile $file, Alias $alias, FileFormatter $formatter): bool
     {
         try {
-            $fileCache = new CacheComponent($fileBuilder->file, $this->cacheFS, $fileBuilder->getCachePath());
+            $fileCache = new CacheComponent($file, $this->cacheFS, $alias->getCachePath($file, $formatter->getName()));
 
-            return $fileCache->cache($fileBuilder->formatter);
+            return $fileCache->cache($formatter);
         } catch (\Exception $e) {
             // Do nothing, just catch exception and keep executing.
             return false;
