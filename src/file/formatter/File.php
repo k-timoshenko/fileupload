@@ -3,6 +3,7 @@
 namespace tkanstantsin\fileupload\formatter;
 
 use League\Flysystem\FilesystemInterface;
+use tkanstantsin\fileupload\config\InvalidConfigException;
 use tkanstantsin\fileupload\model\BaseObject;
 use tkanstantsin\fileupload\model\IFile;
 
@@ -51,7 +52,7 @@ class File extends BaseObject
      * @param IFile $file
      * @param FilesystemInterface $filesystem
      * @param array $config
-     * @throws \RuntimeException
+     * @throws \tkanstantsin\fileupload\config\InvalidConfigException
      */
     public function __construct(IFile $file, FilesystemInterface $filesystem, array $config = [])
     {
@@ -64,24 +65,24 @@ class File extends BaseObject
 
     /**
      * Initialize app
-     * @throws \RuntimeException
+     * @throws InvalidConfigException
      */
     public function init(): void
     {
         parent::init();
 
         if ($this->name === null || !\is_string($this->name) || $this->name === '') {
-            throw new \RuntimeException('Formatter name must be defined');
+            throw new InvalidConfigException('Formatter name must be defined');
         }
         if ($this->path === null) {
-            throw new \RuntimeException('File path property must be defined and be not empty');
+            throw new InvalidConfigException('File path property must be defined and be not empty');
         }
         foreach ($this->formatAdapterArray as $key => $formatAdapter) {
             if (\is_string($formatAdapter) && class_exists($formatAdapter)) {
                 $this->formatAdapterArray[$key] = new $formatAdapter;
             }
             if (!($formatAdapter instanceof IFormatAdapter)) {
-                throw new \RuntimeException(sprintf('Format adapter must be instance of %s.', IFormatAdapter::class));
+                throw new InvalidConfigException(sprintf('Format adapter must be instance of %s.', IFormatAdapter::class));
             }
         }
     }
