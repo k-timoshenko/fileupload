@@ -9,6 +9,7 @@
 namespace tkanstantsin\fileupload\formatter;
 
 use Imagine\Image\Box;
+use Imagine\Image\ImageInterface;
 use Imagine\Imagick\Imagine;
 
 /**
@@ -41,18 +42,38 @@ class Image extends File
     public $mode = self::RESIZE_INSET;
 
     /**
+     * @var Imagine
+     */
+    private $imagine;
+
+    /**
      * @inheritdoc
      * @throws \Imagine\Exception\InvalidArgumentException
      * @throws \Imagine\Exception\RuntimeException
      */
-    public function getContentInternal()
+    protected function getContentInternal()
     {
-        $image = (new Imagine())->read(parent::getContentInternal());
-        $box = $this->width !== null && $this->height !== null
-            ? new Box($this->width, $this->height)
-            : $image->getSize(); // means don't change image size
-        $thumb = $image->thumbnail($box, $this->mode);
+        $this->imagine = new Imagine();
+        $image = $this->imagine->read(parent::getContentInternal());
+        $image = $this->format($image);
 
-        return $thumb->get($this->file->getExtension() ?? self::DEFAULT_EXTENSION);
+        return $image->get($this->file->getExtension() ?? self::DEFAULT_EXTENSION);
+    }
+
+    /**
+     * @param ImageInterface $image
+     * @return ImageInterface
+     * @throws \Imagine\Exception\RuntimeException
+     * @throws \Imagine\Exception\InvalidArgumentException
+     */
+    protected function format(ImageInterface $image): ImageInterface
+    {
+        if ($this->width === null || $this->height === null) {
+            return $image;
+        }
+
+        $box = new Box($this->width, $this->height);
+
+        return $image->thumbnail($box, $this->mode);
     }
 }
