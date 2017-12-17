@@ -44,7 +44,7 @@ class Image extends File
     /**
      * @var Imagine
      */
-    private $imagine;
+    protected $imagine;
 
     /**
      * @inheritdoc
