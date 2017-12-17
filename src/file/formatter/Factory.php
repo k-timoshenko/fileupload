@@ -88,25 +88,29 @@ class Factory
      * @param Alias $alias
      * @param FilesystemInterface $filesystem
      * @param string $key
+     * @param array $formatterConfig
      * @return File
+     * @throws \RuntimeException
      */
-    public function build(IFile $file, Alias $alias, FilesystemInterface $filesystem, string $key): File
+    public function build(IFile $file, Alias $alias, FilesystemInterface $filesystem, string $key, array $formatterConfig = []): File
     {
-        $formatterConfig = $this->formatterConfigArray[$key] ?? null;
-        if ($formatterConfig === null) {
+        $defaultFormatterConfig = $this->formatterConfigArray[$key] ?? null;
+        if ($defaultFormatterConfig === null) {
             throw new \RuntimeException(sprintf('Formatter for key `%s` not found', $key));
         }
 
         $class = null;
         $params = [];
 
-        if (\is_array($formatterConfig)) {
-            $class = $formatterConfig['class'];
-            unset($formatterConfig['class']);
-            $params = $formatterConfig;
-        } elseif (\is_string($formatterConfig)) {
-            $class = $formatterConfig;
+        if (\is_array($defaultFormatterConfig)) {
+            $class = $defaultFormatterConfig['class'];
+            unset($defaultFormatterConfig['class']);
+            $params = $defaultFormatterConfig;
+        } elseif (\is_string($defaultFormatterConfig)) {
+            $class = $defaultFormatterConfig;
         }
+
+        $params = $formatterConfig + $params;
 
         $params['name'] = $key;
         $params['path'] = $alias->getFilePath($file);

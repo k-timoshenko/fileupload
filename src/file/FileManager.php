@@ -172,14 +172,15 @@ class FileManager
     /**
      * @param IFile $file
      * @param string $format
+     * @param array $formatterConfig
      * @return PathBuilder
      * @throws \RuntimeException
      * @throws \ErrorException
      */
-    public function getPathBuilder(IFile $file, string $format): PathBuilder
+    public function getPathBuilder(IFile $file, string $format, array $formatterConfig = []): PathBuilder
     {
         $alias = $this->getAliasConfig($file->getModelAlias());
-        $formatter = $this->formatterFactory->build($file, $alias, $this->uploadFS, $format);
+        $formatter = $this->formatterFactory->build($file, $alias, $this->uploadFS, $format, $formatterConfig);
 
         return new PathBuilder($file, $alias, $formatter);
     }
@@ -202,15 +203,15 @@ class FileManager
      * Caches file and returns url to it.
      * @param IFile $file
      * @param string $format
+     * @param array $formatterConfig
      * @return string
      * @throws \RuntimeException
      * @throws \ErrorException
-     * @throws \Exception
      */
-    public function getFileUrl(IFile $file, string $format): string
+    public function getFileUrl(IFile $file, string $format, array $formatterConfig = []): string
     {
         if ($file->getId()) {
-            $pathBuilder = $this->getPathBuilder($file, $format);
+            $pathBuilder = $this->getPathBuilder($file, $format, $formatterConfig);
             if ($this->cacheFile($file, $pathBuilder->alias, $pathBuilder->formatter)) {
                 return $this->cacheBasePath . DIRECTORY_SEPARATOR . $pathBuilder->alias->getCachePath($file, $format);
             }
