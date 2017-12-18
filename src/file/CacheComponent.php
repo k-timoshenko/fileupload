@@ -95,11 +95,6 @@ class CacheComponent
             return false;
         }
 
-        // remove old file
-        if ($this->filesystem->has($this->assetPath) && !$this->filesystem->delete($this->assetPath)) {
-            return false;
-        }
-
         return \is_resource($content)
             ? $this->filesystem->putStream($this->assetPath, $content)
             : $this->filesystem->put($this->assetPath, $content);
