@@ -62,6 +62,11 @@ class CacheComponent
             return true;
         }
 
+        // checks if path is writable
+        // create new empty file or override existed one
+        // also caches empty result for non-formatted files
+        $this->filesystem->put($this->assetPath, null);
+
         return $this->saveIntoCache($formatter->getContent());
     }
 
@@ -72,7 +77,8 @@ class CacheComponent
      */
     protected function isCached(): bool
     {
-        return $this->filesystem->has($this->assetPath) && $this->filesystem->getTimestamp($this->assetPath) > $this->file->getUpdatedAt();
+        return $this->filesystem->has($this->assetPath)
+            && $this->filesystem->getTimestamp($this->assetPath) > $this->file->getUpdatedAt();
     }
 
     /**
