@@ -95,7 +95,7 @@ class CacheComponent
         }
 
         return \is_resource($content)
-            ? $this->filesystem->writeStream($this->assetPath, $content)
-            : $this->filesystem->write($this->assetPath, $content);
+            ? $this->filesystem->putStream($this->assetPath, $content)
+            : $this->filesystem->put($this->assetPath, $content);
     }
 }
