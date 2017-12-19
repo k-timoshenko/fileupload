@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "fef461e2fc3ec2cb0c097a1962142ad5",
+    "content-hash": "23ab9dc30ec0a4fb42288d2a19500479",
     "packages": [
         {
             "name": "bower-asset/inputmask",
@@ -1213,121 +1213,6 @@
                 "fixtures"
             ],
             "time": "2015-05-29T06:29:14+00:00"
-        },
-        {
-            "name": "league/factory-muffin",
-            "version": "v3.0.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/thephpleague/factory-muffin.git",
-                "reference": "316ed2bac70178567f995d877b831804c9c58d5a"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/factory-muffin/zipball/316ed2bac70178567f995d877b831804c9c58d5a",
-                "reference": "316ed2bac70178567f995d877b831804c9c58d5a",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.4.0"
-            },
-            "replace": {
-                "zizaco/factory-muff": "self.version"
-            },
-            "require-dev": {
-                "doctrine/orm": "2.5.*",
-                "illuminate/database": "5.0.*|5.1.*",
-                "league/factory-muffin-faker": "^2.0",
-                "phpunit/phpunit": "^4.8|^5.0"
-            },
-            "suggest": {
-                "doctrine/orm": "Factory Muffin supports doctrine through the repository store.",
-                "illuminate/database": "Factory Muffin supports eloquent through the model store.",
-                "league/factory-muffin-faker": "Factory Muffin is very powerful together with faker."
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "3.0-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "League\\FactoryMuffin\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Scott Robertson",
-                    "email": "scottymeuk@gmail.com"
-                },
-                {
-                    "name": "Graham Campbell",
-                    "email": "graham@alt-three.com"
-                }
-            ],
-            "description": "The goal of this package is to enable the rapid creation of objects for the purpose of testing.",
-            "homepage": "http://factory-muffin.thephpleague.com/",
-            "keywords": [
-                "factory",
-                "testing"
-            ],
-            "time": "2016-05-13T10:56:41+00:00"
-        },
-        {
-            "name": "league/factory-muffin-faker",
-            "version": "v1.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/thephpleague/factory-muffin-faker.git",
-                "reference": "30dbd11bb6be03b47e52bd60006ae198d20ab426"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/factory-muffin-faker/zipball/30dbd11bb6be03b47e52bd60006ae198d20ab426",
-                "reference": "30dbd11bb6be03b47e52bd60006ae198d20ab426",
-                "shasum": ""
-            },
-            "require": {
-                "fzaninotto/faker": "1.5.*",
-                "php": ">=5.4.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^4.8|^5.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "League\\FactoryMuffin\\Faker\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Graham Campbell",
-                    "email": "graham@alt-three.com"
-                }
-            ],
-            "description": "The goal of this package is to wrap faker to make it super easy to use with factory muffin.",
-            "homepage": "http://factory-muffin.thephpleague.com/",
-            "keywords": [
-                "factory",
-                "faker",
-                "testing"
-            ],
-            "time": "2016-02-14T11:23:29+00:00"
         },
         {
             "name": "myclabs/deep-copy",
@@ -2684,16 +2569,16 @@
         },
         {
             "name": "symfony/browser-kit",
-            "version": "v4.0.1",
+            "version": "v4.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/browser-kit.git",
-                "reference": "3fcf2f6a67c8c10c8667b16bbd62189b9605618b"
+                "reference": "67359d6a03f96f9d15b956013fade2bd271de75a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/browser-kit/zipball/3fcf2f6a67c8c10c8667b16bbd62189b9605618b",
-                "reference": "3fcf2f6a67c8c10c8667b16bbd62189b9605618b",
+                "url": "https://api.github.com/repos/symfony/browser-kit/zipball/67359d6a03f96f9d15b956013fade2bd271de75a",
+                "reference": "67359d6a03f96f9d15b956013fade2bd271de75a",
                 "shasum": ""
             },
             "require": {
@@ -2737,20 +2622,20 @@
             ],
             "description": "Symfony BrowserKit Component",
             "homepage": "https://symfony.com",
-            "time": "2017-11-07T14:45:01+00:00"
+            "time": "2017-12-12T08:41:51+00:00"
         },
         {
             "name": "symfony/console",
-            "version": "v4.0.1",
+            "version": "v4.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "2ff6acc1342a0e7c3ad757a80fd837f5b22535a1"
+                "reference": "de8cf039eacdec59d83f7def67e3b8ff5ed46714"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/2ff6acc1342a0e7c3ad757a80fd837f5b22535a1",
-                "reference": "2ff6acc1342a0e7c3ad757a80fd837f5b22535a1",
+                "url": "https://api.github.com/repos/symfony/console/zipball/de8cf039eacdec59d83f7def67e3b8ff5ed46714",
+                "reference": "de8cf039eacdec59d83f7def67e3b8ff5ed46714",
                 "shasum": ""
             },
             "require": {
@@ -2805,20 +2690,20 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2017-12-04T12:31:58+00:00"
+            "time": "2017-12-14T19:48:22+00:00"
         },
         {
             "name": "symfony/css-selector",
-            "version": "v4.0.1",
+            "version": "v4.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/css-selector.git",
-                "reference": "4d007264ba31da78685a92f49aa13b62cbbd89b4"
+                "reference": "2b71219bf15530f293f6a9262de841d0ca90b11c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/css-selector/zipball/4d007264ba31da78685a92f49aa13b62cbbd89b4",
-                "reference": "4d007264ba31da78685a92f49aa13b62cbbd89b4",
+                "url": "https://api.github.com/repos/symfony/css-selector/zipball/2b71219bf15530f293f6a9262de841d0ca90b11c",
+                "reference": "2b71219bf15530f293f6a9262de841d0ca90b11c",
                 "shasum": ""
             },
             "require": {
@@ -2858,20 +2743,20 @@
             ],
             "description": "Symfony CssSelector Component",
             "homepage": "https://symfony.com",
-            "time": "2017-11-07T14:45:01+00:00"
+            "time": "2017-12-14T19:48:22+00:00"
         },
         {
             "name": "symfony/dom-crawler",
-            "version": "v4.0.1",
+            "version": "v4.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/dom-crawler.git",
-                "reference": "d260a4e14ff4fb82eff98c88494396814962bf77"
+                "reference": "9f207697b4aa664823f43b6568797c48316b621a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/dom-crawler/zipball/d260a4e14ff4fb82eff98c88494396814962bf77",
-                "reference": "d260a4e14ff4fb82eff98c88494396814962bf77",
+                "url": "https://api.github.com/repos/symfony/dom-crawler/zipball/9f207697b4aa664823f43b6568797c48316b621a",
+                "reference": "9f207697b4aa664823f43b6568797c48316b621a",
                 "shasum": ""
             },
             "require": {
@@ -2914,20 +2799,20 @@
             ],
             "description": "Symfony DomCrawler Component",
             "homepage": "https://symfony.com",
-            "time": "2017-11-15T14:17:34+00:00"
+            "time": "2017-12-14T19:48:22+00:00"
         },
         {
             "name": "symfony/event-dispatcher",
-            "version": "v4.0.1",
+            "version": "v4.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/event-dispatcher.git",
-                "reference": "6223fb2b68e7059e8d5843c0103999a84e7275cf"
+                "reference": "d4face19ed8002eec8280bc1c5ec18130472bf43"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/6223fb2b68e7059e8d5843c0103999a84e7275cf",
-                "reference": "6223fb2b68e7059e8d5843c0103999a84e7275cf",
+                "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/d4face19ed8002eec8280bc1c5ec18130472bf43",
+                "reference": "d4face19ed8002eec8280bc1c5ec18130472bf43",
                 "shasum": ""
             },
             "require": {
@@ -2977,11 +2862,11 @@
             ],
             "description": "Symfony EventDispatcher Component",
             "homepage": "https://symfony.com",
-            "time": "2017-11-09T17:30:28+00:00"
+            "time": "2017-12-14T19:48:22+00:00"
         },
         {
             "name": "symfony/finder",
-            "version": "v4.0.1",
+            "version": "v4.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/finder.git",
@@ -3089,16 +2974,16 @@
         },
         {
             "name": "symfony/process",
-            "version": "v4.0.1",
+            "version": "v4.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
-                "reference": "685dc11afcaaea72d7fd11c26835d12b091338f4"
+                "reference": "18d1953068e72262830bad593f0366fa62c93fb7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/685dc11afcaaea72d7fd11c26835d12b091338f4",
-                "reference": "685dc11afcaaea72d7fd11c26835d12b091338f4",
+                "url": "https://api.github.com/repos/symfony/process/zipball/18d1953068e72262830bad593f0366fa62c93fb7",
+                "reference": "18d1953068e72262830bad593f0366fa62c93fb7",
                 "shasum": ""
             },
             "require": {
@@ -3134,20 +3019,20 @@
             ],
             "description": "Symfony Process Component",
             "homepage": "https://symfony.com",
-            "time": "2017-11-22T12:29:35+00:00"
+            "time": "2017-12-14T19:48:22+00:00"
         },
         {
             "name": "symfony/yaml",
-            "version": "v4.0.1",
+            "version": "v4.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "873417cb9949f07be8852d41e3be5ab6f09e1218"
+                "reference": "a5ee52d155f06ad23b19eb63c31228ff56ad1116"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/873417cb9949f07be8852d41e3be5ab6f09e1218",
-                "reference": "873417cb9949f07be8852d41e3be5ab6f09e1218",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/a5ee52d155f06ad23b19eb63c31228ff56ad1116",
+                "reference": "a5ee52d155f06ad23b19eb63c31228ff56ad1116",
                 "shasum": ""
             },
             "require": {
@@ -3192,7 +3077,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2017-12-04T18:34:52+00:00"
+            "time": "2017-12-12T08:41:51+00:00"
         },
         {
             "name": "theseer/tokenizer",
@@ -3283,53 +3168,6 @@
                 "validate"
             ],
             "time": "2016-11-23T20:04:58+00:00"
-        },
-        {
-            "name": "yiisoft/yii2-faker",
-            "version": "2.0.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/yiisoft/yii2-faker.git",
-                "reference": "b88ca69ee226a3610b2c26c026c3203d7ac50f6c"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-faker/zipball/b88ca69ee226a3610b2c26c026c3203d7ac50f6c",
-                "reference": "b88ca69ee226a3610b2c26c026c3203d7ac50f6c",
-                "shasum": ""
-            },
-            "require": {
-                "fzaninotto/faker": "*",
-                "yiisoft/yii2": "*"
-            },
-            "type": "yii2-extension",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "yii\\faker\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Mark Jebri",
-                    "email": "mark.github@yandex.ru"
-                }
-            ],
-            "description": "Fixture generator. The Faker integration for the Yii framework.",
-            "keywords": [
-                "Fixture",
-                "faker",
-                "yii2"
-            ],
-            "time": "2015-03-01T06:22:44+00:00"
         }
     ],
     "aliases": [],
