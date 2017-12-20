@@ -213,7 +213,10 @@ class FileManager
         if ($file->getId()) {
             $pathBuilder = $this->getPathBuilder($file, $format, $formatterConfig);
             if ($this->cacheFile($file, $pathBuilder->alias, $pathBuilder->formatter)) {
-                return $this->cacheBasePath . DIRECTORY_SEPARATOR . $pathBuilder->alias->getCachePath($file, $format);
+                return implode(DIRECTORY_SEPARATOR, [
+                    $this->cacheBasePath,
+                    $pathBuilder->alias->getCachePath($file, $format)
+                ]);
             }
         }
 
