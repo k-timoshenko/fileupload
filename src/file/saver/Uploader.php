@@ -1,6 +1,6 @@
 <?php
 
-namespace common\components\file\savers;
+namespace tkanstantsin\fileupload\saver;
 
 use League\Flysystem\FilesystemInterface;
 use tkanstantsin\fileupload\config\Alias;

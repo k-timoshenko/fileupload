@@ -5,6 +5,7 @@ namespace tkanstantsin\yii2fileupload\action;
 
 use League\Flysystem\Filesystem;
 use tkanstantsin\fileupload\config\Alias;
+use tkanstantsin\fileupload\formatter\Factory as FormatterFactory;
 use tkanstantsin\fileupload\model\Type;
 use tkanstantsin\yii2fileupload\model\File;
 use yii\helpers\StringHelper;
@@ -63,7 +64,7 @@ class GetAction extends AbstractAction
 
         $file = $this->findModel($id);
         $this->aliasConfig = $this->fileManager->getAliasConfig($file->getModelAlias());
-        $pathBuilder = $this->fileManager->getPathBuilder($file, '');
+        $formatter = $this->fileManager->buildFormatter($file, FormatterFactory::FILE_ORIGINAL);
 
         if (!$this->contentFS->has($this->aliasConfig->getFilePath($file))) {
             header('HTTP/1.0 404 Not Found');
@@ -76,7 +77,7 @@ class GetAction extends AbstractAction
 
         switch ($clearFileType) {
             case 'image': // TODO: constant!
-                $this->displayImage($file, $fileOptions, $this->aliasConfig->getCachePath($file, $pathBuilder->formatter->getName()));
+                $this->displayImage($file, $fileOptions, $this->aliasConfig->getCachePath($file, $formatter));
                 break;
             case 'file':
                 $this->displayFile($file, $fileOptions);

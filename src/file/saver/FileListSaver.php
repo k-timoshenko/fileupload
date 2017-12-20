@@ -1,6 +1,6 @@
 <?php
 
-namespace common\components\file\savers;
+namespace tkanstantsin\fileupload\saver;
 
 use tkanstantsin\yii2fileupload\model\File;
 use yii\base\Model;

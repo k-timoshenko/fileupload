@@ -3,8 +3,8 @@
 namespace tkanstantsin\yii2fileupload\action;
 
 
-use common\components\file\savers\Factory;
-use common\components\file\savers\Uploader;
+use tkanstantsin\fileupload\saver\Factory;
+use tkanstantsin\fileupload\saver\Uploader;
 use yii\db\ActiveRecord;
 use yii\web\Response;
 use yii\web\UploadedFile;

@@ -1,6 +1,6 @@
 <?php
 
-namespace common\components\file\savers;
+namespace tkanstantsin\fileupload\saver;
 
 use GuzzleHttp\Client as HttpClient;
 use yii\helpers\FileHelper;

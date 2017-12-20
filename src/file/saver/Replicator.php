@@ -1,16 +1,14 @@
 <?php
 
-namespace common\components\file\savers;
+namespace tkanstantsin\fileupload\saver;
 
-use League\Flysystem\Filesystem;
 use League\Flysystem\FilesystemInterface;
 use tkanstantsin\fileupload\FileManager;
+use tkanstantsin\fileupload\formatter\Factory as FormatterFactory;
 use tkanstantsin\fileupload\model\IFile;
-use tkanstantsin\yii2fileupload\model\File;
 
 /**
- * Class FileDuplicator makes full copy of existed file (copy in DB and FS)
- * @todo: corretly implement it and test.
+ * Class FileDuplicator makes full copy of existed file (only content)
  */
 class Replicator
 {
@@ -19,74 +17,61 @@ class Replicator
      */
     protected $fileManager;
     /**
-     * @var Filesystem
+     * @var IFile
      */
-    protected $filesystem;
+    protected $originalFile;
     /**
-     * @var IFile[]
+     * @var FilesystemInterface
      */
-    protected $files;
+    protected $originalFS;
     /**
-     * @var int
+     * @var IFile
      */
-    protected $newOwnerId;
+    protected $replicaFile;
+    /**
+     * @var FilesystemInterface
+     */
+    protected $replicaFS;
 
     /**
      * FileSaver constructor.
      * @param FileManager $fileManager
-     * @param FilesystemInterface $filesystem
-     * @param IFile[] $files
-     * @param int $newOwnerId
-     * @throws \ErrorException
+     * @param IFile $originalFile
+     * @param FilesystemInterface $originalFS
+     * @param IFile $replicaFile
+     * @param FilesystemInterface $replicaFS
      */
-    public function __construct(FileManager $fileManager, FilesystemInterface $filesystem, array $files, int $newOwnerId)
+    public function __construct(FileManager $fileManager,
+                                IFile $originalFile,
+                                FilesystemInterface $originalFS,
+                                IFile $replicaFile,
+                                FilesystemInterface $replicaFS)
     {
         $this->fileManager = $fileManager;
-        $this->filesystem = $filesystem;
-        $this->newOwnerId = $newOwnerId;
-        $this->files = (array) $files;
-
-
-        foreach ($this->files as $file) {
-            if (!($file instanceof IFile)) {
-                throw new \ErrorException(sprintf('File must be instance of `%s`.', IFile::class));
-            }
-        }
+        $this->originalFile = $originalFile;
+        $this->originalFS = $originalFS;
+        $this->replicaFile = $replicaFile;
+        $this->replicaFS = $replicaFS;
     }
 
     /**
      * @return bool
-     */
-    public function replicate(): bool
-    {
-        $saved = true;
-        foreach ($this->files as $file) {
-            $saved = $saved && $this->replicateFile($file);
-        }
-
-        return $saved;
-    }
-
-    /**
-     * @param \tkanstantsin\yii2fileupload\model\File $file
-     * @return bool
+     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
      * @throws \ErrorException
+     * @throws \League\Flysystem\FileNotFoundException
      */
-    protected function replicateFile(File $file): bool
+    public function run(): bool
     {
-        $fileAttributes = $file->attributes;
-        unset($fileAttributes['id']);
+        $originalFileFormatter = $this->fileManager->buildFormatter(
+            $this->replicaFile,
+            FormatterFactory::FILE_ORIGINAL
+        );
 
-        $newFile = new File($fileAttributes);
-        $newFile->parent_model_id = $this->newOwnerId;
-        $newFile->is_confirmed = true;
+        $replicaAlias = $this->fileManager->getAliasConfig($this->replicaFile->getModelAlias());
+        $newPath = $replicaAlias->getFilePath($this->replicaFile);
+        $saver = new Saver($this->replicaFile, $this->originalFS, $newPath);
 
-        $saved = $newFile->save();
-
-        $aliasConfig = $this->fileManager->getAliasConfig($file->getModelAlias());
-
-        $saved = $saved && $this->filesystem->copy($aliasConfig->getFilePath($file), $aliasConfig->getFilePath($newFile));
-
-        return $saved;
+        return $saver->save($originalFileFormatter);
     }
 }

@@ -9,6 +9,8 @@ use tkanstantsin\fileupload\model\IFile;
 /**
  * Class Saver allows store processed files.
  * E.g. store uploaded files or cache cropped/prepared images.
+ *
+ * @todo add option to force rewriting existed file.
  */
 class Saver
 {

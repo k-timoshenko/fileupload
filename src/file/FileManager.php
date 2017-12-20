@@ -9,7 +9,6 @@ use tkanstantsin\fileupload\formatter\Factory as FormatterFactory;
 use tkanstantsin\fileupload\formatter\File as FileFormatter;
 use tkanstantsin\fileupload\formatter\icon\IconGenerator;
 use tkanstantsin\fileupload\model\IFile;
-use tkanstantsin\fileupload\model\Type;
 use tkanstantsin\fileupload\saver\Saver;
 
 /**
@@ -18,33 +17,10 @@ use tkanstantsin\fileupload\saver\Saver;
 class FileManager
 {
     /**
-     * Base url for uploading files
-     * @var string
-     */
-    public $uploadBaseUrl;
-    /**
-     * Path to folder which would contain cached files.
-     * /cache-base-path/alias/part-of-hash/file-name
-     * @var string
-     */
-    public $cacheBasePath;
-
-    /**
-     * Url for default image
-     * @var string|array
-     */
-    public $imageNotFoundUrl;
-    /**
-     * Url for 404 page for files
-     * @var string|array
-     */
-    public $fileNotFoundUrl;
-
-    /**
      * For uploading
      * @var Filesystem
      */
-    public $uploadFS;
+    public $contentFS;
     /**
      * Web accessible FS
      * @var Filesystem
@@ -112,20 +88,11 @@ class FileManager
      */
     public function init(): void
     {
-        if (!($this->uploadFS instanceof Filesystem)) {
+        if (!($this->contentFS instanceof Filesystem)) {
             throw new \ErrorException(sprintf('UploadFS must be instance of %s.', Filesystem::class));
         }
         if (!($this->cacheFS instanceof Filesystem)) {
             throw new \ErrorException(sprintf('CacheFS must be instance of %s.', Filesystem::class));
-        }
-        if ($this->uploadBaseUrl === null) {
-            throw new \ErrorException('Base upload url must be defined.');
-        }
-        if ($this->cacheBasePath === null) {
-            throw new \ErrorException('Base path for cache must be defined.');
-        }
-        if ($this->imageNotFoundUrl === null || $this->fileNotFoundUrl === null) {
-            throw new \ErrorException('URLs for not founded image and file must be defined.');
         }
 
         $this->iconGenerator = IconGenerator::build($this->iconSet);
@@ -174,30 +141,15 @@ class FileManager
      * @param IFile $file
      * @param string $format
      * @param array $formatterConfig
-     * @return PathBuilder
+     * @return FileFormatter
      * @throws \RuntimeException
      * @throws \ErrorException
      */
-    public function getPathBuilder(IFile $file, string $format, array $formatterConfig = []): PathBuilder
+    public function buildFormatter(IFile $file, string $format, array $formatterConfig = []): FileFormatter
     {
         $alias = $this->getAliasConfig($file->getModelAlias());
-        $formatter = $this->formatterFactory->build($file, $alias, $this->uploadFS, $format, $formatterConfig);
 
-        return new PathBuilder($file, $alias, $formatter);
-    }
-
-    /**
-     * Generates url for upload file with upload widget.
-     * Url format: $uploadBaseUrl/$alias/$id
-     * @example /upload/product/555
-     * @param string $aliasName
-     * @param int $id of related model
-     * @return string
-     * @throws \yii\base\InvalidParamException
-     */
-    public function getUploadUrl(string $aliasName, int $id = null): string
-    {
-        return implode(DIRECTORY_SEPARATOR, array_filter([$this->uploadBaseUrl, $aliasName, $id]));
+        return $this->formatterFactory->build($file, $alias, $this->contentFS, $format, $formatterConfig);
     }
 
     /**
@@ -206,37 +158,21 @@ class FileManager
      * @param string $format
      * @param array $formatterConfig
      * @return string
+     * @throws \InvalidArgumentException
      * @throws \RuntimeException
      * @throws \ErrorException
+     * @throws \League\Flysystem\FileNotFoundException
      */
-    public function getFileUrl(IFile $file, string $format, array $formatterConfig = []): string
+    public function getFilePath(IFile $file, string $format, array $formatterConfig = []): string
     {
-        if ($file->getId()) {
-            $pathBuilder = $this->getPathBuilder($file, $format, $formatterConfig);
-            if ($this->cacheFile($file, $pathBuilder->alias, $pathBuilder->formatter)) {
-                return implode(DIRECTORY_SEPARATOR, [
-                    $this->cacheBasePath,
-                    $pathBuilder->alias->getCachePath($file, $format)
-                ]);
-            }
+        $alias = $this->getAliasConfig($file->getModelAlias());
+        $formatter = $this->buildFormatter($file, $format, $formatterConfig);
+
+        if (!$this->cacheFile($file, $alias, $formatter)) {
+            return $format;
         }
 
-        return $this->getNotFoundUrl($file);
-    }
-
-    /**
-     * Choose 404 url
-     * @param IFile $file
-     * @return string
-     */
-    public function getNotFoundUrl(IFile $file): string
-    {
-        switch ($file->getType()) {
-            case Type::IMAGE:
-                return $this->imageNotFoundUrl;
-            default:
-                return $this->fileNotFoundUrl;
-        }
+        return $alias->getCachePath($file, $format);
     }
 
     /**
@@ -246,18 +182,14 @@ class FileManager
      * @param Alias $alias
      * @param FileFormatter $formatter
      * @return bool
-     * @internal param string $fileType
+     * @throws \InvalidArgumentException
+     * @throws \League\Flysystem\FileNotFoundException
      */
     protected function cacheFile(IFile $file, Alias $alias, FileFormatter $formatter): bool
     {
-        try {
-            $fileCache = new Saver($file, $this->cacheFS, $alias->getCachePath($file, $formatter->getName()));
+        $path = $alias->getCachePath($file, $formatter->getName());
 
-            return $fileCache->save($formatter);
-        } catch (\Exception $e) {
-            // Do nothing, just catch exception and keep executing.
-            return false;
-        }
+        return (new Saver($file, $this->cacheFS, $path))->save($formatter);
     }
 
 }
