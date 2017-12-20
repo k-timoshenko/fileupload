@@ -53,7 +53,6 @@ class CacheComponent
      * @param \tkanstantsin\fileupload\formatter\File $formatter
      * @return bool
      * @throws \InvalidArgumentException
-     * @throws \League\Flysystem\FileExistsException
      * @throws \League\Flysystem\FileNotFoundException
      */
     public function cache(File $formatter): bool
@@ -67,13 +66,12 @@ class CacheComponent
         // also caches empty result for non-formatted files
         $this->filesystem->put($this->assetPath, null);
 
-        return $this->saveIntoCache($formatter->getContent());
+        return $this->write($formatter->getContent());
     }
 
     /**
      * Checks if file is already in cache.
      * @return bool
-     * @throws \League\Flysystem\FileNotFoundException
      */
     protected function isCached(): bool
     {
@@ -85,11 +83,9 @@ class CacheComponent
      * Saves file into Cache::$filesystem
      * @param $content
      * @return bool
-     * @throws \League\Flysystem\FileExistsException
-     * @throws \League\Flysystem\FileNotFoundException
      * @throws \InvalidArgumentException
      */
-    protected function saveIntoCache($content): bool
+    protected function write($content): bool
     {
         if ($content === false || $content === null) {
             return false;
