@@ -1,23 +1,16 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: konstantin
- * Date: 9/29/16
- * Time: 2:49 PM
- */
 
-namespace tkanstantsin\fileupload;
+namespace tkanstantsin\fileupload\saver;
 
-use League\Flysystem\Filesystem;
 use League\Flysystem\FilesystemInterface;
-use tkanstantsin\fileupload\model\IFile;
 use tkanstantsin\fileupload\formatter\File;
+use tkanstantsin\fileupload\model\IFile;
 
 /**
- * Class Cache allows store files processed files.
- * E.g. store cropped image in web-accessible folder.
+ * Class Saver allows store processed files.
+ * E.g. store uploaded files or cache cropped/prepared images.
  */
-class CacheComponent
+class Saver
 {
     /**
      * @var IFile
@@ -32,19 +25,19 @@ class CacheComponent
      * File path in Cache::$filesystem
      * @var string
      */
-    public $assetPath;
+    public $path;
 
     /**
      * CacheComponent constructor.
      * @param IFile $file
-     * @param Filesystem $filesystem
+     * @param FilesystemInterface $filesystem
      * @param string $assetPath
      */
-    public function __construct(IFile $file, Filesystem $filesystem, string $assetPath)
+    public function __construct(IFile $file, FilesystemInterface $filesystem, string $assetPath)
     {
         $this->file = $file;
         $this->filesystem = $filesystem;
-        $this->assetPath = $assetPath;
+        $this->path = $assetPath;
     }
 
     /**
@@ -55,16 +48,16 @@ class CacheComponent
      * @throws \InvalidArgumentException
      * @throws \League\Flysystem\FileNotFoundException
      */
-    public function cache(File $formatter): bool
+    public function save(File $formatter): bool
     {
-        if ($this->isCached()) {
+        if ($this->isSaved()) {
             return true;
         }
 
         // checks if path is writable
         // create new empty file or override existed one
         // also caches empty result for non-formatted files
-        $this->filesystem->put($this->assetPath, null);
+        $this->filesystem->put($this->path, null);
 
         return $this->write($formatter->getContent());
     }
@@ -72,11 +65,12 @@ class CacheComponent
     /**
      * Checks if file is already in cache.
      * @return bool
+     * @throws \League\Flysystem\FileNotFoundException
      */
-    protected function isCached(): bool
+    protected function isSaved(): bool
     {
-        return $this->filesystem->has($this->assetPath)
-            && $this->filesystem->getTimestamp($this->assetPath) > $this->file->getUpdatedAt();
+        return $this->filesystem->has($this->path)
+            && $this->filesystem->getTimestamp($this->path) > $this->file->getUpdatedAt();
     }
 
     /**
@@ -92,7 +86,7 @@ class CacheComponent
         }
 
         return \is_resource($content)
-            ? $this->filesystem->putStream($this->assetPath, $content)
-            : $this->filesystem->put($this->assetPath, $content);
+            ? $this->filesystem->putStream($this->path, $content)
+            : $this->filesystem->put($this->path, $content);
     }
 }

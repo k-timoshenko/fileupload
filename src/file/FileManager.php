@@ -10,6 +10,7 @@ use tkanstantsin\fileupload\formatter\File as FileFormatter;
 use tkanstantsin\fileupload\formatter\icon\IconGenerator;
 use tkanstantsin\fileupload\model\IFile;
 use tkanstantsin\fileupload\model\Type;
+use tkanstantsin\fileupload\saver\Saver;
 
 /**
  * Class FileComponent
@@ -250,9 +251,9 @@ class FileManager
     protected function cacheFile(IFile $file, Alias $alias, FileFormatter $formatter): bool
     {
         try {
-            $fileCache = new CacheComponent($file, $this->cacheFS, $alias->getCachePath($file, $formatter->getName()));
+            $fileCache = new Saver($file, $this->cacheFS, $alias->getCachePath($file, $formatter->getName()));
 
-            return $fileCache->cache($formatter);
+            return $fileCache->save($formatter);
         } catch (\Exception $e) {
             // Do nothing, just catch exception and keep executing.
             return false;
