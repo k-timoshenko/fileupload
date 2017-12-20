@@ -46,8 +46,7 @@ class File extends ActiveRecord implements IFile
     public static function tableName(): string
     {
         // TODO: how to defined it outside via any type of config?
-        return '{{%social_feed_posts}}';
-        // return '{{%file}}';
+         return '{{%file}}';
     }
 
     /**
@@ -190,11 +189,17 @@ class File extends ActiveRecord implements IFile
             ]);
     }
 
+    /**
+     * @return int|null
+     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    /**
+     * @param int $id
+     */
     public function setId(int $id): void
     {
         $this->id = $id;
@@ -281,61 +286,97 @@ class File extends ActiveRecord implements IFile
         $this->extension = $extension;
     }
 
+    /**
+     * @return int
+     */
     public function getSize(): int
     {
         return $this->size;
     }
 
+    /**
+     * @param int $size
+     */
     public function setSize(int $size): void
     {
         $this->size = $size;
     }
 
+    /**
+     * @return int
+     */
     public function getType(): int
     {
         return $this->type_id;
     }
 
+    /**
+     * @param int $type
+     */
     public function setType(int $type): void
     {
         $this->type_id = $type;
     }
 
+    /**
+     * @return null|string
+     */
     public function getMimeType(): ?string
     {
         return $this->mime_type;
     }
 
+    /**
+     * @param string $mimeType
+     */
     public function setMimeType(string $mimeType): void
     {
         $this->mime_type = $mimeType;
     }
 
+    /**
+     * @return string
+     */
     public function getHash(): string
     {
         return $this->hash;
     }
 
+    /**
+     * @param string $hash
+     */
     public function setHash(string $hash): void
     {
         $this->hash = $hash;
     }
 
+    /**
+     * @return int
+     */
     public function getCreatedAt(): int
     {
         return $this->created_at;
     }
 
+    /**
+     * @param int $createdAt
+     */
     public function setCreatedAt(int $createdAt): void
     {
         $this->created_at = $createdAt;
     }
 
+    /**
+     * @return int|null
+     */
     public function getUpdatedAt(): ?int
     {
         return $this->updated_at;
     }
 
+    /**
+     * @param int $updatedAt
+     */
     public function setUpdatedAt(int $updatedAt): void
     {
         $this->updated_at = $updatedAt;
