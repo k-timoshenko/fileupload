@@ -22,13 +22,13 @@ class Saver
      */
     public $filesystem;
     /**
-     * File path in Cache::$filesystem
+     * File path in $filesystem
      * @var string
      */
     public $path;
 
     /**
-     * CacheComponent constructor.
+     * Saver constructor.
      * @param IFile $file
      * @param FilesystemInterface $filesystem
      * @param string $assetPath
@@ -41,8 +41,7 @@ class Saver
     }
 
     /**
-     * Copies, processes and saves file in Cache::$filesystem
-     * @todo: add cleanup of cached files.
+     * Copies, processes and saves file in $filesystem
      * @param \tkanstantsin\fileupload\formatter\File $formatter
      * @return bool
      * @throws \InvalidArgumentException
@@ -63,7 +62,7 @@ class Saver
     }
 
     /**
-     * Checks if file is already in cache.
+     * Checks if file is already in $path.
      * @return bool
      * @throws \League\Flysystem\FileNotFoundException
      */
@@ -74,7 +73,7 @@ class Saver
     }
 
     /**
-     * Saves file into Cache::$filesystem
+     * Saves file into $filesystem
      * @param $content
      * @return bool
      * @throws \InvalidArgumentException
