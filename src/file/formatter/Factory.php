@@ -86,13 +86,13 @@ class Factory
     /**
      * @param IFile $file
      * @param Alias $alias
-     * @param FilesystemInterface $filesystem
+     * @param FilesystemInterface $contentFS
      * @param string $key
      * @param array $formatterConfig
      * @return File
      * @throws \RuntimeException
      */
-    public function build(IFile $file, Alias $alias, FilesystemInterface $filesystem, string $key, array $formatterConfig = []): File
+    public function build(IFile $file, Alias $alias, FilesystemInterface $contentFS, string $key, array $formatterConfig = []): File
     {
         $defaultFormatterConfig = $this->formatterConfigArray[$key] ?? null;
         if ($defaultFormatterConfig === null) {
@@ -116,6 +116,6 @@ class Factory
         $params['path'] = $alias->getFilePath($file);
 
         /* @see File::__construct() */
-        return new $class($file, $filesystem, $params);
+        return new $class($file, $contentFS, $params);
     }
 }
