@@ -18,11 +18,11 @@ use yii\db\ActiveRecord;
  * The followings are the available columns in table 'image':
  * @property int $id
  * @property int $parent_model_id
- * @property int $parent_model
+ * @property string $parent_model
  * @property string $name
  * @property string $extension
- * @property int $is_deleted
- * @property int $is_confirmed
+ * @property bool $is_deleted
+ * @property bool $is_confirmed
  * @property int $size
  * @property string $mime_type
  * @property int $type_id
@@ -46,7 +46,7 @@ class File extends ActiveRecord implements IFile
     public static function tableName(): string
     {
         // TODO: how to defined it outside via any type of config?
-         return '{{%file}}';
+        return '{{%file}}';
     }
 
     /**
