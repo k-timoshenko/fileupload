@@ -44,6 +44,11 @@
       "tkanstantsin\\yii2fileupload\\": "src/yii2"
     }
   },
+  "autoload-dev": {
+    "psr-4": {
+      "tkanstantsin\\fileupload\\stub\\": "stub"
+    }
+  },
   "extra": {
     "branch-alias": {
       "dev-master": "1.0.x-dev"

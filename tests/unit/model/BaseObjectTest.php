@@ -8,23 +8,22 @@ class BaseObjectTest extends \Codeception\Test\Unit
      */
     protected $tester;
 
-    public function testCorrectConfig()
+    public function testCorrectConfig(): void
     {
-        /**
-         * Steps:
-         * - create fake base object with one property
-         * - instantiate empty config -> property is null
-         *
-         * - instantiate with config with property -> property was set
-         */
+        $baseObject = new \tkanstantsin\fileupload\stub\BaseObjectStub([]);
+        $this->assertNull($baseObject->property);
+
+        $baseObject = new \tkanstantsin\fileupload\stub\BaseObjectStub([
+            'property' => 'some not-null value',
+        ]);
+        $this->assertNotNull($baseObject->property);
     }
 
-    public function testInvalidConfig()
+    public function testInvalidConfig(): void
     {
-        /**
-         * Steps:
-         * - declare expected exception @see \tkanstantsin\fileupload\config\InvalidConfigException
-         * - instantiate with wrong property name
-         */
+        $this->expectException(\tkanstantsin\fileupload\config\InvalidConfigException::class);
+        new \tkanstantsin\fileupload\stub\BaseObjectStub([
+            'wrongname' => 'some value',
+        ]);
     }
 }
