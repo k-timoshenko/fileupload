@@ -184,7 +184,7 @@ class File extends ActiveRecord implements IFile
         }
 
         return false !== $this->update([
-                'is_deleted' => (int) true,
+                'is_deleted' => true,
                 'deleted_at' => time(),
             ]);
     }
