@@ -118,7 +118,12 @@ class Uploader extends File
                 return false;
             }
 
-            return $this->filesystem->writeStream($targetFilePath, $this->getFileContent());
+            $contentResource = $this->getFileContent();
+            if ($contentResource === null) {
+                return false;
+            }
+
+            return $this->filesystem->writeStream($targetFilePath, $contentResource);
         } catch (\Exception $e) {
             return false;
         }
