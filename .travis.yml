@@ -56,4 +56,8 @@ before_script:
 
 script:
   # PHP tests
-  - vendor/bin/codecept --verbose run
+  - vendor/bin/codecept --verbose run --coverage --coverage-xml
+
+after_script:
+  - wget https://scrutinizer-ci.com/ocular.phar
+  - php ocular.phar code-coverage:upload --format=php-clover test/_output/coverage.xml
