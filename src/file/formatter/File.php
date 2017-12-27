@@ -82,7 +82,7 @@ class File extends BaseObject
             if (\is_string($formatAdapter) && class_exists($formatAdapter)) {
                 $this->formatAdapterArray[$key] = new $formatAdapter;
             }
-            if (!($formatAdapter instanceof IFormatAdapter)) {
+            if (!($this->formatAdapterArray[$key] instanceof IFormatAdapter)) {
                 throw new InvalidConfigException(sprintf('Format adapter must be instance of %s.', IFormatAdapter::class));
             }
         }
