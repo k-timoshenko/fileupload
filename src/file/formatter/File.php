@@ -4,6 +4,7 @@ namespace tkanstantsin\fileupload\formatter;
 
 use League\Flysystem\FilesystemInterface;
 use tkanstantsin\fileupload\config\InvalidConfigException;
+use tkanstantsin\fileupload\formatter\adapter\IFormatAdapter;
 use tkanstantsin\fileupload\model\BaseObject;
 use tkanstantsin\fileupload\model\IFile;
 

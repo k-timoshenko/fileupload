@@ -1,6 +1,6 @@
 <?php
 
-namespace tkanstantsin\fileupload\formatter;
+namespace tkanstantsin\fileupload\formatter\adapter;
 
 use tkanstantsin\fileupload\model\IFile;
 
