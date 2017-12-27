@@ -33,10 +33,12 @@
     "codeception/codeception": "^2.3",
     "codeception/verify": "~0.3.1",
     "fzaninotto/faker": "1.5.*",
-    "ralouphie/mimey": "^1.0"
+    "ralouphie/mimey": "^1.0",
+    "ps/image-optimizer": "^1.1.2"
   },
   "suggest": {
-    "fortawesome/font-awesome": "For file types without preview generator"
+    "fortawesome/font-awesome": "For file types without preview generator",
+    "ps/image-optimizer": "Image optimization toolkit"
   },
   "autoload": {
     "psr-4": {
