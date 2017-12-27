@@ -51,8 +51,13 @@ class Saver
      */
     public function save(File $formatter): bool
     {
-        if ($this->isSaved()) {
+        $isCached = $this->isSaved();
+        $isEmpty = $this->isEmpty();
+        if ($isCached && !$isEmpty) {
             return true;
+        }
+        if ($isEmpty) {
+            return false;
         }
 
         // checks if path is writable
@@ -60,7 +65,21 @@ class Saver
         // also caches empty result for non-formatted files
         $this->filesystem->put($this->path, null);
 
-        return $this->write($formatter->getContent());
+        $content = $formatter->getContent();
+        if ($content === '') {
+            return false;
+        }
+
+        return $this->write($content);
+    }
+
+    /**
+     * @return bool
+     */
+    protected function isEmpty(): bool
+    {
+        return $this->filesystem->has($this->path)
+            && $this->filesystem->getSize($this->path) === 0;
     }
 
     /**
