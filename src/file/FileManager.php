@@ -89,7 +89,7 @@ class FileManager
     public function init(): void
     {
         if (!($this->contentFS instanceof Filesystem)) {
-            throw new \ErrorException(sprintf('UploadFS must be instance of %s.', Filesystem::class));
+            throw new \ErrorException(sprintf('ContentFS must be instance of %s.', Filesystem::class));
         }
         if (!($this->cacheFS instanceof Filesystem)) {
             throw new \ErrorException(sprintf('CacheFS must be instance of %s.', Filesystem::class));

@@ -70,7 +70,7 @@ class FileManager extends Component
             throw new \ErrorException('URLs for not founded image and file must be defined.');
         }
 
-        $this->manager['uploadFS'] = \Yii::$app->{$this->manager['uploadFS']}->getFileSystem();
+        $this->manager['contentFS'] = \Yii::$app->{$this->manager['contentFS']}->getFileSystem();
         $this->manager['cacheFS'] = \Yii::$app->{$this->manager['cacheFS']}->getFileSystem();
 
         $class = ArrayHelper::remove($this->manager, 'class', BaseFileManager::class);
