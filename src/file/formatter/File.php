@@ -16,6 +16,16 @@ use tkanstantsin\fileupload\model\IFile;
 class File extends BaseObject
 {
     /**
+     * Additional dynamic config for processor class.
+     * @var array
+     */
+    public $config = [];
+    /**
+     * @var IFormatAdapter[]|array
+     */
+    public $formatAdapterArray = [];
+
+    /**
      * @var IFile
      */
     protected $file;
@@ -36,17 +46,6 @@ class File extends BaseObject
      * @var string
      */
     protected $path;
-
-    /**
-     * @var IFormatAdapter[]|array
-     */
-    protected $formatAdapterArray = [];
-
-    /**
-     * Additional dynamic config for processor class.
-     * @var array
-     */
-    public $config = [];
 
     /**
      * FileProcessor constructor.
