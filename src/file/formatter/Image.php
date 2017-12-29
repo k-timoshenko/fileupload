@@ -25,6 +25,10 @@ class Image extends File
      * Like background `contain` in css.
      */
     public const RESIZE_INSET = \Imagine\Image\ImageInterface::THUMBNAIL_INSET;
+    /**
+     * Means that image may be smaller than defined in config, never bigger.
+     */
+    public const RESIZE_INSET_KEEP_RATIO = 'inset_keep_ratio';
 
     public const DEFAULT_EXTENSION = 'jpg';
 
@@ -40,6 +44,12 @@ class Image extends File
      * @var string
      */
     public $mode = self::RESIZE_INSET;
+    /**
+     * Whether image must keep aspect ration when used inset mote.
+     * Means that image would may be smaller than smaller
+     * @var bool
+     */
+    public $keepRatio = true;
 
     /**
      * @var Imagine
@@ -48,6 +58,7 @@ class Image extends File
 
     /**
      * @inheritdoc
+     * @throws \UnexpectedValueException
      * @throws \Imagine\Exception\InvalidArgumentException
      * @throws \Imagine\Exception\RuntimeException
      */
@@ -63,6 +74,7 @@ class Image extends File
     /**
      * @param ImageInterface $image
      * @return ImageInterface
+     * @throws \UnexpectedValueException
      * @throws \Imagine\Exception\RuntimeException
      * @throws \Imagine\Exception\InvalidArgumentException
      */
@@ -74,6 +86,15 @@ class Image extends File
 
         $box = new Box($this->width, $this->height);
 
-        return $image->thumbnail($box, $this->mode);
+        switch ($this->mode) {
+            case self::RESIZE_OUTBOUND:
+            case self::RESIZE_INSET:
+                return $image->thumbnail($box, $this->mode);
+            case self::RESIZE_INSET_KEEP_RATIO:
+                // TODO: implement new resize mode.
+                throw new \UnexpectedValueException(sprintf('Resize mode `%s` not supported yet', $this->mode));
+            default:
+                throw new \UnexpectedValueException(sprintf('Image resize mode `%s` not defined', $this->mode));
+        }
     }
 }
