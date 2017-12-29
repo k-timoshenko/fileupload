@@ -4,6 +4,7 @@ namespace tkanstantsin\fileupload\formatter\adapter;
 
 use ImageOptimizer\Optimizer;
 use ImageOptimizer\OptimizerFactory;
+use tkanstantsin\fileupload\model\BaseObject;
 use tkanstantsin\fileupload\model\IFile;
 
 /**
@@ -11,7 +12,7 @@ use tkanstantsin\fileupload\model\IFile;
  * Optimize images using `ps/image-optimizer`
  * @see https://github.com/psliwa/image-optimizer
  */
-class PsImageOptimizer implements IFormatAdapter
+class PsImageOptimizer extends BaseObject implements IFormatAdapter
 {
     public const DEFAULT_CONFIG = [
         'ignore_errors'                     => true,
@@ -32,16 +33,16 @@ class PsImageOptimizer implements IFormatAdapter
     public $optimizerConfig = self::DEFAULT_CONFIG;
 
     /**
-     * ImageOptimizer constructor.
-     *
-     * @param array $config
+     * @inheritdoc
      */
-    public function __construct(array $config = [])
+    public function init(): void
     {
-        foreach ($config as $key => $value) {
-            $this->$key = $value;
+        parent::init();
+        if (!class_exists(OptimizerFactory::class)) {
+            trigger_error(sprintf('%s class not found', OptimizerFactory::class));
         }
     }
+
 
     /**
      * Applies filters or something to content and return it
