@@ -3,8 +3,10 @@
 namespace tkanstantsin\fileupload\formatter\adapter;
 
 use Imagine\Image\ImageInterface;
+use Imagine\Image\Point;
 use Imagine\Imagick\Imagine;
 use tkanstantsin\fileupload\config\InvalidConfigException;
+use tkanstantsin\fileupload\formatter\Image;
 use tkanstantsin\fileupload\model\BaseObject;
 use tkanstantsin\fileupload\model\IFile;
 
@@ -72,6 +74,7 @@ class Watermark extends BaseObject implements IFormatAdapter
      * @param       $content
      *
      * @return mixed
+     * @throws \Imagine\Exception\InvalidArgumentException
      * @throws \Imagine\Exception\RuntimeException
      * @throws \ImageOptimizer\Exception\Exception
      */
@@ -87,7 +90,13 @@ class Watermark extends BaseObject implements IFormatAdapter
 
         // TODO: implement watermark adapter.
 
-        return $content;
+        /* @see http://urmaul.com/blog/imagick-filters-comparison */
+        $watermark = $watermark->resize($imageSize, ImageInterface::FILTER_SINC);
+        $point = new Point(0, 0);
+
+        $image = $image->paste($watermark, $point);
+
+        return $image->get($file->getExtension() ?? Image::DEFAULT_EXTENSION);
     }
 
     private function getWatermark(Imagine $imagine): ImageInterface
