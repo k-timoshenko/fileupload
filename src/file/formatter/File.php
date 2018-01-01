@@ -27,6 +27,18 @@ class File extends BaseObject
     public $formatAdapterArray = [];
 
     /**
+     * @see Factory::DEFAULT_FORMATTER_ARRAY
+     * @example file, _normal, _product_preview
+     * @var string
+     */
+    public $name;
+    /**
+     * Path to original file in contentFS
+     * @var string
+     */
+    public $path;
+
+    /**
      * @var IFile
      */
     protected $file;
@@ -34,19 +46,6 @@ class File extends BaseObject
      * @var FilesystemInterface
      */
     protected $filesystem;
-
-    /**
-     * @see Factory::DEFAULT_FORMATTER_ARRAY
-     * @example file, _normal, _product_preview
-     * @var string
-     */
-    protected $name;
-
-    /**
-     * Path to original file in contentFS
-     * @var string
-     */
-    protected $path;
 
     /**
      * FileProcessor constructor.
