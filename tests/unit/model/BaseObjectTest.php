@@ -1,29 +1,33 @@
 <?php
 
+namespace unit\model;
 
-class BaseObjectTest extends Unit
+use tkanstantsin\fileupload\config\InvalidConfigException;
+use tkanstantsin\fileupload\stub\BaseObjectStub;
+
+class BaseObjectTest extends \Unit
 {
     /**
-     * @throws \tkanstantsin\fileupload\config\InvalidConfigException
+     * @throws InvalidConfigException
      */
     public function testCorrectConfig(): void
     {
-        $baseObject = new \tkanstantsin\fileupload\stub\BaseObjectStub([]);
+        $baseObject = new BaseObjectStub([]);
         $this->assertNull($baseObject->property);
 
-        $baseObject = new \tkanstantsin\fileupload\stub\BaseObjectStub([
+        $baseObject = new BaseObjectStub([
             'property' => 'some not-null value',
         ]);
         $this->assertNotNull($baseObject->property);
     }
 
     /**
-     * @throws \tkanstantsin\fileupload\config\InvalidConfigException
+     * @throws InvalidConfigException
      */
     public function testInvalidConfig(): void
     {
-        $this->expectException(\tkanstantsin\fileupload\config\InvalidConfigException::class);
-        new \tkanstantsin\fileupload\stub\BaseObjectStub([
+        $this->expectException(InvalidConfigException::class);
+        new BaseObjectStub([
             'wrongname' => 'some value',
         ]);
     }
