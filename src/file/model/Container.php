@@ -74,7 +74,7 @@ class Container
         }
         if ($reflection->implementsInterface(IConfigurable::class)) {
             // set $config as the last parameter (existing one will be overwritten)
-            return $reflection->newInstanceArgs($config);
+            return $reflection->newInstanceArgs([$config]);
         }
 
         $object = $reflection->newInstance();
