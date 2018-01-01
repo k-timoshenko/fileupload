@@ -8,13 +8,14 @@ use tkanstantsin\fileupload\config\InvalidConfigException;
 use tkanstantsin\fileupload\formatter\Factory as FormatterFactory;
 use tkanstantsin\fileupload\formatter\File as FileFormatter;
 use tkanstantsin\fileupload\formatter\icon\IconGenerator;
+use tkanstantsin\fileupload\model\BaseObject;
 use tkanstantsin\fileupload\model\IFile;
 use tkanstantsin\fileupload\saver\Saver;
 
 /**
  * Class FileComponent
  */
-class FileManager
+class FileManager extends BaseObject
 {
     /**
      * For uploading
@@ -69,25 +70,13 @@ class FileManager
     private $formatterFactory;
 
     /**
-     * FileManagerComponent constructor.
-     * @param array $config
-     * @throws config\InvalidConfigException
-     */
-    public function __construct(array $config)
-    {
-        foreach ($config as $key => $value) {
-            $this->$key = $value;
-        }
-
-        $this->init();
-    }
-
-    /**
      * Check initialization parameters and parse configs
      * @throws config\InvalidConfigException
      */
     public function init(): void
     {
+        parent::init();
+
         if (!($this->contentFS instanceof Filesystem)) {
             throw new InvalidConfigException(sprintf('ContentFS must be instance of %s.', Filesystem::class));
         }
