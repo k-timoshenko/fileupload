@@ -7,7 +7,7 @@ use tkanstantsin\fileupload\config\InvalidConfigException;
 /**
  * Class BaseObject
  */
-class BaseObject
+class BaseObject implements IConfigurable
 {
     /**
      * Util constructor.
@@ -16,13 +16,7 @@ class BaseObject
      */
     public function __construct(array $config = [])
     {
-        foreach ($config as $key => $value) {
-            if (!property_exists($this, $key)) {
-                throw new InvalidConfigException(sprintf('Property %s in class %s not found.', $key, static::class));
-            }
-            $this->$key = $value;
-        }
-
+        Container::configure($this, $config);
         $this->init();
     }
 
