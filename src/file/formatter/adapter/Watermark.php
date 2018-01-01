@@ -74,6 +74,7 @@ class Watermark extends BaseObject implements IFormatAdapter
      * @param       $content
      *
      * @return mixed
+     * @throws \UnexpectedValueException
      * @throws \Imagine\Exception\InvalidArgumentException
      * @throws \Imagine\Exception\RuntimeException
      * @throws \ImageOptimizer\Exception\Exception
@@ -99,6 +100,13 @@ class Watermark extends BaseObject implements IFormatAdapter
         return $image->get($file->getExtension() ?? Image::DEFAULT_EXTENSION);
     }
 
+    /**
+     * Get watermark image
+     * @param Imagine $imagine
+     * @return ImageInterface
+     * @throws \Imagine\Exception\RuntimeException
+     * @throws \UnexpectedValueException
+     */
     private function getWatermark(Imagine $imagine): ImageInterface
     {
         $resource = null;
