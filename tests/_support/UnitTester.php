@@ -29,11 +29,13 @@ class UnitTester extends \Codeception\Actor
     /**
      * @return \tkanstantsin\fileupload\FileManager
      * @throws \LogicException
-     * @throws \ErrorException
+     * @throws \tkanstantsin\fileupload\config\InvalidConfigException
+     * @throws \ReflectionException
      */
     public function getFileManager(): \tkanstantsin\fileupload\FileManager
     {
-        return new \tkanstantsin\fileupload\FileManager([
+        return \tkanstantsin\fileupload\model\Container::createObject([
+            'class' => \tkanstantsin\fileupload\FileManager::class,
             'aliasArray' => [
                 'test-alias' => [
                     'maxCount' => 1,
@@ -93,7 +95,6 @@ class UnitTester extends \Codeception\Actor
                     ? $filesystem->delete($file['path'])
                     : $filesystem->deleteDir($file['path']);
             }
-            
         }
     }
 }
