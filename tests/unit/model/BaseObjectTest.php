@@ -8,6 +8,9 @@ class BaseObjectTest extends \Codeception\Test\Unit
      */
     protected $tester;
 
+    /**
+     * @throws \tkanstantsin\fileupload\config\InvalidConfigException
+     */
     public function testCorrectConfig(): void
     {
         $baseObject = new \tkanstantsin\fileupload\stub\BaseObjectStub([]);
@@ -19,6 +22,9 @@ class BaseObjectTest extends \Codeception\Test\Unit
         $this->assertNotNull($baseObject->property);
     }
 
+    /**
+     * @throws \tkanstantsin\fileupload\config\InvalidConfigException
+     */
     public function testInvalidConfig(): void
     {
         $this->expectException(\tkanstantsin\fileupload\config\InvalidConfigException::class);
