@@ -3,8 +3,8 @@
 namespace tkanstantsin\fileupload;
 
 use League\Flysystem\Filesystem;
-use tkanstantsin\fileupload\config\Alias;
 use tkanstantsin\fileupload\config\Factory as AliasFactory;
+use tkanstantsin\fileupload\config\InvalidConfigException;
 use tkanstantsin\fileupload\formatter\Factory as FormatterFactory;
 use tkanstantsin\fileupload\formatter\File as FileFormatter;
 use tkanstantsin\fileupload\formatter\icon\IconGenerator;
@@ -28,12 +28,12 @@ class FileManager
     public $cacheFS;
 
     /**
-     * @see config\model\Alias
+     * @see config\Alias
      * @var array
      */
     public $aliasArray;
     /**
-     * @see config\model\Alias
+     * @see config\Alias
      * @var array
      */
     public $defaultAlias = [
@@ -71,7 +71,7 @@ class FileManager
     /**
      * FileManagerComponent constructor.
      * @param array $config
-     * @throws \ErrorException
+     * @throws config\InvalidConfigException
      */
     public function __construct(array $config)
     {
@@ -84,15 +84,15 @@ class FileManager
 
     /**
      * Check initialization parameters and parse configs
-     * @throws \ErrorException
+     * @throws config\InvalidConfigException
      */
     public function init(): void
     {
         if (!($this->contentFS instanceof Filesystem)) {
-            throw new \ErrorException(sprintf('ContentFS must be instance of %s.', Filesystem::class));
+            throw new InvalidConfigException(sprintf('ContentFS must be instance of %s.', Filesystem::class));
         }
         if (!($this->cacheFS instanceof Filesystem)) {
-            throw new \ErrorException(sprintf('CacheFS must be instance of %s.', Filesystem::class));
+            throw new InvalidConfigException(sprintf('CacheFS must be instance of %s.', Filesystem::class));
         }
 
         $this->iconGenerator = IconGenerator::build($this->iconSet);
@@ -106,10 +106,10 @@ class FileManager
 
     /**
      * @param string $name
-     * @return Alias
-     * @throws \ErrorException
+     * @return config\Alias
+     * @throws \RuntimeException
      */
-    public function getAliasConfig(string $name): Alias
+    public function getAliasConfig(string $name): config\Alias
     {
         return $this->aliasFactory->getAliasConfig($name);
     }
@@ -117,7 +117,7 @@ class FileManager
     /**
      * @param string $name
      * @return string|null
-     * @throws \ErrorException
+     * @throws \RuntimeException
      */
     public function getModelByAlias(string $name): ?string
     {
@@ -143,7 +143,6 @@ class FileManager
      * @param array $formatterConfig
      * @return FileFormatter
      * @throws \RuntimeException
-     * @throws \ErrorException
      */
     public function buildFormatter(IFile $file, string $format, array $formatterConfig = []): FileFormatter
     {
@@ -160,7 +159,6 @@ class FileManager
      * @return string
      * @throws \InvalidArgumentException
      * @throws \RuntimeException
-     * @throws \ErrorException
      * @throws \League\Flysystem\FileNotFoundException
      */
     public function getFilePath(IFile $file, string $format, array $formatterConfig = []): string
@@ -179,13 +177,13 @@ class FileManager
      * Caches file available in web.
      *
      * @param IFile $file
-     * @param Alias $alias
+     * @param config\Alias $alias
      * @param FileFormatter $formatter
      * @return bool
      * @throws \InvalidArgumentException
      * @throws \League\Flysystem\FileNotFoundException
      */
-    protected function cacheFile(IFile $file, Alias $alias, FileFormatter $formatter): bool
+    protected function cacheFile(IFile $file, config\Alias $alias, FileFormatter $formatter): bool
     {
         $path = $alias->getCachePath($file, $formatter->getName());
 

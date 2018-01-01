@@ -75,7 +75,7 @@ class Alias
     /**
      * Alias constructor.
      * @param array $config
-     * @throws \ErrorException
+     * @throws InvalidConfigException
      */
     public function __construct(array $config = [])
     {
@@ -84,21 +84,21 @@ class Alias
         }
 
         if (!\is_int($this->maxSize) || $this->maxSize <= 0) {
-            throw new \ErrorException(sprintf('Maximum file size must be positive integer but `%s` got.', $this->maxSize));
+            throw new InvalidConfigException(sprintf('Maximum file size must be positive integer but `%s` got.', $this->maxSize));
         }
         if (!\is_int($this->maxCount) || $this->maxCount <= 0) {
-            throw new \ErrorException(sprintf('Maximum file count must be positive integer but `%s` got.', $this->maxCount));
+            throw new InvalidConfigException(sprintf('Maximum file count must be positive integer but `%s` got.', $this->maxCount));
         }
         if (!\in_array($this->hashMethod, hash_algos(), true)) {
-            throw new \ErrorException(sprintf('Hash method `%s` not found.', $this->hashMethod));
+            throw new InvalidConfigException(sprintf('Hash method `%s` not found.', $this->hashMethod));
         }
         // TODO: create interface with all such methods.
         // Implement base version. And allow to use custom realizations.
         if ($this->filePathClosure !== null && !\is_callable($this->filePathClosure)) {
-            throw new \ErrorException('FilePathClosure must be callable.');
+            throw new InvalidConfigException('FilePathClosure must be callable.');
         }
         if ($this->assetNameClosure !== null && !\is_callable($this->assetNameClosure)) {
-            throw new \ErrorException('AssetNameClosure must be callable.');
+            throw new InvalidConfigException('AssetNameClosure must be callable.');
         }
     }
 

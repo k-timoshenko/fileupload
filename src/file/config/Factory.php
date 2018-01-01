@@ -23,8 +23,7 @@ class Factory
      * @param array $defaultAliasConfig
      * @param array $aliasArray
      * @return array
-     * @throws \ErrorException
-     * @todo: create Alias class.
+     * @throws InvalidConfigException
      */
     public static function prepareAliases(array $defaultAliasConfig, array $aliasArray): array
     {
@@ -60,7 +59,7 @@ class Factory
      * Add config
      * @param string $name
      * @param $config
-     * @throws \ErrorException
+     * @throws InvalidConfigException
      */
     public function add(string $name, $config): void
     {
@@ -69,7 +68,7 @@ class Factory
 
     /**
      * @param array $configArray
-     * @throws \ErrorException
+     * @throws InvalidConfigException
      */
     public function addMultiple(array $configArray): void
     {
@@ -81,13 +80,13 @@ class Factory
     /**
      * @param string $name
      * @return Alias
-     * @throws \ErrorException
+     * @throws \RuntimeException
      */
     public function getAliasConfig(string $name): Alias
     {
         $aliasConfig = $this->aliasArray[$name] ?? null;
         if ($aliasConfig === null) {
-            throw new \ErrorException(sprintf('Alias with key `%s` not defined.', $name));
+            throw new \RuntimeException(sprintf('Alias with key `%s` not defined.', $name));
         }
 
         return $aliasConfig;
@@ -97,12 +96,12 @@ class Factory
      * @param string|int $name
      * @param array|string $config
      * @return Alias
-     * @throws \ErrorException
+     * @throws InvalidConfigException
      */
     protected function createAlias(string $name, $config): Alias
     {
         if (!\is_string($config) && !\is_array($config)) {
-            throw new \ErrorException('Invalid alias config for fileupload.');
+            throw new InvalidConfigException('Invalid alias config for fileupload.');
         }
         if (\is_string($config)) { // using default config
             $config = [
@@ -119,7 +118,7 @@ class Factory
         ]);
 
         if (!\in_array($config['hashMethod'], hash_algos(), true)) {
-            throw new \ErrorException(sprintf('Hash method `%s` not found.', $config['hashMethod']));
+            throw new InvalidConfigException(sprintf('Hash method `%s` not found.', $config['hashMethod']));
         }
 
         return new Alias($config);
