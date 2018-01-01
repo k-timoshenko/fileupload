@@ -27,6 +27,36 @@ class UnitTester extends \Codeception\Actor
      */
 
     /**
+     * @var \tkanstantsin\fileupload\FileManager
+     */
+    private $fileFactory;
+
+    /**
+     * @return \Helper\TestFileFactory
+     */
+    public function getFileFactory(): \Helper\TestFileFactory
+    {
+        if ($this->fileFactory === null) {
+            $this->fileFactory = new \Helper\TestFileFactory();
+        }
+
+        return $this->fileFactory;
+    }
+
+    /**
+     * @see \Helper\TestFileFactory::create()
+     * @param int $type
+     * @param string $alias
+     * @param array $params
+     * @return \tkanstantsin\fileupload\model\IFile
+     * @throws \tkanstantsin\fileupload\config\InvalidConfigException
+     */
+    public function createFile(int $type, string $alias, array $params = []): \tkanstantsin\fileupload\model\IFile
+    {
+        return $this->getFileFactory()->create($type, $alias, $params);
+    }
+
+    /**
      * @return \tkanstantsin\fileupload\FileManager
      * @throws \LogicException
      * @throws \tkanstantsin\fileupload\config\InvalidConfigException
