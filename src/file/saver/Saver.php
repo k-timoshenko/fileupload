@@ -3,6 +3,7 @@
 namespace tkanstantsin\fileupload\saver;
 
 use League\Flysystem\FilesystemInterface;
+use tkanstantsin\fileupload\config\InvalidConfigException;
 use tkanstantsin\fileupload\formatter\File;
 use tkanstantsin\fileupload\model\IFile;
 
@@ -33,13 +34,18 @@ class Saver
      * Saver constructor.
      * @param IFile $file
      * @param FilesystemInterface $filesystem
-     * @param string $assetPath
+     * @param string $path
+     * @throws InvalidConfigException
      */
-    public function __construct(IFile $file, FilesystemInterface $filesystem, string $assetPath)
+    public function __construct(IFile $file, FilesystemInterface $filesystem, string $path)
     {
         $this->file = $file;
         $this->filesystem = $filesystem;
-        $this->path = $assetPath;
+        $this->path = $path;
+
+        if ($this->path === '') {
+            throw new InvalidConfigException('Saver path must be not empty');
+        }
     }
 
     /**
