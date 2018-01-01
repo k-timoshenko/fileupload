@@ -28,6 +28,13 @@ class TestFileFactory
         $this->mimes = new \Mimey\MimeTypes();
     }
 
+    /**
+     * @param int $type
+     * @param string $alias
+     * @param array $params
+     * @return IFile
+     * @throws \tkanstantsin\fileupload\config\InvalidConfigException
+     */
     public function create(int $type, string $alias, array $params = []): IFile
     {
         $extension = $this->factory->randomElement(self::IMAGE_EXTENSION_ARRAY);
