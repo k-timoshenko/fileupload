@@ -1,13 +1,8 @@
 <?php
 
 
-class BaseObjectTest extends \Codeception\Test\Unit
+class BaseObjectTest extends Unit
 {
-    /**
-     * @var \UnitTester
-     */
-    protected $tester;
-
     /**
      * @throws \tkanstantsin\fileupload\config\InvalidConfigException
      */

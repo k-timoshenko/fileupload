@@ -1,13 +1,8 @@
 <?php
 
 
-class SaverTest extends \Codeception\Test\Unit
+class SaverTest extends Unit
 {
-    /**
-     * @var \UnitTester
-     */
-    protected $tester;
-
     public function testWhetherSaved()
     {
         // TODO: create component which would generate FileManager and it's components.
