@@ -60,5 +60,5 @@ script:
 
 after_script:
   - wget https://scrutinizer-ci.com/ocular.phar
-  - rm ./coverage.xml && mv ./test/_output/coverage.xml ./coverage.xml
+  - mv ./tests/_output/coverage.xml ./coverage.xml
   - php ocular.phar code-coverage:upload --format=php-clover coverage.xml
