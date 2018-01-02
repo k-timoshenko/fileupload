@@ -1,44 +1,77 @@
 <?php
 
+namespace unit\saver;
 
-class SaverTest extends Unit
+use tkanstantsin\fileupload\formatter\Factory as FormatterFactory;
+use tkanstantsin\fileupload\model\Type;
+use tkanstantsin\fileupload\saver\Saver;
+
+/**
+ * Class SaverTest
+ *
+ * @todo: use memory adapter and create each time completely new FileManager.
+ */
+class SaverTest extends \Unit
 {
-    public function testWhetherSaved()
+    /**
+     * @throws \tkanstantsin\fileupload\config\InvalidConfigException
+     * @throws \League\Flysystem\FileNotFoundException
+     * @throws \ReflectionException
+     */
+    public function testWriteString(): void
     {
-        // TODO: create component which would generate FileManager and it's components.
-        // TODO: use memory adapter and create each time completely new FileManager.
+        // TODO: simplify preparation before test.
+        $fileManager = $this->tester->getFileManager();
+        // TODO: use constant instead of `test-alias` string.
+        $file = $this->tester->createFile(Type::FILE, 'test-alias');
+        $alias = $fileManager->getAliasConfig($file->getModelAlias());
+        // NOTE: formatter always returns content from getFilePath() too.
+        // TODO: create formatter for tests that will return desired content.
+        $formatter = $fileManager->buildFormatter($file, FormatterFactory::FILE_ORIGINAL);
+        $path = $alias->getFilePath($file);
+
         /**
          * Steps:
-         * - get FS
-         * - get IFile
-         * - get asset path
-         *
-         * - check if NOT saved
-         *
-         * --//--
-         * - write something random in asset path in FS
-         * - check if IS saved
-         *
-         * --//--
-         * - write something random in asset path in FS
-         * - set updatedAt into future
-         * - check if NOT saved
+         * - get saver
+         * - try write stream -> get true
          */
+
+        $this->assertFalse($fileManager->contentFS->has($path), 'File not exist before test');
+
+        $saver = new Saver($file, $fileManager->contentFS, $path);
+        $saver->save($formatter);
+
+        $this->assertTrue($fileManager->contentFS->has($path), 'File saved');
     }
 
-    public function testWrite()
+    public function testWriteStream()
     {
         /**
          * Steps:
          * - get saver
-         * - try write null or false -> get false
-         *
-         * - get saver
-         * - try write anything else -> get true or exception
+         * - try write stream -> get true
          */
     }
 
-    public function testSave()
+    public function testWriteNull(): void
+    {
+        /**
+         * Steps:
+         * - get saver
+         * - try write NULL -> get false
+         */
+    }
+
+    public function testWriteFalse(): void
+    {
+        /**
+         * Steps:
+         * - get saver
+         * - try write FALSE -> get false
+         */
+    }
+
+    public function testSave(): void
     {
         /**
          * Steps:
@@ -47,7 +80,7 @@ class SaverTest extends Unit
          */
     }
 
-    public function testSaveSkipIfFileExist()
+    public function testSaveSkipIfFileExist(): void
     {
         /**
          * Steps:
@@ -58,7 +91,7 @@ class SaverTest extends Unit
          */
     }
 
-    public function testForceSave()
+    public function testForceSave(): void
     {
         /**
          * Steps:
