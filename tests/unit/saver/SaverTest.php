@@ -6,6 +6,7 @@ namespace unit\saver;
 use tkanstantsin\fileupload\formatter\Factory as FormatterFactory;
 use tkanstantsin\fileupload\model\Type;
 use tkanstantsin\fileupload\saver\Saver;
+use tkanstantsin\fileupload\stub\formatter\StringFormatterStub;
 
 /**
  * Class SaverTest
@@ -26,9 +27,7 @@ class SaverTest extends \Unit
         // TODO: use constant instead of `test-alias` string.
         $file = $this->tester->createFile(Type::FILE, 'test-alias');
         $alias = $fileManager->getAliasConfig($file->getModelAlias());
-        // NOTE: formatter always returns content from getFilePath() too.
-        // TODO: create formatter for tests that will return desired content.
-        $formatter = $fileManager->buildFormatter($file, FormatterFactory::FILE_ORIGINAL);
+        $formatter = new StringFormatterStub($file, $fileManager->contentFS);
         $path = $alias->getFilePath($file);
 
         /**
@@ -40,26 +39,17 @@ class SaverTest extends \Unit
         $this->assertFalse($fileManager->contentFS->has($path), 'File not exist before test');
 
         $saver = new Saver($file, $fileManager->contentFS, $path);
-        $saver->save($formatter);
+        $this->assertTrue($saver->save($formatter), 'File saved');
 
         $this->assertTrue($fileManager->contentFS->has($path), 'File saved');
     }
 
-    public function testWriteStream()
+    public function testWriteResource()
     {
         /**
          * Steps:
          * - get saver
          * - try write stream -> get true
-         */
-    }
-
-    public function testWriteNull(): void
-    {
-        /**
-         * Steps:
-         * - get saver
-         * - try write NULL -> get false
          */
     }
 
