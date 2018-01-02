@@ -61,8 +61,6 @@ class File extends BaseObject
         $this->file = $file;
         $this->filesystem = $filesystem;
         parent::__construct($config);
-
-        $this->init();
     }
 
     /**
