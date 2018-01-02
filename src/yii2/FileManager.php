@@ -17,6 +17,7 @@ use yii\helpers\Url;
 /**
  * Class FileComponent
  *
+ * @todo: create repository only for yii2-filemanager widget
  * @todo: proxy all methods to the real filemanager.
  */
 class FileManager extends Component
@@ -93,16 +94,17 @@ class FileManager extends Component
     }
 
     /**
-     * Caches file and returns url to it. Return 404 image or link if fails without exception.
+     * Caches file and returns url to it. Return 404 image or link if fails
+     * without exception.
      * @param IFile $file
      * @param string $format
      * @param array $formatterConfig
      * @return string
-     * @throws \yii\base\InvalidParamException
      * @throws \InvalidArgumentException
+     * @throws \yii\base\InvalidParamException
      * @throws \RuntimeException
-     * @throws \ErrorException
      * @throws \League\Flysystem\FileNotFoundException
+     * @throws \tkanstantsin\fileupload\config\InvalidConfigException
      */
     public function getFileUrl(IFile $file, string $format, array $formatterConfig = []): string
     {
@@ -142,8 +144,8 @@ class FileManager extends Component
      * @throws \RuntimeException
      * @throws \InvalidArgumentException
      * @throws \yii\base\InvalidParamException
-     * @throws \ErrorException
      * @throws \League\Flysystem\FileNotFoundException
+     * @throws \tkanstantsin\fileupload\config\InvalidConfigException
      */
     public function getJQueryUploadFileData(File $file): array
     {
