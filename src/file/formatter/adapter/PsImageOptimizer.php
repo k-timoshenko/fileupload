@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace tkanstantsin\fileupload\formatter\adapter;
 
@@ -77,6 +78,7 @@ class PsImageOptimizer extends BaseObject implements IFormatAdapter
      * @param string $name
      *
      * @return Optimizer
+     * @throws \ImageOptimizer\Exception\Exception
      */
     protected function getOptimizer($name = OptimizerFactory::OPTIMIZER_SMART): Optimizer
     {

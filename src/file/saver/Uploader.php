@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace tkanstantsin\fileupload\saver;
 
@@ -83,7 +84,6 @@ class Uploader extends File
      * @return bool
      * @throws \League\Flysystem\FileExistsException
      * @throws \InvalidArgumentException
-     * @throws \ErrorException
      */
     public function upload(): bool
     {

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace tkanstantsin\fileupload;
 
@@ -149,6 +150,7 @@ class FileManager extends BaseObject
      * @throws \InvalidArgumentException
      * @throws \RuntimeException
      * @throws \League\Flysystem\FileNotFoundException
+     * @throws InvalidConfigException
      */
     public function getFilePath(IFile $file, string $format, array $formatterConfig = []): string
     {
@@ -171,6 +173,7 @@ class FileManager extends BaseObject
      * @return bool
      * @throws \InvalidArgumentException
      * @throws \League\Flysystem\FileNotFoundException
+     * @throws InvalidConfigException
      */
     protected function cacheFile(IFile $file, config\Alias $alias, FileFormatter $formatter): bool
     {

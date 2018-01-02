@@ -1,9 +1,5 @@
 <?php
-/**
- * Created by Konstantin Timoshenko
- * Email: t.kanstantsin@gmail.com
- * Date: 4/6/16 at 2:13 AM
- */
+declare(strict_types=1);
 
 namespace tkanstantsin\yii2fileupload;
 

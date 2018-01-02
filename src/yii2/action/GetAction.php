@@ -1,7 +1,7 @@
 <?php
+declare(strict_types=1);
 
 namespace tkanstantsin\yii2fileupload\action;
-
 
 use League\Flysystem\Filesystem;
 use tkanstantsin\fileupload\config\Alias;

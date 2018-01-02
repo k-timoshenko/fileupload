@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace tkanstantsin\fileupload\formatter\icon;
 
@@ -49,6 +50,7 @@ class IconGenerator
      */
     public static function build($class): ?self
     {
+        /* @var ElusiveIcons|FontAwesome $iconSetClass */
         $iconSetClass = $class ?? FontAwesome::class;
 
         return new self($iconSetClass::PREFIX, $iconSetClass::ICON_SET);

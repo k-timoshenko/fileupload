@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: konstantin
- * Date: 9/29/16
- * Time: 3:09 PM
- */
+declare(strict_types=1);
 
 namespace tkanstantsin\fileupload\model;
 

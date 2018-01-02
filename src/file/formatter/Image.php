@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: konstantin
- * Date: 10/16/16
- * Time: 2:54 PM
- */
+declare(strict_types=1);
 
 namespace tkanstantsin\fileupload\formatter;
 

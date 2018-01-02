@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: konstantin
- * Date: 5.7.17
- * Time: 12.41
- */
+declare(strict_types=1);
 
 namespace tkanstantsin\fileupload\formatter;
 
@@ -50,7 +45,7 @@ class Factory
     ];
 
     /**
-     * Configs for availabe formatters.
+     * Configs for available formatters.
      * May contain: class name or array with class name and parameters.
      * @example: \tkanstantsin\fileupload\formatter\File
      * ```php

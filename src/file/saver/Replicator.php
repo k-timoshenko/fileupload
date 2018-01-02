@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace tkanstantsin\fileupload\saver;
 
@@ -58,8 +59,8 @@ class Replicator
      * @return bool
      * @throws \InvalidArgumentException
      * @throws \RuntimeException
-     * @throws \ErrorException
      * @throws \League\Flysystem\FileNotFoundException
+     * @throws \tkanstantsin\fileupload\config\InvalidConfigException
      */
     public function run(): bool
     {

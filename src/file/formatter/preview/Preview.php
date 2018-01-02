@@ -1,9 +1,5 @@
 <?php
-/**
- * Created by Konstantin Timoshenko
- * Email: t.kanstantsin@gmail.com
- * Date: 2/2/16 at 11:47 PM
- */
+declare(strict_types=1);
 
 namespace tkanstantsin\fileupload\formatter\preview;
 

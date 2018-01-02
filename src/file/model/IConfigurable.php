@@ -1,9 +1,10 @@
 <?php
+declare(strict_types=1);
 
 namespace tkanstantsin\fileupload\model;
 
 /**
- * Interface IConfigureable
+ * Interface IConfigurable
  */
 interface IConfigurable
 {

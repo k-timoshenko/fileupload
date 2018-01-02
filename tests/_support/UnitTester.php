@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 use League\Flysystem\Adapter\Local as LocalFSAdapter;
 use League\Flysystem\Filesystem;
