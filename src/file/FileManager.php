@@ -146,40 +146,39 @@ class FileManager extends BaseObject
      * @param IFile $file
      * @param string $format
      * @param array $formatterConfig
-     * @return string
+     * @return string|null path to image in cacheFS or null if fails
      * @throws \InvalidArgumentException
      * @throws \RuntimeException
      * @throws \League\Flysystem\FileNotFoundException
      * @throws InvalidConfigException
      */
-    public function getFilePath(IFile $file, string $format, array $formatterConfig = []): string
+    public function getFilePath(IFile $file, string $format, array $formatterConfig = []): ?string
     {
         $alias = $this->getAliasConfig($file->getModelAlias());
         $formatter = $this->buildFormatter($file, $format, $formatterConfig);
+        $targetPath = $alias->getCachePath($file, $format);
 
-        if (!$this->cacheFile($file, $alias, $formatter)) {
-            return $format;
+        if (!$this->cacheFile($file, $formatter, $targetPath)) {
+            return null;
         }
 
-        return $alias->getCachePath($file, $format);
+        return $targetPath;
     }
 
     /**
      * Caches file available in web.
      *
      * @param IFile $file
-     * @param config\Alias $alias
      * @param FileFormatter $formatter
+     * @param string $targetPath
      * @return bool
      * @throws \InvalidArgumentException
-     * @throws \League\Flysystem\FileNotFoundException
      * @throws InvalidConfigException
+     * @throws \League\Flysystem\FileNotFoundException
      */
-    protected function cacheFile(IFile $file, config\Alias $alias, FileFormatter $formatter): bool
+    protected function cacheFile(IFile $file, FileFormatter $formatter, string $targetPath): bool
     {
-        $path = $alias->getCachePath($file, $formatter->getName());
-
-        return (new Saver($file, $this->cacheFS, $path))->save($formatter);
+        return (new Saver($file, $this->cacheFS, $targetPath))->save($formatter);
     }
 
 }
