@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace tkanstantsin\fileupload\formatter;
 
 use Imagine\Image\Box;
+use Imagine\Image\BoxInterface;
 use Imagine\Image\ImageInterface;
 use Imagine\Imagick\Imagine;
 
@@ -75,20 +76,8 @@ class Image extends File
      */
     protected function format(ImageInterface $image): ImageInterface
     {
-        $actualBox = $image->getSize();
-        if ($this->width !== null
-            && $this->height !== null
-        ) {
-            $box = new Box($this->width, $this->height);
-        } elseif ($this->width !== null
-            && $this->height === null
-        ) {
-            $box = $actualBox->widen($this->width);
-        } elseif ($this->width === null
-            && $this->height !== null
-        ) {
-            $box = $actualBox->heighten($this->height);
-        } else { // both are null
+        $box = $this->createBox($image);
+        if ($box === null) {
             return $image;
         }
 
@@ -102,5 +91,31 @@ class Image extends File
             default:
                 throw new \UnexpectedValueException(sprintf('Image resize mode `%s` not defined', $this->mode));
         }
+    }
+
+    /**
+     * @param ImageInterface $image
+     * @return BoxInterface|null
+     * @throws \Imagine\Exception\InvalidArgumentException
+     */
+    protected function createBox(ImageInterface $image): ?BoxInterface
+    {
+        if ($this->width !== null
+            && $this->height !== null
+        ) {
+            return new Box($this->width, $this->height);
+        }
+
+        $actualBox = $image->getSize();
+        if ($this->width !== null) {
+            return $actualBox->widen($this->width);
+        }
+        if ($this->height !== null
+        ) {
+            return $actualBox->heighten($this->height);
+        }
+
+        // both are null
+        return null;
     }
 }
