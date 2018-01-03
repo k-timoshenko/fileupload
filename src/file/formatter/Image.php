@@ -36,6 +36,19 @@ class Image extends File
      * @var int
      */
     public $height;
+
+    /**
+     * Used when defined only height as upper limit for width
+     * @todo: implement in Image::createBox() method.
+     * @var int
+     */
+    public $widthUpperLimit;
+    /**
+     * Used when defined only widith as upper limit for height
+     * @var int
+     */
+    public $heightUpperLimit;
+
     /**
      * @var string
      */
