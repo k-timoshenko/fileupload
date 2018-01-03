@@ -132,6 +132,7 @@ class FileManager extends Component
         switch ($file->getType()) {
             case Type::IMAGE:
                 return Url::to($this->imageNotFoundUrl);
+            case Type::FILE:
             default:
                 return Url::to($this->fileNotFoundUrl);
         }
