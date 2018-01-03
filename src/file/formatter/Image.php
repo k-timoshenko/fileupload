@@ -75,11 +75,22 @@ class Image extends File
      */
     protected function format(ImageInterface $image): ImageInterface
     {
-        if ($this->width === null || $this->height === null) {
+        $actualBox = $image->getSize();
+        if ($this->width !== null
+            && $this->height !== null
+        ) {
+            $box = new Box($this->width, $this->height);
+        } elseif ($this->width !== null
+            && $this->height === null
+        ) {
+            $box = $actualBox->widen($this->width);
+        } elseif ($this->width === null
+            && $this->height !== null
+        ) {
+            $box = $actualBox->heighten($this->height);
+        } else { // both are null
             return $image;
         }
-
-        $box = new Box($this->width, $this->height);
 
         switch ($this->mode) {
             case self::RESIZE_OUTBOUND:
