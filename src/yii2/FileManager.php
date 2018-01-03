@@ -99,16 +99,20 @@ class FileManager extends Component
      * @param IFile|null $file
      * @param string $format
      * @param array $formatterConfig
-     * @return string
+     * @return string|null
      * @throws \InvalidArgumentException
      * @throws \yii\base\InvalidParamException
      * @throws \RuntimeException
      * @throws \League\Flysystem\FileNotFoundException
      * @throws \tkanstantsin\fileupload\config\InvalidConfigException
      */
-    public function getFileUrl(?IFile $file, string $format, array $formatterConfig = []): string
+    public function getFileUrl(?IFile $file, string $format, array $formatterConfig = []): ?string
     {
-        if ($file !== null && $file->getId() !== null) { // null if file is not saved yet
+        if ($file !== null) {
+            return null;
+        }
+
+        if ($file->getId() !== null) { // null if file is not saved yet
             $path = $this->manager->getFilePath($file, $format, $formatterConfig);
             if ($path !== null) {
                 return implode(DIRECTORY_SEPARATOR, [
@@ -123,11 +127,11 @@ class FileManager extends Component
 
     /**
      * Choose 404 url
-     * @param IFile $file
+     * @param IFile|null $file
      * @return string
      * @throws \yii\base\InvalidParamException
      */
-    public function getNotFoundUrl(IFile $file): string
+    public function getNotFoundUrl(?IFile $file): string
     {
         switch ($file->getType()) {
             case Type::IMAGE:
