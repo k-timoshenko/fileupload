@@ -108,7 +108,7 @@ class FileManager extends Component
      */
     public function getFileUrl(?IFile $file, string $format, array $formatterConfig = []): ?string
     {
-        if ($file !== null) {
+        if ($file === null) {
             return null;
         }
 
