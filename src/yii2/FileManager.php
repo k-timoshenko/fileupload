@@ -127,11 +127,11 @@ class FileManager extends Component
 
     /**
      * Choose 404 url
-     * @param IFile|null $file
+     * @param IFile $file
      * @return string
      * @throws \yii\base\InvalidParamException
      */
-    public function getNotFoundUrl(?IFile $file): string
+    public function getNotFoundUrl(IFile $file): string
     {
         switch ($file->getType()) {
             case Type::IMAGE:
