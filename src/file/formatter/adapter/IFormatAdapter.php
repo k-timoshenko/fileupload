@@ -16,6 +16,7 @@ interface IFormatAdapter
      * @param IFile $file
      * @param       $content
      *
+     * @todo: unify content type prior to resource.
      * @return mixed
      */
     public function exec(IFile $file, $content);
