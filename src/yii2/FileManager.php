@@ -106,9 +106,9 @@ class FileManager extends Component
      * @throws \League\Flysystem\FileNotFoundException
      * @throws \tkanstantsin\fileupload\config\InvalidConfigException
      */
-    public function getFileUrl(IFile $file, string $format, array $formatterConfig = []): string
+    public function getFileUrl(?IFile $file, string $format, array $formatterConfig = []): string
     {
-        if ($file->getId() !== null) { // null if file is not saved yet
+        if ($file !== null && $file->getId() !== null) { // null if file is not saved yet
             $path = $this->manager->getFilePath($file, $format, $formatterConfig);
             if ($path !== null) {
                 return implode(DIRECTORY_SEPARATOR, [
