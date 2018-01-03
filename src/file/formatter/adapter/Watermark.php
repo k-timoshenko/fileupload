@@ -152,7 +152,7 @@ class Watermark extends BaseObject implements IFormatAdapter
     private function getWatermarkBox(BoxInterface $imageSize, BoxInterface $watermarkSize): BoxInterface
     {
         // ensure that watermark smaller than image
-        $watermarkSize = $watermarkSize->widen($imageSize->getWidth() * $this->scale);
+        $watermarkSize = $watermarkSize->widen((int) ($imageSize->getWidth() * $this->scale));
         $watermarkSize = $watermarkSize->heighten(min($watermarkSize->getHeight(), $imageSize->getHeight()));
 
         return $watermarkSize;
@@ -168,8 +168,8 @@ class Watermark extends BaseObject implements IFormatAdapter
     private function getPositionPoint(BoxInterface $imageSize, BoxInterface $watermarkSize): Point
     {
         return new Point(
-            ($imageSize->getWidth() - $watermarkSize->getWidth()) / 2,
-            ($imageSize->getHeight() - $watermarkSize->getHeight()) / 2
+            (int) (($imageSize->getWidth() - $watermarkSize->getWidth()) / 2),
+            (int) (($imageSize->getHeight() - $watermarkSize->getHeight()) / 2)
         );
     }
 }
