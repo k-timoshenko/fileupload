@@ -96,7 +96,7 @@ class FileManager extends Component
     /**
      * Caches file and returns url to it. Return 404 image or link if fails
      * without exception.
-     * @param IFile $file
+     * @param IFile|null $file
      * @param string $format
      * @param array $formatterConfig
      * @return string
