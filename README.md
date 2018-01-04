@@ -46,3 +46,25 @@ new FileManager([
     ],
 ]);
 ```
+
+### Alias
+
+**name** - Alias name must contain only latin letters, digits, hyphen (-) and underscore
+
+class
+
+directory
+
+maxSize
+
+maxCount
+
+multiple
+
+hashMethod
+
+cacheHashLength
+
+filePathClosure
+
+assetNameClosure

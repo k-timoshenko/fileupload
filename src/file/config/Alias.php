@@ -84,6 +84,9 @@ class Alias
             $this->$key = $value;
         }
 
+        if (preg_match('/^[a-z0-9-_]$/i', $this->name)) {
+            throw new InvalidConfigException(sprintf('Alias name must contain only latin letters, digits, hyphen (-) and underscore. `%s` got.', $this->name));
+        }
         if (!\is_int($this->maxSize) || $this->maxSize <= 0) {
             throw new InvalidConfigException(sprintf('Maximum file size must be positive integer but `%s` got.', $this->maxSize));
         }
