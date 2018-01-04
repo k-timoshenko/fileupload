@@ -127,10 +127,11 @@ class Alias
      *
      * @return string
      */
-    public function getCachePath(IFile $file, string $formatName): string
+    public function getAssetPath(IFile $file, string $formatName): string
     {
         return implode('/', array_filter([
             Type::$folderPrefix[$file->getType()] . '_' . $formatName,
+            $file->getModelAlias(),
             mb_substr($file->getHash(), 0, $this->cacheHashLength),
             $this->getAssetName($file),
         ]));

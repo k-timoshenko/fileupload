@@ -156,7 +156,7 @@ class FileManager extends BaseObject
     {
         $alias = $this->getAliasConfig($file->getModelAlias());
         $formatter = $this->buildFormatter($file, $format, $formatterConfig);
-        $targetPath = $alias->getCachePath($file, $format);
+        $targetPath = $alias->getAssetPath($file, $format);
 
         if (!$this->cacheFile($file, $formatter, $targetPath)) {
             return null;
