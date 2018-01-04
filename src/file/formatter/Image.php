@@ -162,7 +162,7 @@ class Image extends File
         if ($this->height !== null) {
             $box = $actualBox->heighten($this->height);
             if ($this->maxWidth !== null && $this->maxWidth < $box->getWidth()) {
-                $box = $box->heighten($this->maxWidth);
+                $box = $box->widen($this->maxWidth);
             }
 
             return $box;
