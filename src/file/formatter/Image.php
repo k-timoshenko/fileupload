@@ -6,6 +6,8 @@ namespace tkanstantsin\fileupload\formatter;
 use Imagine\Image\Box;
 use Imagine\Image\BoxInterface;
 use Imagine\Image\ImageInterface;
+use Imagine\Image\Palette\RGB as RGBPalette;
+use Imagine\Image\Point;
 use Imagine\Imagick\Imagine;
 
 /**
@@ -50,6 +52,12 @@ class Image extends File
     public $heightUpperLimit;
 
     /**
+     * Used for jpg images which may be png originally and have transparency.
+     * @var string
+     */
+    public $transparentBackground = 'ffffff';
+
+    /**
      * @var string
      */
     public $mode = self::RESIZE_INSET;
@@ -77,7 +85,12 @@ class Image extends File
         $image = $this->imagine->read(parent::getContentInternal());
         $image = $this->format($image);
 
-        return $image->get($this->file->getExtension() ?? self::DEFAULT_EXTENSION);
+        $extension = mb_strtolower($this->file->getExtension() ?? self::DEFAULT_EXTENSION);
+        if (\in_array($extension, ['jpg', 'jpeg'], true)) {
+            $image = $this->setBackgroundInsteadOfAlpha($image);
+        }
+
+        return $image->get($extension);
     }
 
     /**
@@ -89,7 +102,7 @@ class Image extends File
      */
     protected function format(ImageInterface $image): ImageInterface
     {
-        $box = $this->createBox($image);
+        $box = $this->createBox($image->getSize());
         if ($box === null) {
             return $image;
         }
@@ -107,11 +120,30 @@ class Image extends File
     }
 
     /**
+     * Add Image::transparentBackground color behind image.
+     * If original image was of PNG type but stored with jpg extension, or it
+     * must be converted
+     *
      * @param ImageInterface $image
+     * @return ImageInterface
+     * @throws \Imagine\Exception\RuntimeException
+     * @throws \Imagine\Exception\InvalidArgumentException
+     */
+    protected function setBackgroundInsteadOfAlpha(ImageInterface $image): ImageInterface
+    {
+        $palette = new RGBPalette();
+        $backgroundColor = $palette->color($this->transparentBackground, 100);
+        $background = $this->imagine->create($image->getSize(), $backgroundColor);
+
+        return $background->paste($image, new Point(0, 0));
+    }
+
+    /**
+     * @param BoxInterface $actualBox
      * @return BoxInterface|null
      * @throws \Imagine\Exception\InvalidArgumentException
      */
-    protected function createBox(ImageInterface $image): ?BoxInterface
+    protected function createBox(BoxInterface $actualBox): ?BoxInterface
     {
         if ($this->width !== null
             && $this->height !== null
@@ -119,7 +151,6 @@ class Image extends File
             return new Box($this->width, $this->height);
         }
 
-        $actualBox = $image->getSize();
         if ($this->width !== null) {
             return $actualBox->widen($this->width);
         }
