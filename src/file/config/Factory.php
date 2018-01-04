@@ -113,7 +113,7 @@ class Factory
         // add default options
         $config = array_replace($this->defaultAliasConfig, $config);
         $config = array_merge($config, [
-            'alias' => $name,
+            'name' => $name,
             'directory' => $config['directory'] ?? $name,
             'multiple' => $config['maxCount'] > 1,
         ]);
