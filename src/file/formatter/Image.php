@@ -44,12 +44,12 @@ class Image extends File
      * @todo: implement in Image::createBox() method.
      * @var int
      */
-    public $widthUpperLimit;
+    public $maxWidth;
     /**
      * Used when defined only widith as upper limit for height
      * @var int
      */
-    public $heightUpperLimit;
+    public $maxHeight;
 
     /**
      * Used for jpg images which may be png originally and have transparency.
@@ -152,11 +152,20 @@ class Image extends File
         }
 
         if ($this->width !== null) {
-            return $actualBox->widen($this->width);
+            $box = $actualBox->widen($this->width);
+            if ($this->maxHeight !== null && $this->maxHeight < $box->getHeight()) {
+                $box = $box->heighten($this->maxHeight);
+            }
+
+            return $box;
         }
-        if ($this->height !== null
-        ) {
-            return $actualBox->heighten($this->height);
+        if ($this->height !== null) {
+            $box = $actualBox->heighten($this->height);
+            if ($this->maxWidth !== null && $this->maxWidth < $box->getWidth()) {
+                $box = $box->heighten($this->maxWidth);
+            }
+
+            return $box;
         }
 
         // both are null
