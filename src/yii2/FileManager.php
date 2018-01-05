@@ -23,6 +23,12 @@ use yii\helpers\Url;
 class FileManager extends Component
 {
     /**
+     * Will hide file formatting exception if true
+     * @var bool
+     */
+    public $silentMode = true;
+
+    /**
      * Base url for uploading files
      * @var string
      */
@@ -103,8 +109,7 @@ class FileManager extends Component
      * @throws \InvalidArgumentException
      * @throws \yii\base\InvalidParamException
      * @throws \RuntimeException
-     * @throws \League\Flysystem\FileNotFoundException
-     * @throws \tkanstantsin\fileupload\config\InvalidConfigException
+     * @throws \Exception
      */
     public function getFileUrl(?IFile $file, string $format, array $formatterConfig = []): ?string
     {
@@ -113,12 +118,18 @@ class FileManager extends Component
         }
 
         if ($file->getId() !== null) { // null if file is not saved yet
-            $path = $this->manager->getFilePath($file, $format, $formatterConfig);
-            if ($path !== null) {
-                return implode(DIRECTORY_SEPARATOR, [
-                    $this->cacheBasePath,
-                    $path,
-                ]);
+            try {
+                $path = $this->manager->getFilePath($file, $format, $formatterConfig);
+                if ($path !== null) {
+                    return implode(DIRECTORY_SEPARATOR, [
+                        $this->cacheBasePath,
+                        $path,
+                    ]);
+                }
+            } catch (\Exception $e) {
+                if (!$this->silentMode) {
+                    throw $e;
+                }
             }
         }
 
