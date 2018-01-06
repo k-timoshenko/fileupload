@@ -21,13 +21,13 @@
     "php": ">=7.1",
     "league/flysystem": "~1.0",
     "guzzlehttp/guzzle": "^6.3.0",
-    "imagine/imagine": "^0.7.1"
+    "imagine/imagine": "^0.7.1",
+    "ralouphie/mimey": "^1.0"
   },
   "require-dev": {
     "codeception/codeception": "^2.3",
     "codeception/verify": "~0.3.1",
     "fzaninotto/faker": "1.5.*",
-    "ralouphie/mimey": "^1.0",
     "ps/image-optimizer": "^1.1.2"
   },
   "suggest": {
