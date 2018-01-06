@@ -4,11 +4,8 @@ declare(strict_types=1);
 namespace tkanstantsin\yii2fileupload;
 
 use tkanstantsin\fileupload\FileManager as BaseFileManager;
-use tkanstantsin\fileupload\formatter\Factory as FormatterFactory;
 use tkanstantsin\fileupload\model\IFile;
-use tkanstantsin\fileupload\model\Type;
 use tkanstantsin\fileupload\model\Type as FileType;
-use tkanstantsin\yii2fileupload\model\File;
 use yii\base\Component;
 use yii\base\InvalidConfigException;
 use yii\helpers\ArrayHelper;
@@ -114,7 +111,7 @@ class FileManager extends Component
             return $this->cacheBasePath . DIRECTORY_SEPARATOR . $path;
         }
 
-        $fileTypeId = $file !== null ? $file->getType() : Type::FILE;
+        $fileTypeId = $file !== null ? $file->getType() : FileType::FILE;
 
         return $this->getNotFoundUrl($fileTypeId);
     }
@@ -136,7 +133,7 @@ class FileManager extends Component
             return $this->cacheBasePath . DIRECTORY_SEPARATOR . $path;
         }
 
-        return $notFoundUrl ?? $this->getNotFoundUrl(Type::IMAGE);
+        return $notFoundUrl ?? $this->getNotFoundUrl(FileType::IMAGE);
     }
 
     /**
@@ -147,9 +144,9 @@ class FileManager extends Component
     public function getNotFoundUrl(int $fileTypeId): string
     {
         switch ($fileTypeId) {
-            case Type::IMAGE:
+            case FileType::IMAGE:
                 return Url::to($this->imageNotFoundUrl);
-            case Type::FILE:
+            case FileType::FILE:
             default:
                 return Url::to($this->fileNotFoundUrl);
         }
