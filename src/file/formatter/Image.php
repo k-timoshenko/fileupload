@@ -75,22 +75,35 @@ class Image extends File
 
     /**
      * @inheritdoc
+     * @throws \Imagine\Exception\RuntimeException
+     */
+    public function init(): void
+    {
+        parent::init();
+
+        $this->imagine = new Imagine();
+    }
+
+    /**
+     * @inheritdoc
      * @throws \UnexpectedValueException
      * @throws \Imagine\Exception\InvalidArgumentException
      * @throws \Imagine\Exception\RuntimeException
      */
     protected function getContentInternal()
     {
-        $this->imagine = new Imagine();
         $image = $this->imagine->read(parent::getContentInternal());
         $image = $this->format($image);
 
-        $extension = mb_strtolower($this->file->getExtension() ?? self::DEFAULT_EXTENSION);
-        if (\in_array($extension, ['jpg', 'jpeg'], true)) {
-            $image = $this->setBackgroundInsteadOfAlpha($image);
-        }
+        return $image->get($this->getExtension());
+    }
 
-        return $image->get($extension);
+    /**
+     * @return string
+     */
+    protected function getExtension(): string
+    {
+        return mb_strtolower($this->file->getExtension() ?? self::DEFAULT_EXTENSION);
     }
 
     /**
@@ -101,6 +114,21 @@ class Image extends File
      * @throws \Imagine\Exception\InvalidArgumentException
      */
     protected function format(ImageInterface $image): ImageInterface
+    {
+        $image = $this->resize($image);
+        $image = $this->setBackground($image);
+
+        return $image;
+    }
+
+    /**
+     * @param ImageInterface $image
+     * @return ImageInterface
+     * @throws \Imagine\Exception\RuntimeException
+     * @throws \UnexpectedValueException
+     * @throws \Imagine\Exception\InvalidArgumentException
+     */
+    protected function resize(ImageInterface $image): ImageInterface
     {
         $box = $this->createBox($image->getSize());
         if ($box === null) {
@@ -117,25 +145,6 @@ class Image extends File
             default:
                 throw new \UnexpectedValueException(sprintf('Image resize mode `%s` not defined', $this->mode));
         }
-    }
-
-    /**
-     * Add Image::transparentBackground color behind image.
-     * If original image was of PNG type but stored with jpg extension, or it
-     * must be converted
-     *
-     * @param ImageInterface $image
-     * @return ImageInterface
-     * @throws \Imagine\Exception\RuntimeException
-     * @throws \Imagine\Exception\InvalidArgumentException
-     */
-    protected function setBackgroundInsteadOfAlpha(ImageInterface $image): ImageInterface
-    {
-        $palette = new RGBPalette();
-        $backgroundColor = $palette->color($this->transparentBackground, 100);
-        $background = $this->imagine->create($image->getSize(), $backgroundColor);
-
-        return $background->paste($image, new Point(0, 0));
     }
 
     /**
@@ -170,5 +179,28 @@ class Image extends File
 
         // both are null
         return null;
+    }
+
+    /**
+     * Add Image::transparentBackground color behind image.
+     * If original image was of PNG type but stored with jpg extension, or it
+     * must be converted
+     *
+     * @param ImageInterface $image
+     * @return ImageInterface
+     * @throws \Imagine\Exception\RuntimeException
+     * @throws \Imagine\Exception\InvalidArgumentException
+     */
+    protected function setBackground(ImageInterface $image): ImageInterface
+    {
+        if (!\in_array($this->getExtension(), ['jpg', 'jpeg'], true)) {
+            return $image;
+        }
+
+        $palette = new RGBPalette();
+        $backgroundColor = $palette->color($this->transparentBackground, 100);
+        $background = $this->imagine->create($image->getSize(), $backgroundColor);
+
+        return $background->paste($image, new Point(0, 0));
     }
 }
