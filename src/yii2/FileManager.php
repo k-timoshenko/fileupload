@@ -183,47 +183,4 @@ class FileManager extends Component
 
         return null;
     }
-
-    /**
-     * Generates file info for response to jQueryFileUpload widget.
-     * @param File $file
-     * @return array
-     * @throws \RuntimeException
-     * @throws \InvalidArgumentException
-     * @throws \yii\base\InvalidParamException
-     * @throws \League\Flysystem\FileNotFoundException
-     * @throws \tkanstantsin\fileupload\config\InvalidConfigException
-     */
-    public function getJQueryUploadFileData(File $file): array
-    {
-        return [
-            // file model
-            'id' => $file->getId(),
-            'alias' => $file->getModelAlias(),
-            'model_id' => $file->getModelId(),
-            // file info
-            'name' => $file->getFullName(),
-            'size' => $file->getSize(),
-            'is_deleted' => (integer) $file->is_deleted,
-            'is_confirmed' => (integer) $file->is_confirmed,
-            // urls
-            // path to full image or file itself.
-            'url' => Url::to($this->manager->getFilePath($file, FormatterFactory::FILE_ORIGINAL)),
-            // path to image thumbnail or file icon.
-            'preview_url' => $file->getType() === FileType::IMAGE
-                ? Url::to($this->manager->getFilePath($file, FormatterFactory::IMAGE_DEFAULT_FORMAT))
-                : null,
-            'icon' => $this->manager->getIcon($file->getExtension()),
-        ];
-    }
-
-    /**
-     * Generates file info for multiple files for jQuery File Upload widget.
-     * @param IFile[] $fileArray
-     * @return array
-     */
-    public function getJQueryFileDataArray(array $fileArray): array
-    {
-        return array_map([$this, 'getFileData'], array_values($fileArray));
-    }
 }
