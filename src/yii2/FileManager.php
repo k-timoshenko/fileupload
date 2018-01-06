@@ -100,6 +100,62 @@ class FileManager extends Component
     }
 
     /**
+     * @param IFile|null $file
+     * @param string $format
+     * @param array $formatterConfig
+     * @return string
+     * @throws \Exception
+     * @throws \yii\base\InvalidParamException
+     */
+    public function getFileUrl(?IFile $file, string $format, array $formatterConfig = []): string
+    {
+        $path = $this->getFilePath($file, $format, $formatterConfig);
+        if ($path !== null) {
+            return $this->cacheBasePath . DIRECTORY_SEPARATOR . $path;
+        }
+
+        $fileTypeId = $file !== null ? $file->getType() : Type::FILE;
+
+        return $this->getNotFoundUrl($fileTypeId);
+    }
+
+    /**
+     * Format file and return image link if failed
+     * @param IFile|null $file
+     * @param string $format
+     * @param array $formatterConfig
+     * @param string|null $notFoundUrl
+     * @return string
+     * @throws \Exception
+     * @throws \yii\base\InvalidParamException
+     */
+    public function getImageUrl(?IFile $file, string $format, array $formatterConfig = [], string $notFoundUrl = null): string
+    {
+        $path = $this->getFilePath($file, $format, $formatterConfig);
+        if ($path !== null) {
+            return $this->cacheBasePath . DIRECTORY_SEPARATOR . $path;
+        }
+
+        return $notFoundUrl ?? $this->getNotFoundUrl(Type::IMAGE);
+    }
+
+    /**
+     * Choose 404 url
+     * @param int $fileTypeId
+     * @return string
+     */
+    public function getNotFoundUrl(int $fileTypeId): string
+    {
+        switch ($fileTypeId) {
+            case Type::IMAGE:
+                return Url::to($this->imageNotFoundUrl);
+            case Type::FILE:
+            default:
+                return Url::to($this->fileNotFoundUrl);
+        }
+    }
+
+    /**
      * Caches file and returns url to it. Return 404 image or link if fails
      * without exception.
      * @param IFile|null $file
@@ -111,46 +167,21 @@ class FileManager extends Component
      * @throws \RuntimeException
      * @throws \Exception
      */
-    public function getFileUrl(?IFile $file, string $format, array $formatterConfig = []): ?string
+    protected function getFilePath(?IFile $file, string $format, array $formatterConfig = []): ?string
     {
-        if ($file === null) {
+        if ($file === null || $file->getId() !== null /*null if file is not saved yet*/) {
             return null;
         }
 
-        if ($file->getId() !== null) { // null if file is not saved yet
-            try {
-                $path = $this->manager->getFilePath($file, $format, $formatterConfig);
-                if ($path !== null) {
-                    return implode(DIRECTORY_SEPARATOR, [
-                        $this->cacheBasePath,
-                        $path,
-                    ]);
-                }
-            } catch (\Exception $e) {
-                if (!$this->silentMode) {
-                    throw $e;
-                }
+        try {
+            return $this->manager->getFilePath($file, $format, $formatterConfig);
+        } catch (\Exception $e) {
+            if (!$this->silentMode) {
+                throw $e;
             }
         }
 
-        return $this->getNotFoundUrl($file);
-    }
-
-    /**
-     * Choose 404 url
-     * @param IFile $file
-     * @return string
-     * @throws \yii\base\InvalidParamException
-     */
-    public function getNotFoundUrl(IFile $file): string
-    {
-        switch ($file->getType()) {
-            case Type::IMAGE:
-                return Url::to($this->imageNotFoundUrl);
-            case Type::FILE:
-            default:
-                return Url::to($this->fileNotFoundUrl);
-        }
+        return null;
     }
 
     /**
