@@ -6,6 +6,7 @@ namespace tkanstantsin\fileupload\formatter;
 use Imagine\Image\Box;
 use Imagine\Image\BoxInterface;
 use Imagine\Image\ImageInterface;
+use Imagine\Image\ImagineInterface;
 use Imagine\Image\Palette\RGB as RGBPalette;
 use Imagine\Image\Point;
 use Imagine\Imagick\Imagine;
@@ -69,7 +70,7 @@ class Image extends File
     public $keepRatio = true;
 
     /**
-     * @var Imagine
+     * @var ImagineInterface
      */
     protected $imagine;
 

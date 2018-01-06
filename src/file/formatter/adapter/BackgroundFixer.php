@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace tkanstantsin\fileupload\formatter\adapter;
 
+use Imagine\Image\ImagineInterface;
 use Imagine\Image\Palette\RGB as RGBPalette;
 use Imagine\Image\Point;
 use Imagine\Imagick\Imagine;
@@ -25,7 +26,13 @@ class BackgroundFixer extends BaseObject implements IFormatAdapter
     public $transparentBackground = 'ffffff';
 
     /**
+     * @var ImagineInterface
+     */
+    protected $imagine;
+
+    /**
      * @inheritdoc
+     * @throws \Imagine\Exception\RuntimeException
      * @throws \tkanstantsin\fileupload\config\InvalidConfigException
      */
     public function init(): void
@@ -35,6 +42,8 @@ class BackgroundFixer extends BaseObject implements IFormatAdapter
         if ($this->transparentBackground === null) {
             throw new InvalidConfigException('Background color not defined');
         }
+
+        $this->imagine = new Imagine();
     }
 
     /**
@@ -44,6 +53,7 @@ class BackgroundFixer extends BaseObject implements IFormatAdapter
      * @param       $content
      *
      * @return mixed
+     * @throws \Imagine\Exception\OutOfBoundsException
      * @throws \UnexpectedValueException
      * @throws \Imagine\Exception\InvalidArgumentException
      * @throws \Imagine\Exception\RuntimeException
@@ -51,8 +61,7 @@ class BackgroundFixer extends BaseObject implements IFormatAdapter
      */
     public function exec(IFile $file, $content)
     {
-        $imagine = new Imagine();
-        $image = $imagine->load($content);
+        $image = $this->imagine->load($content);
 
         if (!\in_array(mb_strtolower($file->getExtension() ?? self::DEFAULT_EXTENSION), ['jpg', 'jpeg'], true)) {
             return $image;
@@ -60,7 +69,7 @@ class BackgroundFixer extends BaseObject implements IFormatAdapter
 
         $palette = new RGBPalette();
         $backgroundColor = $palette->color($this->transparentBackground, 100);
-        $background = $imagine->create($image->getSize(), $backgroundColor);
+        $background = $this->imagine->create($image->getSize(), $backgroundColor);
 
         return $background->paste($image, new Point(0, 0));
     }
