@@ -14,12 +14,12 @@ class Factory
 {
     // File formatter constants
     public const FILE_ORIGINAL = 'original';
-    public const IMAGE_LARGE = 'large';
+    public const IMAGE_HD = 'hd';
     public const IMAGE_FULL_HD = 'full_hd';
 
     // Default file formatters
     public const FILE_DEFAULT_FORMAT = self::FILE_ORIGINAL;
-    public const IMAGE_DEFAULT_FORMAT = self::IMAGE_LARGE;
+    public const IMAGE_DEFAULT_FORMAT = self::IMAGE_HD;
 
     /**
      * Default set of configs for files and images. It can be supplemented in
@@ -32,10 +32,10 @@ class Factory
     public const DEFAULT_FORMATTER_ARRAY = [
         self::FILE_ORIGINAL => File::class,
 
-        self::IMAGE_LARGE => [
+        self::IMAGE_HD => [
             'class' => Image::class,
             'width' => 1280,
-            'height' => 1024,
+            'height' => 720,
         ],
         self::IMAGE_FULL_HD => [
             'class' => Image::class,
