@@ -49,38 +49,21 @@ class Type
     }
 
     /**
-     * Normalizes file type string into correct array
-     * @param string $fileType
-     * @return array
-     */
-    public static function normalize(string $fileType): array
-    {
-        $typeArray = explode('_', $fileType);
-
-        $normalized = [
-            'original' => $fileType,
-            'type' => $typeArray[0] ?? self::FILE,
-        ];
-
-        if ($normalized['type'] === self::IMAGE) {
-            $normalized['width'] = $typeArray[0] ?? null;
-            $normalized['height'] = $typeArray[1] ?? null;
-        }
-
-        return $normalized;
-    }
-
-    /**
      * Returns file type by its mime type.
-     * @param string $mimeType
+     * @param string|null $mimeType
      * @return int
      */
-    public static function getByMimeType(string $mimeType): int
+    public static function getByMimeType(?string $mimeType): int
     {
-        if (mb_strpos($mimeType, 'image') === 0) {
-            return static::IMAGE;
+        switch (explode('/', (string) $mimeType)[0] ?? null) {
+            case 'image':
+                return static::IMAGE;
+            case 'audio':
+                return static::AUDIO;
+            case 'video':
+                return static::VIDEO;
+            default:
+                return static::FILE;
         }
-
-        return static::FILE;
     }
 }

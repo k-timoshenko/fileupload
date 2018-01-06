@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace tkanstantsin\fileupload\config;
 
+use tkanstantsin\fileupload\model\ExternalFile;
 use tkanstantsin\fileupload\model\IFile;
 use tkanstantsin\fileupload\model\Type;
 
@@ -117,17 +118,19 @@ class Alias
             return \call_user_func($this->filePathClosure, $file);
         }
 
+        if ($file instanceof ExternalFile) {
+            return $file->getActualPath();
+        }
+
         return $file->getId() !== null
             ? $this->getFileDirectory($file) . DIRECTORY_SEPARATOR . $this->getFileName($file)
             : null;
     }
 
     /**
-     * Returns path for caching files.
-     *
-     * @param IFile  $file
+     * Returns path in asset filesystem
+     * @param IFile $file
      * @param string $formatName
-     *
      * @return string
      */
     public function getAssetPath(IFile $file, string $formatName): string
@@ -141,6 +144,7 @@ class Alias
     }
 
     /**
+     * File name in asset directory
      * @param IFile $file
      * @return string
      */
