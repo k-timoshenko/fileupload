@@ -111,7 +111,9 @@ class FileManager extends Component
             return $this->cacheBasePath . DIRECTORY_SEPARATOR . $path;
         }
 
-        $fileTypeId = $file !== null ? $file->getType() : FileType::FILE;
+        $fileTypeId = $file !== null && $file->getType() !== null
+            ? $file->getType()
+            : FileType::FILE;
 
         return $this->getNotFoundUrl($fileTypeId);
     }
