@@ -13,7 +13,9 @@ use tkanstantsin\fileupload\config\InvalidConfigException;
  */
 class ImagineFactory
 {
-    /* Available driver */
+    public const DEFAULT_DRIVER = self::IMAGICK;
+
+    /* Available drivers */
     public const GD = 'gd';
     public const IMAGICK = 'imagick';
     public const GMAGICK = 'gmagick';

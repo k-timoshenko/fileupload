@@ -5,17 +5,16 @@ namespace tkanstantsin\fileupload\formatter\adapter;
 
 use Imagine\Image\BoxInterface;
 use Imagine\Image\ImageInterface;
+use Imagine\Image\ImagineInterface;
 use Imagine\Image\Point;
-use Imagine\Imagick\Imagine;
 use tkanstantsin\fileupload\config\InvalidConfigException;
 use tkanstantsin\fileupload\formatter\Image;
-use tkanstantsin\fileupload\model\BaseObject;
 use tkanstantsin\fileupload\model\IFile;
 
 /**
  * Class Watermark
  */
-class Watermark extends BaseObject implements IFormatAdapter
+class Watermark extends AbstractImageAdapter
 {
     public const POSITION_CENTER_CENTER = 'center_center';
     public const POSITION_CENTER_LEFT = 'center_left';
@@ -89,6 +88,7 @@ class Watermark extends BaseObject implements IFormatAdapter
      * @param       $content
      *
      * @return mixed
+     * @throws \Imagine\Exception\OutOfBoundsException
      * @throws \UnexpectedValueException
      * @throws \Imagine\Exception\InvalidArgumentException
      * @throws \Imagine\Exception\RuntimeException
@@ -96,14 +96,12 @@ class Watermark extends BaseObject implements IFormatAdapter
      */
     public function exec(IFile $file, $content)
     {
-        $imagine = new Imagine();
-
         $image = \is_resource($content)
-            ? $imagine->read($content)
-            : $imagine->load($content);
+            ? $this->imagine->read($content)
+            : $this->imagine->load($content);
         $imageSize = $image->getSize();
 
-        $watermark = $this->getWatermark($imagine);
+        $watermark = $this->getWatermark($this->imagine);
         $watermarkSize = $watermark->getSize();
 
         // NOTE: only for position: center
@@ -120,12 +118,12 @@ class Watermark extends BaseObject implements IFormatAdapter
 
     /**
      * Get watermark image
-     * @param Imagine $imagine
+     * @param ImagineInterface $imagine
      * @return ImageInterface
      * @throws \Imagine\Exception\RuntimeException
      * @throws \UnexpectedValueException
      */
-    private function getWatermark(Imagine $imagine): ImageInterface
+    private function getWatermark(ImagineInterface $imagine): ImageInterface
     {
         $resource = null;
         if ($this->markFilepath !== null) {

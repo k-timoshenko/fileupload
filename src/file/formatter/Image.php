@@ -32,6 +32,12 @@ class Image extends File
     public const DEFAULT_EXTENSION = 'jpg';
 
     /**
+     * @see ImagineFactory::get()
+     * @var string
+     */
+    public $driver = ImagineFactory::DEFAULT_DRIVER;
+
+    /**
      * @var int
      */
     public $width;
@@ -82,13 +88,14 @@ class Image extends File
     {
         parent::init();
 
-        $this->imagine = new Imagine();
+        $this->imagine = ImagineFactory::get($this->driver);
     }
 
     /**
      * @todo: add check for metadata with `exif_read_data` method.
      * @see http://php.net/manual/en/function.exif-read-data.php
      * @inheritdoc
+     * @throws \Imagine\Exception\OutOfBoundsException
      * @throws \UnexpectedValueException
      * @throws \Imagine\Exception\InvalidArgumentException
      * @throws \Imagine\Exception\RuntimeException
@@ -112,6 +119,7 @@ class Image extends File
     /**
      * @param ImageInterface $image
      * @return ImageInterface
+     * @throws \Imagine\Exception\OutOfBoundsException
      * @throws \UnexpectedValueException
      * @throws \Imagine\Exception\RuntimeException
      * @throws \Imagine\Exception\InvalidArgumentException
@@ -191,6 +199,7 @@ class Image extends File
      *
      * @param ImageInterface $image
      * @return ImageInterface
+     * @throws \Imagine\Exception\OutOfBoundsException
      * @throws \Imagine\Exception\RuntimeException
      * @throws \Imagine\Exception\InvalidArgumentException
      */

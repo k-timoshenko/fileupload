@@ -3,19 +3,16 @@ declare(strict_types=1);
 
 namespace tkanstantsin\fileupload\formatter\adapter;
 
-use Imagine\Image\ImagineInterface;
 use Imagine\Image\Palette\RGB as RGBPalette;
 use Imagine\Image\Point;
-use Imagine\Imagick\Imagine;
 use tkanstantsin\fileupload\config\InvalidConfigException;
-use tkanstantsin\fileupload\model\BaseObject;
 use tkanstantsin\fileupload\model\IFile;
 
 /**
  * Class BackgroundFixer replaces transparent background in PNG image that
  * would be converted in JPG
  */
-class BackgroundFixer extends BaseObject implements IFormatAdapter
+class BackgroundFixer extends AbstractImageAdapter
 {
     public const DEFAULT_EXTENSION = 'jpg';
 
@@ -24,11 +21,6 @@ class BackgroundFixer extends BaseObject implements IFormatAdapter
      * @var string
      */
     public $transparentBackground = 'ffffff';
-
-    /**
-     * @var ImagineInterface
-     */
-    protected $imagine;
 
     /**
      * @inheritdoc
@@ -42,8 +34,6 @@ class BackgroundFixer extends BaseObject implements IFormatAdapter
         if ($this->transparentBackground === null) {
             throw new InvalidConfigException('Background color not defined');
         }
-
-        $this->imagine = new Imagine();
     }
 
     /**
