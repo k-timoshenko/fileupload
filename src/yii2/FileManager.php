@@ -166,7 +166,7 @@ class FileManager extends Component
      */
     protected function getFilePath(?IFile $file, string $format, array $formatterConfig = []): ?string
     {
-        if ($file === null || $file->getId() !== null /*null if file is not saved yet*/) {
+        if ($file === null || $file->getId() === null /*null if file is not saved yet*/) {
             return null;
         }
 
