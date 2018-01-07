@@ -285,7 +285,7 @@ class File extends ActiveRecord implements IFile
     /**
      * @return int
      */
-    public function getSize(): int
+    public function getSize(): ?int
     {
         return $this->size;
     }
@@ -301,7 +301,7 @@ class File extends ActiveRecord implements IFile
     /**
      * @return int
      */
-    public function getType(): int
+    public function getType(): ?int
     {
         return $this->type_id;
     }
@@ -333,7 +333,7 @@ class File extends ActiveRecord implements IFile
     /**
      * @return string
      */
-    public function getHash(): string
+    public function getHash(): ?string
     {
         return $this->hash;
     }
@@ -349,7 +349,7 @@ class File extends ActiveRecord implements IFile
     /**
      * @return int
      */
-    public function getCreatedAt(): int
+    public function getCreatedAt(): ?int
     {
         return $this->created_at;
     }

@@ -155,7 +155,7 @@ class TestFile extends BaseObject implements IFile
         $this->extension = $extension;
     }
 
-    public function getSize(): int
+    public function getSize(): ?int
     {
         return $this->size;
     }
@@ -165,7 +165,7 @@ class TestFile extends BaseObject implements IFile
         $this->size = $size;
     }
 
-    public function getType(): int
+    public function getType(): ?int
     {
         return $this->type;
     }
@@ -185,7 +185,7 @@ class TestFile extends BaseObject implements IFile
         $this->mimeType = $mimeType;
     }
 
-    public function getHash(): string
+    public function getHash(): ?string
     {
         return $this->hash;
     }
@@ -195,7 +195,7 @@ class TestFile extends BaseObject implements IFile
         $this->hash = $hash;
     }
 
-    public function getCreatedAt(): int
+    public function getCreatedAt(): ?int
     {
         return $this->createdAt;
     }

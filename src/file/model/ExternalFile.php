@@ -230,7 +230,7 @@ class ExternalFile extends BaseObject implements IFile
     /**
      * @return int
      */
-    public function getSize(): int
+    public function getSize(): ?int
     {
         return $this->size;
     }
@@ -246,7 +246,7 @@ class ExternalFile extends BaseObject implements IFile
     /**
      * @return int
      */
-    public function getType(): int
+    public function getType(): ?int
     {
         return $this->type;
     }
@@ -278,7 +278,7 @@ class ExternalFile extends BaseObject implements IFile
     /**
      * @return string
      */
-    public function getHash(): string
+    public function getHash(): ?string
     {
         return $this->hash;
     }
@@ -294,7 +294,7 @@ class ExternalFile extends BaseObject implements IFile
     /**
      * @return int
      */
-    public function getCreatedAt(): int
+    public function getCreatedAt(): ?int
     {
         return $this->createdAt;
     }
@@ -326,7 +326,7 @@ class ExternalFile extends BaseObject implements IFile
     /**
      * @return string
      */
-    public function getActualPath(): string
+    public function getActualPath(): ?string
     {
         return $this->actualPath;
     }

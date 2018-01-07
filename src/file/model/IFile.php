@@ -30,7 +30,7 @@ interface IFile
      * @see Type
      * @return int
      */
-    public function getType(): int;
+    public function getType(): ?int;
 
     /**
      * @see Type
@@ -100,7 +100,7 @@ interface IFile
      * Size int bytes
      * @return int
      */
-    public function getSize(): int;
+    public function getSize(): ?int;
 
     /**
      * Set size
@@ -123,7 +123,7 @@ interface IFile
     /**
      * @return string
      */
-    public function getHash(): string;
+    public function getHash(): ?string;
 
     /**
      * @param string $hash
@@ -135,7 +135,7 @@ interface IFile
      * Unix timestamp
      * @return int
      */
-    public function getCreatedAt(): int;
+    public function getCreatedAt(): ?int;
 
     /**
      * Unix timestamp
