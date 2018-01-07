@@ -102,7 +102,7 @@ class ExternalFile extends BaseObject implements IFile
             throw new InvalidConfigException('Model id must be defined');
         }
 
-        $file->setActualPath($path);
+        $file->setActualPath($file->getActualPath() ?? $path);
         $file->setId($file->generateId());
         $file->setHash(crc32($file->getId()));
         $file->setCreatedAt($file->getCreatedAt() ?? 0);
