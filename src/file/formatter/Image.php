@@ -86,6 +86,8 @@ class Image extends File
     }
 
     /**
+     * @todo: add check for metadata with `exif_read_data` method.
+     * @see http://php.net/manual/en/function.exif-read-data.php
      * @inheritdoc
      * @throws \UnexpectedValueException
      * @throws \Imagine\Exception\InvalidArgumentException
