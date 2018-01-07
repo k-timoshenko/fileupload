@@ -120,7 +120,7 @@ class ExternalFile extends BaseObject implements IFile
         }
 
         $file->setName(pathinfo($path, PATHINFO_FILENAME));
-        $extension = pathinfo($path, PATHINFO_FILENAME);
+        $extension = pathinfo($path, PATHINFO_EXTENSION);
         if ($extension !== '') {
             $file->setExtension($extension);
         }
