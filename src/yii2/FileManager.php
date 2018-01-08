@@ -144,7 +144,7 @@ class FileManager extends Component
         if ($path !== null) {
             $url = $this->cacheBasePath . DIRECTORY_SEPARATOR . $path;
             if ($this->assetAppendTimestamp && $file !== null && $file->getUpdatedAt() !== null) {
-                $url = '?' . $file->getUpdatedAt();
+                $url .= '?' . $file->getUpdatedAt();
             }
 
             return $url;
