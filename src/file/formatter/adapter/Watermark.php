@@ -11,7 +11,6 @@ use tkanstantsin\fileupload\config\InvalidConfigException;
 use tkanstantsin\fileupload\formatter\Image;
 use tkanstantsin\fileupload\formatter\ImagineFactory;
 use tkanstantsin\fileupload\model\IFile;
-use Imagine\Imagick\Imagine as ImagickImagine;
 
 /**
  * Class Watermark
