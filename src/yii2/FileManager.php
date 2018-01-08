@@ -38,6 +38,12 @@ class FileManager extends Component
     public $cacheBasePath;
 
     /**
+     * Add updatedAt timestamp if it defined
+     * @var bool
+     */
+    public $assetAppendTimestamp = true;
+
+    /**
      * Url for default image
      * @var string|array
      */
@@ -101,6 +107,8 @@ class FileManager extends Component
      * @param string $format
      * @param array $formatterConfig
      * @return string
+     * @throws \RuntimeException
+     * @throws \InvalidArgumentException
      * @throws \Exception
      * @throws \yii\base\InvalidParamException
      */
@@ -125,6 +133,8 @@ class FileManager extends Component
      * @param array $formatterConfig
      * @param string|null $notFoundUrl
      * @return string
+     * @throws \RuntimeException
+     * @throws \InvalidArgumentException
      * @throws \Exception
      * @throws \yii\base\InvalidParamException
      */
@@ -132,7 +142,12 @@ class FileManager extends Component
     {
         $path = $this->getFilePath($file, $format, $formatterConfig);
         if ($path !== null) {
-            return $this->cacheBasePath . DIRECTORY_SEPARATOR . $path;
+            $url = $this->cacheBasePath . DIRECTORY_SEPARATOR . $path;
+            if ($this->assetAppendTimestamp && $file !== null && $file->getUpdatedAt() !== null) {
+                $url = '?' . $file->getUpdatedAt();
+            }
+
+            return $url;
         }
 
         return $notFoundUrl ?? $this->getNotFoundUrl(FileType::IMAGE);
@@ -142,6 +157,7 @@ class FileManager extends Component
      * Choose 404 url
      * @param int $fileTypeId
      * @return string
+     * @throws \yii\base\InvalidParamException
      */
     public function getNotFoundUrl(int $fileTypeId): string
     {
