@@ -9,7 +9,9 @@ use Imagine\Image\ImagineInterface;
 use Imagine\Image\Point;
 use tkanstantsin\fileupload\config\InvalidConfigException;
 use tkanstantsin\fileupload\formatter\Image;
+use tkanstantsin\fileupload\formatter\ImagineFactory;
 use tkanstantsin\fileupload\model\IFile;
+use Imagine\Imagick\Imagine as ImagickImagine;
 
 /**
  * Class Watermark
@@ -108,7 +110,8 @@ class Watermark extends AbstractImageAdapter
         $watermarkSize = $this->getWatermarkBox($imageSize, $watermarkSize);
 
         /* @see http://urmaul.com/blog/imagick-filters-comparison */
-        $watermark = $watermark->resize($watermarkSize, ImageInterface::FILTER_SINC);
+        $filter = $this->driver === ImagineFactory::IMAGICK ? ImageInterface::FILTER_SINC : ImageInterface::FILTER_UNDEFINED;
+        $watermark = $watermark->resize($watermarkSize, $filter);
         $watermarkSize = $watermark->getSize();
 
         $image = $image->paste($watermark, $this->getPositionPoint($imageSize, $watermarkSize));
