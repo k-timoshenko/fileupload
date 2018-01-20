@@ -10,6 +10,7 @@ use yii\base\Component;
 use yii\base\InvalidConfigException;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
+use yii\web\UrlManager;
 
 /**
  * Class FileComponent
@@ -24,6 +25,12 @@ class FileManager extends Component
      * @var bool
      */
     public $silentMode = true;
+
+    /**
+     * Url manager used for correct url generating
+     * @var UrlManager
+     */
+    public $urlManager;
 
     /**
      * Base url for uploading files
@@ -45,11 +52,13 @@ class FileManager extends Component
 
     /**
      * Url for default image
+     * NOTE: for correct routing it is recommended to set array
      * @var string|array
      */
     public $imageNotFoundUrl;
     /**
      * Url for 404 page for files
+     * NOTE: for correct routing it is recommended to set array
      * @var string|array
      */
     public $fileNotFoundUrl;
@@ -66,6 +75,16 @@ class FileManager extends Component
      */
     public function init(): void
     {
+        if ($this->urlManager === null) {
+            $this->urlManager = \Yii::$app->urlManager;
+        }
+        if (\is_string($this->urlManager)) {
+            $this->urlManager = \Yii::$app->get($this->urlManager);
+        }
+        if (!($this->urlManager instanceof UrlManager)) {
+            throw new InvalidConfigException('Url manager must be defined');
+        }
+
         if ($this->uploadBaseUrl === null) {
             throw new \ErrorException('Base upload url must be defined.');
         }
@@ -99,7 +118,7 @@ class FileManager extends Component
      */
     public function getUploadUrl(string $aliasName, int $id = null): string
     {
-        return implode(DIRECTORY_SEPARATOR, array_filter([$this->uploadBaseUrl, $aliasName, $id]));
+        return $this->urlManager->createUrl(implode(DIRECTORY_SEPARATOR, array_filter([$this->uploadBaseUrl, $aliasName, $id])));
     }
 
     /**
@@ -147,7 +166,7 @@ class FileManager extends Component
                 $url .= '?' . $file->getUpdatedAt();
             }
 
-            return $url;
+            return $this->urlManager->createUrl($url);
         }
 
         return $notFoundUrl ?? $this->getNotFoundUrl(FileType::IMAGE);
@@ -163,10 +182,10 @@ class FileManager extends Component
     {
         switch ($fileTypeId) {
             case FileType::IMAGE:
-                return Url::to($this->imageNotFoundUrl);
+                return $this->urlManager->createUrl($this->imageNotFoundUrl);
             case FileType::FILE:
             default:
-                return Url::to($this->fileNotFoundUrl);
+                return $this->urlManager->createUrl($this->fileNotFoundUrl);
         }
     }
 
