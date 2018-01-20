@@ -9,7 +9,6 @@ use tkanstantsin\fileupload\model\Type as FileType;
 use yii\base\Component;
 use yii\base\InvalidConfigException;
 use yii\helpers\ArrayHelper;
-use yii\helpers\Url;
 use yii\web\UrlManager;
 
 /**
