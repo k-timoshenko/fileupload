@@ -7,7 +7,7 @@
     "fileupload",
     "upload"
   ],
-  "homepage": "https://github.com/t-kanstantsin/yii2-fileupload",
+  "homepage": "https://github.com/t-kanstantsin/fileupload",
   "license": "BSD-3-Clause",
   "authors": [
     {
@@ -36,8 +36,7 @@
   },
   "autoload": {
     "psr-4": {
-      "tkanstantsin\\fileupload\\": "src/file",
-      "tkanstantsin\\yii2fileupload\\": "src/yii2"
+      "tkanstantsin\\fileupload\\": "src"
     }
   },
   "autoload-dev": {
