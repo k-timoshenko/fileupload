@@ -9,7 +9,6 @@ use Imagine\Image\ImageInterface;
 use Imagine\Image\ImagineInterface;
 use Imagine\Image\Palette\RGB as RGBPalette;
 use Imagine\Image\Point;
-use Imagine\Imagick\Imagine;
 
 /**
  * Class ImageProcessor
@@ -19,11 +18,11 @@ class Image extends File
     /**
      * Like background `cover` in css.
      */
-    public const RESIZE_OUTBOUND = \Imagine\Image\ImageInterface::THUMBNAIL_OUTBOUND;
+    public const RESIZE_OUTBOUND = ImageInterface::THUMBNAIL_OUTBOUND;
     /**
      * Like background `contain` in css.
      */
-    public const RESIZE_INSET = \Imagine\Image\ImageInterface::THUMBNAIL_INSET;
+    public const RESIZE_INSET = ImageInterface::THUMBNAIL_INSET;
     /**
      * Means that image may be smaller than defined in config, never bigger.
      */

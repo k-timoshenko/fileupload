@@ -5,6 +5,7 @@ namespace Helper;
 
 use Faker\Factory;
 use tkanstantsin\fileupload\model\IFile;
+use Mimey\MimeTypes as MimeType;
 
 class TestFileFactory
 {
@@ -26,7 +27,7 @@ class TestFileFactory
     public function __construct()
     {
         $this->factory = Factory::create();
-        $this->mimes = new \Mimey\MimeTypes();
+        $this->mimes = new MimeType();
     }
 
     /**
