@@ -2,6 +2,7 @@
 build
 docs
 vendor
+composer.lock
 
 # tests
 codecept
