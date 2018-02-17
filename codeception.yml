@@ -14,7 +14,7 @@ coverage:
     low_limit: 30
     high_limit: 60
     include:
-        - src/file/*
+        - src/*
 extensions:
     enabled:
         - Codeception\Extension\RunFailed
