@@ -65,11 +65,11 @@ class Alias
     public $cacheHashLength;
 
     /**
-     * @var callable
+     * @var callable|null
      */
     public $filePathClosure;
     /**
-     * @var callable
+     * @var callable|null
      */
     public $assetNameClosure;
 
