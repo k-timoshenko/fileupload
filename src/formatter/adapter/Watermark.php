@@ -33,7 +33,7 @@ class Watermark extends AbstractImageAdapter
 
     /**
      * Absolute path to image file
-     * @var string|null
+     * @var callable|string|null
      */
     public $markFilepath;
     /**
@@ -66,6 +66,7 @@ class Watermark extends AbstractImageAdapter
     /**
      * @inheritdoc
      * @throws \tkanstantsin\fileupload\config\InvalidConfigException
+     * @throws \ErrorException
      */
     public function init(): void
     {
@@ -77,8 +78,8 @@ class Watermark extends AbstractImageAdapter
         if ($this->markFilepath === null && $this->markContent === null) {
             throw new InvalidConfigException('Either watermarkPath or watermarkImage must be defined.');
         }
-        if ($this->markFilepath !== null && !file_exists($this->markFilepath)) {
-            throw new InvalidConfigException(sprintf('Watermark by path `%s` not found.', $this->markFilepath));
+        if ($this->getMarkFilepath() !== null && !file_exists($this->getMarkFilepath())) {
+            throw new InvalidConfigException(sprintf('Watermark by path `%s` not found.', $this->getMarkFilepath()));
         }
     }
 
@@ -94,6 +95,7 @@ class Watermark extends AbstractImageAdapter
      * @throws \Imagine\Exception\InvalidArgumentException
      * @throws \Imagine\Exception\RuntimeException
      * @throws \ImageOptimizer\Exception\Exception
+     * @throws \ErrorException
      */
     public function exec(IFile $file, $content)
     {
@@ -124,12 +126,13 @@ class Watermark extends AbstractImageAdapter
      * @return ImageInterface
      * @throws \Imagine\Exception\RuntimeException
      * @throws \UnexpectedValueException
+     * @throws \ErrorException
      */
     private function getWatermark(ImagineInterface $imagine): ImageInterface
     {
         $resource = null;
-        if ($this->markFilepath !== null) {
-            $resource = fopen($this->markFilepath, 'rb');
+        if ($this->getMarkFilepath() !== null) {
+            $resource = fopen($this->getMarkFilepath(), 'rb');
         } elseif (\is_string($this->markContent)) {
             $resource = 'a'; // TODO: create resource.
         } elseif (\is_resource($this->markContent)) {
@@ -171,5 +174,24 @@ class Watermark extends AbstractImageAdapter
             (int) (($imageSize->getWidth() - $watermarkSize->getWidth()) / 2),
             (int) (($imageSize->getHeight() - $watermarkSize->getHeight()) / 2)
         );
+    }
+
+    /**
+     * @return null|string
+     * @throws \ErrorException
+     */
+    private function getMarkFilepath(): ?string
+    {
+        if ($this->markFilepath === null) {
+            return null;
+        }
+        if (\is_string($this->markFilepath)) {
+            return $this->markFilepath;
+        }
+        if (\is_callable($this->markFilepath)) {
+            return \call_user_func($this->markFilepath, $this);
+        }
+
+        throw new \ErrorException('Mark file path has invalid format. Callable, string or null expected.');
     }
 }
