@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace tkanstantsin\fileupload\saver;
 
 use GuzzleHttp\Client as HttpClient;
-use yii\helpers\FileHelper;
+use Mimey\MimeTypes;
 use yii\web\UploadedFile;
 
 /**
@@ -22,7 +22,7 @@ class Factory
         return new UploadedFile([
             'name' => $fileName,
             'tempName' => static::getTempFile($content),
-            'type' => FileHelper::getMimeTypeByExtension($fileName),
+            'type' => (new MimeTypes())->getMimeType(pathinfo($fileName)['extension'] ?? null),
             'size' => mb_strlen($content),
         ]);
     }
@@ -31,6 +31,7 @@ class Factory
      * @param string $url
      * @param string|null $fileName
      * @return null|UploadedFile
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public static function buildFromUrl(string $url, string $fileName = null): ?UploadedFile
     {
@@ -42,7 +43,7 @@ class Factory
 
         return new UploadedFile([
             'name' => $fileName ?? pathinfo($url, PATHINFO_BASENAME),
-            'tempName' => static::getTempFile($response->getBody()),
+            'tempName' => static::getTempFile((string) $response->getBody()),
             'type' => $response->getHeaderLine('Content-Type'),
             'size' => (int) $response->getHeaderLine('Content-Length'),
         ]);
@@ -57,7 +58,7 @@ class Factory
         return new UploadedFile([
             'name' => $fileName,
             'tempName' => $fileName,
-            'type' => FileHelper::getMimeTypeByExtension($fileName),
+            'type' => (new MimeTypes())->getMimeType(pathinfo($fileName)['extension'] ?? null),
             'size' => filesize($fileName),
         ]);
     }
