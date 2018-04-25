@@ -8,6 +8,7 @@ use tkanstantsin\fileupload\config\InvalidConfigException;
 use tkanstantsin\fileupload\formatter\adapter\IFormatAdapter;
 use tkanstantsin\fileupload\model\BaseObject;
 use tkanstantsin\fileupload\model\Container;
+use tkanstantsin\fileupload\model\ICacheStateful;
 use tkanstantsin\fileupload\model\IFile;
 
 /**
@@ -38,6 +39,13 @@ class File extends BaseObject
      * @var string
      */
     public $path;
+    /**
+     * ```
+     * <?php function (IFile $file, bool $cached) {} ?>
+     * ```
+     * @var callable|null
+     */
+    public $afterCacheCallback;
 
     /**
      * @var IFile
@@ -111,6 +119,22 @@ class File extends BaseObject
         }
 
         return $content;
+    }
+
+    /**
+     * Call user function after saving cached file
+     * @param bool $cached
+     */
+    public function afterCacheCallback(bool $cached): void
+    {
+        if (!($this->file instanceof ICacheStateful)) {
+            return;
+        }
+        if (!\is_callable($this->afterCacheCallback)) {
+            return;
+        }
+
+        \call_user_func($this->afterCacheCallback, $this->file, $cached);
     }
 
     /**

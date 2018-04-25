@@ -77,7 +77,11 @@ class Saver
             return false;
         }
 
-        return $this->write($content);
+        $saved = $this->write($content);
+
+        $formatter->afterCacheCallback($saved);
+
+        return $saved;
     }
 
     /**

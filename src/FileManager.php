@@ -10,6 +10,7 @@ use tkanstantsin\fileupload\formatter\Factory as FormatterFactory;
 use tkanstantsin\fileupload\formatter\File as FileFormatter;
 use tkanstantsin\fileupload\formatter\icon\IconGenerator;
 use tkanstantsin\fileupload\model\BaseObject;
+use tkanstantsin\fileupload\model\ICacheStateful;
 use tkanstantsin\fileupload\model\IFile;
 use tkanstantsin\fileupload\saver\Saver;
 
@@ -178,6 +179,10 @@ class FileManager extends BaseObject
      */
     protected function cacheFile(IFile $file, FileFormatter $formatter, string $targetPath): bool
     {
+        if ($file instanceof ICacheStateful && $file->getIsCached($formatter->name)) {
+            return true;
+        }
+
         return (new Saver($file, $this->cacheFS, $targetPath))->save($formatter);
     }
 
