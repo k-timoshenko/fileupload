@@ -8,25 +8,6 @@ use tkanstantsin\fileupload\formatter\Factory;
 interface ICacheStateful
 {
     /**
-     * Set all cached formats
-     * @example:
-     * ```php
-     * [
-     *      'format-name' => `cached at unixtimestamp`,
-     *      'another-format-name' => `cached at unixtimestamp`,
-     * ]
-     * ```
-     * @param array $cachedState
-     */
-    public function setCachedStateArray(array $cachedState): void;
-
-    /**
-     * Get all cached formats data
-     * @return array
-     */
-    public function getCachedStateArray(): array;
-
-    /**
      * Get caching time of single format
      * @param string $format
      * @see Factory::$formatterConfigArray
@@ -35,7 +16,6 @@ interface ICacheStateful
     public function getCachedAt(string $format): ?int;
 
     /**
-     * Set caching time of single format
      * @param string $format
      * @param int $cachedAt
      */
@@ -47,4 +27,9 @@ interface ICacheStateful
      * @return bool
      */
     public function getIsCached(string $format): bool;
+
+    /**
+     * @return bool
+     */
+    public function saveCachedState(): bool;
 }

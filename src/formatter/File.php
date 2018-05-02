@@ -39,13 +39,6 @@ class File extends BaseObject
      * @var string
      */
     public $path;
-    /**
-     * ```
-     * <?php function (IFile $file, File $formatter) {} ?>
-     * ```
-     * @var callable|null
-     */
-    public $afterCacheCallback;
 
     /**
      * @var IFile
@@ -123,18 +116,15 @@ class File extends BaseObject
 
     /**
      * Call user function after saving cached file
-     * @param bool $cached
      */
     public function afterCacheCallback(): void
     {
         if (!($this->file instanceof ICacheStateful)) {
             return;
         }
-        if (!\is_callable($this->afterCacheCallback)) {
-            return;
-        }
 
-        \call_user_func($this->afterCacheCallback, $this->file, $this);
+        $this->file->setCachedAt($this->name, time());
+        $this->file->saveCachedState();
     }
 
     /**
