@@ -41,7 +41,7 @@ class File extends BaseObject
     public $path;
     /**
      * ```
-     * <?php function (IFile $file, bool $cached) {} ?>
+     * <?php function (IFile $file, File $formatter) {} ?>
      * ```
      * @var callable|null
      */
@@ -125,7 +125,7 @@ class File extends BaseObject
      * Call user function after saving cached file
      * @param bool $cached
      */
-    public function afterCacheCallback(bool $cached): void
+    public function afterCacheCallback(): void
     {
         if (!($this->file instanceof ICacheStateful)) {
             return;
@@ -134,7 +134,7 @@ class File extends BaseObject
             return;
         }
 
-        \call_user_func($this->afterCacheCallback, $this->file, $cached);
+        \call_user_func($this->afterCacheCallback, $this->file, $this);
     }
 
     /**

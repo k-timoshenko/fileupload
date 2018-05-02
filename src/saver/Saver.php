@@ -79,7 +79,9 @@ class Saver
 
         $saved = $this->write($content);
 
-        $formatter->afterCacheCallback($saved);
+        if ($saved) {
+            $formatter->afterCacheCallback();
+        }
 
         return $saved;
     }
