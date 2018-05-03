@@ -40,7 +40,7 @@ class ExternalCacheStatefulFile extends ExternalFile implements ICacheStateful
     /**
      * @param array $cachedState
      */
-    public function setCachedStateArray(array $cachedState): void
+    public function setCachedState(array $cachedState): void
     {
         $this->cachedState = $cachedState;
     }
@@ -48,7 +48,7 @@ class ExternalCacheStatefulFile extends ExternalFile implements ICacheStateful
     /**
      * @return array
      */
-    public function getCachedStateArray(): array
+    public function getCachedState(): array
     {
         return $this->cachedState;
     }
