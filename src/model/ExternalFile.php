@@ -18,59 +18,59 @@ class ExternalFile extends BaseObject implements IFile
      * Length of hash from path
      * @see ExternalFile::generateId()
      */
-    private const ID_PATH_HASH_LENGTH = 4;
+    protected const ID_PATH_HASH_LENGTH = 4;
 
     /**
      * @var int|null
      */
-    private $id;
+    protected $id;
     /**
      * @var string|null
      */
-    private $modelAlias;
+    protected $modelAlias;
     /**
      * @var int|null
      */
-    private $modelId;
+    protected $modelId;
     /**
      * @var string|null
      */
-    private $name;
+    protected $name;
     /**
      * @var string|null
      */
-    private $extension;
+    protected $extension;
     /**
      * @var int|null
      */
-    private $size;
+    protected $size;
     /**
      * @see FileType
      * @var int|null
      */
-    private $type;
+    protected $type;
     /**
      * @var string|null
      */
-    private $mimeType;
+    protected $mimeType;
     /**
      * @var string|null
      */
-    private $hash;
+    protected $hash;
     /**
      * @var int|null
      */
-    private $createdAt;
+    protected $createdAt;
     /**
      * @var int|null
      */
-    private $updatedAt;
+    protected $updatedAt;
 
     /**
      * Path to file in filesystem
      * @var string|null
      */
-    private $actualPath;
+    protected $actualPath;
 
     /**
      * Build IFile object based only on file path, model alias and id

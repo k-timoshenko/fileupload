@@ -31,11 +31,11 @@ class ExternalCacheStatefulFile extends ExternalFile implements ICacheStateful
      * ```
      * @var array
      */
-    private $cachedState = [];
+    protected $cachedState = [];
     /**
      * @var \Closure
      */
-    private $saveCachedStateCallback;
+    protected $saveCachedStateCallback;
 
     /**
      * @param array $cachedState
