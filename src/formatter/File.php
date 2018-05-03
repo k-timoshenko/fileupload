@@ -13,11 +13,16 @@ use tkanstantsin\fileupload\model\IFile;
 
 /**
  * Class FileProcessor
- * TODO: create callbacks or interfaces for getting customized file name or
- * filepath
+ * @todo: create callbacks or interfaces for getting customized file name
+ *     or file path
  */
 class File extends BaseObject
 {
+    public const EVENT_CACHED = 'cached';
+    public const EVENT_EMPTY = 'empty';
+    public const EVENT_ERROR = 'error';
+    public const EVENT_NOT_FOUND = 'not_found';
+
     /**
      * Additional dynamic config for processor class.
      * @var array
@@ -116,15 +121,29 @@ class File extends BaseObject
 
     /**
      * Call user function after saving cached file
+     * @param string $event
      */
-    public function afterCacheCallback(): void
+    public function triggerEvent(string $event): void
     {
-        if (!($this->file instanceof ICacheStateful)) {
-            return;
+        // TODO: use event library and allow attach events to IFile and ICacheStateful.
+        // cache triggers
+        if ($this->file instanceof ICacheStateful) {
+            switch ($event) {
+                case self::EVENT_CACHED:
+                    $this->file->setCachedAt($this->name, time());
+                    break;
+                case self::EVENT_EMPTY:
+                case self::EVENT_ERROR:
+                case self::EVENT_NOT_FOUND:
+                    // TODO: split those and save different cases of cache state.
+                    $this->file->setCachedAt($this->name, null);
+                    break;
+            }
+
+            $this->file->saveCachedState();
         }
 
-        $this->file->setCachedAt($this->name, time());
-        $this->file->saveCachedState();
+        // other triggers
     }
 
     /**

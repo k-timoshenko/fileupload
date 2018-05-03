@@ -16,10 +16,11 @@ interface ICacheStateful
     public function getCachedAt(string $format): ?int;
 
     /**
+     * @todo: save different states @see tkanstantsin\fileupload\formatter\File.
      * @param string $format
      * @param int $cachedAt
      */
-    public function setCachedAt(string $format, int $cachedAt): void;
+    public function setCachedAt(string $format, ?int $cachedAt): void;
 
     /**
      * Whether file already cached in such format

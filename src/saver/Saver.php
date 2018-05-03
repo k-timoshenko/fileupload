@@ -61,9 +61,13 @@ class Saver
         $isCached = $this->isSaved();
         $isEmpty = $this->isEmpty();
         if ($isCached && !$isEmpty) {
+            $formatter->triggerEvent(File::EVENT_CACHED);
+
             return true;
         }
         if ($isEmpty) {
+            $formatter->triggerEvent(File::EVENT_EMPTY);
+
             return false;
         }
 
@@ -73,21 +77,27 @@ class Saver
         $this->filesystem->put($this->path, null);
 
         $content = $formatter->getContent();
+        if ($content === false) {
+            $formatter->triggerEvent(File::EVENT_NOT_FOUND);
+
+            return false;
+        }
         if ($content === '') {
+            $formatter->triggerEvent(File::EVENT_ERROR);
+
             return false;
         }
 
         $saved = $this->write($content);
 
-        if ($saved) {
-            $formatter->afterCacheCallback();
-        }
+        $formatter->triggerEvent($saved ? File::EVENT_CACHED : File::EVENT_ERROR);
 
         return $saved;
     }
 
     /**
      * @return bool
+     * @throws \League\Flysystem\FileNotFoundException
      */
     protected function isEmpty(): bool
     {

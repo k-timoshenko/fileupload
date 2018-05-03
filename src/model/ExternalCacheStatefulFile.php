@@ -3,9 +3,32 @@ declare(strict_types=1);
 
 namespace tkanstantsin\fileupload\model;
 
+/**
+ * Class ExternalCacheStatefulFile
+ */
 class ExternalCacheStatefulFile extends ExternalFile implements ICacheStateful
 {
     /**
+     * @todo: formalize cache config.
+     * @xample (current)
+     * ```php
+     *  [
+     *      'formatter-name' => 123456789,
+     *      ...
+     *  ],
+     * ```
+     * @example (for todo)
+     * ```php
+     *  [
+     *      'formatter-name' => [
+     *          'is_cached' => true|false,
+     *          'cached_at' => 123456789,
+     *          'empty' => true|false,
+     *          'error' => true|false,
+     *      ],
+     *      ...
+     *  ],
+     * ```
      * @var array
      */
     private $cachedState = [];
@@ -48,12 +71,12 @@ class ExternalCacheStatefulFile extends ExternalFile implements ICacheStateful
 
     /**
      * @param string $format
-     * @param int $cachedAt
+     * @param int|null $cachedAt
      */
-    public function setCachedAt(string $format, int $cachedAt): void
+    public function setCachedAt(string $format, ?int $cachedAt): void
     {
         $this->cachedState[$format] = $cachedAt;
-        if ($cachedAt <= 0) {
+        if ($cachedAt === null || $cachedAt <= 0) {
             unset($this->cachedState[$format]);
         }
     }
@@ -85,6 +108,6 @@ class ExternalCacheStatefulFile extends ExternalFile implements ICacheStateful
             return true;
         }
 
-        return (bool)\call_user_func($this->saveCachedStateCallback, $this);
+        return (bool) \call_user_func($this->saveCachedStateCallback, $this);
     }
 }
