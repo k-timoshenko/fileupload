@@ -140,7 +140,7 @@ class File extends BaseObject
                     break;
             }
 
-            $this->file->saveCachedState();
+            $this->file->saveState();
         }
 
         // other triggers

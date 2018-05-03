@@ -32,5 +32,5 @@ interface ICacheStateful
     /**
      * @return bool
      */
-    public function saveCachedState(): bool;
+    public function saveState(): bool;
 }

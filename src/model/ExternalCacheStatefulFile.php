@@ -35,7 +35,7 @@ class ExternalCacheStatefulFile extends ExternalFile implements ICacheStateful
     /**
      * @var \Closure
      */
-    protected $saveCachedStateCallback;
+    protected $saveStateCallback;
 
     /**
      * @param array $cachedState
@@ -94,20 +94,20 @@ class ExternalCacheStatefulFile extends ExternalFile implements ICacheStateful
     /**
      * @param \Closure $callback
      */
-    public function setSaveCacheCallback(\Closure $callback): void
+    public function setSaveStateCallback(\Closure $callback): void
     {
-        $this->saveCachedStateCallback = $callback;
+        $this->saveStateCallback = $callback;
     }
 
     /**
      * @return bool
      */
-    public function saveCachedState(): bool
+    public function saveState(): bool
     {
-        if (!($this->saveCachedStateCallback instanceof \Closure)) {
+        if (!($this->saveStateCallback instanceof \Closure)) {
             return true;
         }
 
-        return (bool) \call_user_func($this->saveCachedStateCallback, $this);
+        return (bool) \call_user_func($this->saveStateCallback, $this);
     }
 }
