@@ -75,6 +75,8 @@ class ExternalCacheStatefulFile extends ExternalFile implements ICacheStateful
      */
     public function setCachedAt(string $format, ?int $cachedAt): void
     {
+        // TODO: add max expire period.
+
         $this->cachedState[$format] = $cachedAt;
         if ($cachedAt === null || $cachedAt <= 0) {
             unset($this->cachedState[$format]);
