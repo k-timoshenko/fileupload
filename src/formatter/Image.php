@@ -175,6 +175,7 @@ class Image extends File
      */
     protected function createBox(BoxInterface $actualBox): BoxInterface
     {
+        // TODO: check resize modes.
         if ($this->width !== null && $this->height !== null) {
             return new Box($this->width, $this->height);
         }
