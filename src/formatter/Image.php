@@ -9,9 +9,12 @@ use Imagine\Image\ImageInterface;
 use Imagine\Image\ImagineInterface;
 use Imagine\Image\Palette\RGB as RGBPalette;
 use Imagine\Image\Point;
+use tkanstantsin\fileupload\config\InvalidConfigException;
 
 /**
  * Class ImageProcessor
+ *
+ * @todo: add min width|height options.
  */
 class Image extends File
 {
@@ -70,6 +73,7 @@ class Image extends File
     /**
      * Whether image must keep aspect ration when used inset mote.
      * Means that image would may be smaller than smaller
+     * @todo: implement it.
      * @var bool
      */
     public $keepRatio = true;
@@ -88,6 +92,13 @@ class Image extends File
         parent::init();
 
         $this->imagine = ImagineFactory::get($this->driver);
+
+        if ($this->width !== null && $this->maxWidth !== null) {
+            throw new InvalidConfigException('`width` and `maxWidth` cannot be defined at the same time');
+        }
+        if ($this->height !== null && $this->maxHeight !== null) {
+            throw new InvalidConfigException('`height` and `maxHeight` cannot be defined at the same time');
+        }
     }
 
     /**
@@ -140,15 +151,16 @@ class Image extends File
      */
     protected function resize(ImageInterface $image): ImageInterface
     {
-        $box = $this->createBox($image->getSize());
-        if ($box === null) {
+        $originBox = $image->getSize();
+        $newBox = $this->createBox($originBox);
+        if ($this->areBoxesEqual($originBox, $newBox)) {
             return $image;
         }
 
         switch ($this->mode) {
             case self::RESIZE_OUTBOUND:
             case self::RESIZE_INSET:
-                return $image->thumbnail($box, $this->mode);
+                return $image->thumbnail($newBox, $this->mode);
             case self::RESIZE_INSET_KEEP_RATIO:
                 // TODO: implement new resize mode.
                 throw new \UnexpectedValueException(sprintf('Resize mode `%s` not supported yet', $this->mode));
@@ -159,36 +171,30 @@ class Image extends File
 
     /**
      * @param BoxInterface $actualBox
-     * @return BoxInterface|null
-     * @throws \Imagine\Exception\InvalidArgumentException
+     * @return BoxInterface
      */
-    protected function createBox(BoxInterface $actualBox): ?BoxInterface
+    protected function createBox(BoxInterface $actualBox): BoxInterface
     {
-        if ($this->width !== null
-            && $this->height !== null
-        ) {
+        if ($this->width !== null && $this->height !== null) {
             return new Box($this->width, $this->height);
         }
 
+        $box = clone $actualBox;
         if ($this->width !== null) {
-            $box = $actualBox->widen($this->width);
-            if ($this->maxHeight !== null && $this->maxHeight < $box->getHeight()) {
-                $box = $box->heighten($this->maxHeight);
-            }
-
-            return $box;
+            $box = $box->widen($this->width);
         }
         if ($this->height !== null) {
-            $box = $actualBox->heighten($this->height);
-            if ($this->maxWidth !== null && $this->maxWidth < $box->getWidth()) {
-                $box = $box->widen($this->maxWidth);
-            }
-
-            return $box;
+            $box = $box->heighten($this->height);
         }
 
-        // both are null
-        return null;
+        if ($this->maxWidth !== null && $this->maxWidth < $box->getWidth()) {
+            $box = $box->widen($this->maxWidth);
+        }
+        if ($this->maxHeight !== null && $this->maxHeight < $box->getHeight()) {
+            $box = $box->heighten($this->maxHeight);
+        }
+
+        return $box;
     }
 
     /**
@@ -213,5 +219,16 @@ class Image extends File
         $background = $this->imagine->create($image->getSize(), $backgroundColor);
 
         return $background->paste($image, new Point(0, 0));
+    }
+
+    /**
+     * @param BoxInterface $a
+     * @param BoxInterface $b
+     * @return bool
+     */
+    protected function areBoxesEqual(BoxInterface $a, BoxInterface $b): bool
+    {
+        return $a->getWidth() === $b->getWidth()
+            && $a->getHeight() === $b->getHeight();
     }
 }
