@@ -102,20 +102,10 @@ class Watermark extends AbstractImageAdapter
         $image = \is_resource($content)
             ? $this->imagine->read($content)
             : $this->imagine->load($content);
-        $imageSize = $image->getSize();
 
-        $watermark = $this->getWatermark($this->imagine);
-        $watermarkSize = $watermark->getSize();
-
-        // NOTE: only for position: center
-        $watermarkSize = $this->getWatermarkBox($imageSize, $watermarkSize);
-
-        /* @see http://urmaul.com/blog/imagick-filters-comparison */
-        $filter = $this->driver === ImagineFactory::IMAGICK ? ImageInterface::FILTER_SINC : ImageInterface::FILTER_UNDEFINED;
-        $watermark = $watermark->resize($watermarkSize, $filter);
-        $watermarkSize = $watermark->getSize();
-
-        $image = $image->paste($watermark, $this->getPositionPoint($imageSize, $watermarkSize));
+        if ($this->markFilepath !== null || $this->markContent !== null) {
+            $image = $this->applyWatermark($image);
+        }
 
         return $image->get($file->getExtension() ?? Image::DEFAULT_EXTENSION);
     }
@@ -193,5 +183,28 @@ class Watermark extends AbstractImageAdapter
         }
 
         throw new \ErrorException('Mark file path has invalid format. Callable, string or null expected.');
+    }
+
+    /**
+     * @param ImageInterface $image
+     * @return ImageInterface
+     * @throws \ErrorException
+     */
+    private function applyWatermark(ImageInterface $image): ImageInterface
+    {
+        $imageSize = $image->getSize();
+
+        $watermark = $this->getWatermark($this->imagine);
+        $watermarkSize = $watermark->getSize();
+
+        // NOTE: only for position: center
+        $watermarkSize = $this->getWatermarkBox($imageSize, $watermarkSize);
+
+        /* @see http://urmaul.com/blog/imagick-filters-comparison */
+        $filter = $this->driver === ImagineFactory::IMAGICK ? ImageInterface::FILTER_SINC : ImageInterface::FILTER_UNDEFINED;
+        $watermark = $watermark->resize($watermarkSize, $filter);
+        $watermarkSize = $watermark->getSize();
+
+        return $image->paste($watermark, $this->getPositionPoint($imageSize, $watermarkSize));
     }
 }
