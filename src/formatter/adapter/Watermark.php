@@ -103,9 +103,7 @@ class Watermark extends AbstractImageAdapter
             ? $this->imagine->read($content)
             : $this->imagine->load($content);
 
-        if ($this->markFilepath !== null || $this->markContent !== null) {
-            $image = $this->applyWatermark($image);
-        }
+        $image = $this->applyWatermark($image);
 
         return $image->get($file->getExtension() ?? Image::DEFAULT_EXTENSION);
     }
@@ -113,12 +111,12 @@ class Watermark extends AbstractImageAdapter
     /**
      * Get watermark image
      * @param ImagineInterface $imagine
-     * @return ImageInterface
+     * @return ImageInterface|null
      * @throws \Imagine\Exception\RuntimeException
      * @throws \UnexpectedValueException
      * @throws \ErrorException
      */
-    private function getWatermark(ImagineInterface $imagine): ImageInterface
+    private function getWatermark(ImagineInterface $imagine): ?ImageInterface
     {
         $resource = null;
         if ($this->getMarkFilepath() !== null) {
@@ -130,7 +128,7 @@ class Watermark extends AbstractImageAdapter
         }
 
         if ($resource === null) {
-            throw new \UnexpectedValueException('Water mark image invalid format');
+            return null;
         }
 
         return $imagine->read($resource);
@@ -195,6 +193,10 @@ class Watermark extends AbstractImageAdapter
         $imageSize = $image->getSize();
 
         $watermark = $this->getWatermark($this->imagine);
+        if ($watermark === null) {
+            return $image;
+        }
+
         $watermarkSize = $watermark->getSize();
 
         // NOTE: only for position: center
